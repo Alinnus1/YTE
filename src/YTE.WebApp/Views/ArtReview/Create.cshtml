@@ -1,0 +1,45 @@
+﻿@model YTE.BusinessLogic.Implementation.ArtReview.Model.CreateArtReviewModel
+
+
+
+<h1 class="py-3">Create a review for <i></i></h1>
+
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input hidden asp-for="ArtObjectId" class="form-control" />
+
+            <div class="form-group">
+                <label class="control-label">Rate out of 10</label>
+                <input asp-for="Score" step="0.1" type="number" class="form-control" />
+                <span asp-validation-for="Score" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">When did you experience this art form?</label>
+                <input asp-for="ExperiencedAt" type="date" class="form-control" />
+                <span asp-validation-for="ExperiencedAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Write a few words about it if you want!</label>
+                <textarea asp-for="Review" class="form-control"></textarea>
+                <span asp-validation-for="Review" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a id="list" href="">See all the reviews for this art.</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/backtolist.js"></script>
+}

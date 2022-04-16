@@ -1,0 +1,64 @@
+﻿@model YTE.BusinessLogic.Implementation.VideoGame.Model.CreateVideoGameModel
+
+<h1 class="py-3">Add a New VideoGame</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label  class="control-label">Title</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label  class="control-label">Developer </label>
+                <input asp-for="Author" class="form-control" />
+                <span asp-validation-for="Author" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Release Date</label>
+                <input asp-for="ReleaseDate" class="form-control" type="date" />
+                <span asp-validation-for="ReleaseDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label  class="control-label">Language</label>
+                <input asp-for="Language" class="form-control" />
+                <span asp-validation-for="Language" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label  class="control-label">Synopsis</label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label  class="control-label">ESRB Rating</label>
+                <input asp-for="Esrbrating" class="form-control" />
+                <span asp-validation-for="Esrbrating" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsMultiplayer" /> @Html.DisplayNameFor(model => model.IsMultiplayer)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="selectedGenres" class="control-label">Select Genres</label>
+                <select id="Genre" asp-for="selectedGenres" class="form-control select" asp-items="@(new SelectList(string.Empty,"Value","Text"))" multiple></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a href="/VideoGame/List">Back to List</a>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/game-genre-multiselect.js"></script>
+}

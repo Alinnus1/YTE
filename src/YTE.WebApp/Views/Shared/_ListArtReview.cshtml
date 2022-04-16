@@ -1,0 +1,35 @@
+﻿@model YTE.BusinessLogic.Implementation.ArtReview.Model.ListArtReviewModel
+@inject YTE.Common.DTOS.CurrentUserDto CurrentUser
+<tr>
+    <td>
+        <a href="/UserProfile/Details/@Model.UserName"> @Model.UserName</a>
+    </td>
+    <td>
+        @Model.Score
+    </td>
+    <td>
+        @Model.ExperiencedAt.ToShortDateString()
+    </td>
+    <td>
+        @Model.Date.ToShortDateString()
+    </td>
+    <td>
+        <p class="shorten">@Model.Review</p>
+    </td>
+    <td>
+        @if (CurrentUser.UserName == Model.UserName || CurrentUser.Roles.Contains("Admin"))
+        {
+            <a class="btn btn-outline-dark" href="/ArtReview/Edit/@Model.ArtObjectId/@Model.UserName">Edit</a>
+
+            <br />
+            <span id="confirmDeleteSpan_@Model.UserName" style="display:none">
+                <span>Are you sure you want to delete?</span>
+                <a href="/ArtReview/Delete/@Model.ArtObjectId/@Model.UserName" type="submit" class="btn btn-outline-danger">Yes</a>
+                <a style=" cursor:pointer;" class="btn btn-outline-primary" onclick="confirmDelete('@Model.UserName', false)">No</a>
+            </span>
+            <span id="deleteSpan_@Model.UserName">
+                <a style=" cursor:pointer;" class="btn btn-outline-danger" onclick="confirmDelete('@Model.UserName',true)">Delete</a>
+            </span>
+        }
+    </td>
+</tr>

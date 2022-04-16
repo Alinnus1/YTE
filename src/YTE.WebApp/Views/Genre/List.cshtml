@@ -1,0 +1,71 @@
+﻿@model IEnumerable<YTE.BusinessLogic.Implementation.Genre.Model.ListGenreModel>
+
+<h1 class="py-3">List of Genres</h1>
+
+<div class="btn-group" role="group">
+
+    <a type="button" class="btn btn-outline-dark" href="/Genre/List/2">Film genres</a>
+    <a type="button" class="btn btn-outline-dark" href="/Genre/List/1">Manga genres</a>
+    <a type="button" class="btn btn-outline-dark" href="/Genre/List/3">Video game genres</a>
+    <a type="button" class="btn btn-outline-dark" href="/Genre/List/">All genres</a>
+</div>
+<a class="btn btn-outline-success" href="/Genre/Create" style="float:right">Create new genre</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Genre name
+            </th>
+            <th>
+                Type of genre
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @{
+                        switch (@item.GenreType)
+                        {
+                            case 1:
+                                <p>Manga Genre</p>
+                                break;
+                            case 2:
+                                <p>Film Genre</p>
+                                break;
+                            case 3:
+                                <p>VideoGame Genre</p>
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
+                </td>
+                <td>
+
+                    <span id="confirmDeleteSpan_@item.Id@item.GenreType" style="display:none">
+                        <span>Are you sure you want to delete?</span>
+                        <a href="/Genre/Delete/@item.Id/@item.GenreType" type="submit" class="btn btn-danger">Yes</a>
+                        <a class="btn btn-primary" onclick="confirmDelete('@item.Id@item.GenreType', false)">No</a>
+                    </span>
+                    <span id="deleteSpan_@item.Id@item.GenreType">
+                        <a class="btn btn-outline-danger" onclick="confirmDelete('@item.Id@item.GenreType',true)">Delete</a>
+                    </span>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts{
+    <script src="~/js/delete.js"></script>
+
+}

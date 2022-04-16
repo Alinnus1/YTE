@@ -1,0 +1,19 @@
+﻿@inject YTE.Common.DTOS.CurrentUserDto CurrentUser
+
+<div class="jumbotron">
+    <h1 class="display-4"><b>Y</b>our <b>T</b>aste in <b>E</b>verything!</h1>
+    <p class="lead">YTE is a universal multi-purpose social platform that accomplishes everything that sites like <u>letterboxd</u>, <u>imbd</u>, <u>animelist</u> do and even more! You can build your profile by reviewing any art piece that you have experienced in your life. You can find users with similar interests and start following them on their journey. You can add to your watch/favorite lists any art piece, regardless of their type.</p>
+    <hr class="my-4">
+    @if (!CurrentUser.IsAuthenticated)
+    {
+        <p class="lead">Start your journey by <a href="/UserAccount/Login">log in</a></p>
+    }else
+    {
+        <p class="lead">Welcome back, @CurrentUser.UserName!</p>
+    }
+
+    <p class="lead">Check our current catalog of <a href="/Film/List">films</a>, <a href="/Manga/List">mangas</a>, and <a href="/VideoGame/List">video games</a>.</p>
+    <p class="lead">
+        <a class="btn btn-primary btn-lg" href="/UserProfile/List" role="button">Find user profiles </a>
+    </p>
+</div>

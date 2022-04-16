@@ -1,0 +1,67 @@
+﻿@model YTE.BusinessLogic.Implementation.Account.Model.RegisterModel
+
+
+<h1 class="py-3">Create your new account</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form action="/UserAccount/Register" method="post" novalidate="novalidate">
+            <div class="form-group">
+                <label class="control-label"> UserName</label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Email </label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Password</label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Confirm your password </label>
+                <input asp-for="ConfirmPassword" type="password" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label"> Name</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Pronoun</label>
+                <input asp-for="Pronoun" class="form-control" />
+                <span asp-validation-for="Pronoun" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Date of Birth</label>
+                <input asp-for="Age" class="form-control" type="date" />
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Gender</label>
+                @*<input asp-for="Idgender" class="form-control" />*@
+                @*<select class="form-control" asp-for="Idgender" asp-items="@(new SelectList(ViewBag.Genders, "Value", "Text"))"></select>*@
+                <select id="gender-dropdown" class="form-control" asp-for="GenderId" asp-items="@(new SelectList(string.Empty,"Value","Text"))"></select>
+                <span asp-validation-for="GenderId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a href="/Home/Index">Back to Home</a>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/gender-dropdown.js" ></script>
+}

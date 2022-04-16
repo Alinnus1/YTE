@@ -1,0 +1,87 @@
+﻿@model YTE.BusinessLogic.Implementation.Admin.Model.DetailsUserModel
+
+<h1 class="py-3">Details of <i>@Model.UserName</i></h1>
+
+<div>
+
+    <hr />
+    <dl class="row">
+
+        <dt class="col-sm-2">
+            Email
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Email
+        </dd>
+        <dt class="col-sm-2">
+            UserName
+        </dt>
+        <dd class="col-sm-10">
+            @Model.UserName
+        </dd>
+        <dt class="col-sm-2">
+            Name
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Name
+        </dd>
+        <dt class="col-sm-2">
+            Pronoun
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Pronoun
+        </dd>
+        <dt class="col-sm-2">
+            Age
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Age
+        </dd>
+        <dt class="col-sm-2">
+            Date of Join
+        </dt>
+        <dd class="col-sm-10">
+            @Model.JoinDate.ToShortDateString()
+        </dd>
+        <dt class="col-sm-2">
+            Gender
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Gender
+        </dd>
+        <dt class="col-sm-2">
+            Roles
+        </dt>
+        <dd class="col-sm-10">
+            @{
+                foreach (var role in @Model.Roles)
+                {
+                    <b>@role</b>
+                }
+            }
+        </dd>
+        <dt class="col-sm-2">
+            Profile Picture
+        </dt>
+        <dd class="col-sm-10">
+            <img src="@Model.Image" width="100" height="100" />
+        </dd>
+    </dl>
+</div>
+<div class="btn-group" role="group">
+    <a type="button" class="btn btn-outline-primary" href="/Admin/UserList">Back to List</a>
+    <a type="button" class="btn btn-outline-dark" href="/Admin/EditUser/@Model.Id">Edit Account</a>
+    <span id="confirmDeleteSpan_@Model.Id" style="display:none">
+        <span>Are you sure you want to delete?</span>
+        <a href="/Admin/DeleteUser/@Model.Id" type="submit" class="btn btn-danger">Yes</a>
+        <a style="cursor:pointer" class="btn btn-primary" onclick="confirmDelete('@Model.Id', false)">No</a>
+    </span>
+    <span id="deleteSpan_@Model.Id">
+        <a  style="cursor:pointer" class="btn btn-outline-danger" onclick="confirmDelete('@Model.Id',true)">Delete</a>
+    </span>
+</div>
+
+@section Scripts{
+
+    <script src="~/js/delete.js"></script>
+}

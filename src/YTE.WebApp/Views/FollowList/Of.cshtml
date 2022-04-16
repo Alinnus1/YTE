@@ -1,0 +1,81 @@
+﻿@model YTE.Common.DTOS.PaginatedList<YTE.BusinessLogic.Implementation.FollowList.Model.ListFollowersListModel>
+@inject YTE.Common.DTOS.CurrentUserDto CurrentUser
+
+
+<h1 class="py-3">Users that <i>@ViewData["UserName"]</i> follows</h1>
+
+<link href="~/css/input.css" rel="stylesheet" />
+<form class="py-3" href="/FollowList/Of/@ViewData["UserName"]" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by UserName: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-outline-primary" />
+            <a class="btn btn-outline-secondary" href="/FollowList/Of/@ViewData["UserName"]">Clear filter</a>
+        </p>
+    </div>
+</form>
+
+<table class="table ">
+    <thead>
+        <tr>
+            <th>
+
+            </th>
+            <th>
+                User Name
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    <img src="@item.FollowedImage" width="50" height="50" />
+                </td>
+                <td>
+                    <a href="/UserProfile/Details/@item.FollowedUserName">@item.FollowedUserName</a>
+                </td>
+                <td>
+                    @if (CurrentUser.Id == item.FollowerUserId)
+                    {
+
+                        <button class="btn btn-outline-dark" onclick="removeFromFollow('@item.FollowedUserId')">Unfollow</button>
+                        <button class="btn btn-outline-info" data-toggle="popover" title="Unfollowing" style="margin: 0; padding: 0; font-size: 14px;  border-radius: 50%;  width: 37px; height: 37px; transition: transform 2s; position: relative; " data-content="You'll no longer receive @item.FollowedUserName's reviews via email!">i</button>
+
+                    }
+
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@{
+    var prevDisabled = !Model.PreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.NextPage ? "disabled" : "";
+}
+
+<a asp-action="List"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="List"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>
+
+
+@section Scripts{
+
+    <script src="~/js/add-follow.js"></script>
+    <script src="~/js/add-popover.js"></script>
+}

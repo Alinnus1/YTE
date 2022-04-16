@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\YTE.Entities\YTE.Entities.csproj" />
+    <ProjectReference Include="..\YTE.Common\YTE.Common.csproj" />
+  </ItemGroup>
+
+  
+
+</Project>

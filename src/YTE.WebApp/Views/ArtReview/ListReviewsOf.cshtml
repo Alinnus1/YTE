@@ -1,0 +1,59 @@
+﻿@model YTE.Common.DTOS.PaginatedList<YTE.BusinessLogic.Implementation.ArtReview.Model.ListUserArtReviewModel>
+
+
+<h1 class="py-3">All reviews of <a href="/UserProfile/Details/@ViewBag.UserName"><i>@ViewBag.UserName</i></a></h1>
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                <a asp-action="ListReviewsOf" asp-route-sortOrder="@ViewData["ScoreSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Score</a>
+            </th>
+            <th>
+                Experienced At
+            </th>
+            <th>
+                <a asp-action="ListReviewsOf" asp-route-sortOrder="@ViewData["DateSortParm"]"asp-route-currentFilter="@ViewData["CurrentFilter"]">Date of review</a>
+            </th>
+            <th>
+                Review
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <partial name="_ListReview" model="@item" />
+        }
+    </tbody>
+</table>
+@{
+    var prevDisabled = !Model.PreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.NextPage ? "disabled" : "";
+}
+
+<a asp-action="ListReviewsOf"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="ListReviewsOf"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>
+@section Scripts {
+    <script src="~/js/jquery-shorten.js"></script>
+    <script src="~/js/apply-shorten.js"></script>
+    <script src="~/js/delete.js"></script>
+}
+

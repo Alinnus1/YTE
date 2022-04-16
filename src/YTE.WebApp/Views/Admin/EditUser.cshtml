@@ -1,0 +1,74 @@
+﻿@model YTE.BusinessLogic.Implementation.Admin.Model.EditUserModel
+
+
+<h1 class="py-3">Edit user <i>@Model.Name</i></h1>
+
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditUser" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label"></label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Pronoun" class="control-label"></label>
+                <input asp-for="Pronoun" class="form-control" />
+                <span asp-validation-for="Pronoun" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Age" class="control-label"></label>
+                <input asp-for="Age" class="form-control" type="date" />
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Gender</label>
+                <select id="gender-dropdown" class="form-control" asp-for="GenderId" asp-items="@(new SelectList(string.Empty,"Value","Text"))"></select>
+                <span asp-validation-for="GenderId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Select Roles</label>
+                <select id="Role" asp-for="selectedRoles" class="form-control select" asp-items="@(new SelectList(string.Empty,"Value","Text"))" multiple style="overflow-y:auto"></select>
+            </div>
+            <div class="form-group">
+                <label class="control-label"> Profile picture</label>
+                <input type="file" asp-for="Image" accept=".png, .jpg, .jpeg, .gif" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NewPassword" class="control-label"></label>
+                <input asp-for="NewPassword" type="password" class="form-control" />
+                <span asp-validation-for="NewPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a href="/Admin/UserList">Back to List</a>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/gender-dropdown-s.js"></script>
+    <script src="~/js/roles-dropdown.js"></script>
+}

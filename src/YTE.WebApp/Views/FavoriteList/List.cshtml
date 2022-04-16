@@ -1,0 +1,70 @@
+﻿@model YTE.Common.DTOS.PaginatedList<YTE.BusinessLogic.Implementation.FavoriteList.Model.ListFavoriteListModel>
+@inject YTE.Common.DTOS.CurrentUserDto CurrentUser
+
+<h1 class="py-3">List of favorites</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Art Name
+            </th>
+            <th>
+                Poster
+            </th>
+            <th>
+                Details
+            </th>
+            <th>
+                Action
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a href="/@item.Route/Details/@item.ArtObjectId">@item.ArtName</a>
+                </td>
+                <td>
+                    <img src="@item.Poster" width="230" height="345" />
+                </td>
+
+                <td>
+                    <p><b>Review:</b> <span class="shorten">@item.Review</span> , <b>Score:</b> @item.Score, <b>Date of Review:</b> @item.Date.ToShortDateString() , <b>Date of Experience: </b>@item.Date.ToShortDateString()</p>
+
+                </td>
+                <td>
+                    @if (CurrentUser.Id == @item.UserId)
+
+                    {
+                        <a id="removefavorite" class="btn btn-danger" onclick="removeFromFavorite('@item.ArtObjectId')">Remove from favorites</a>
+
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@{
+    var prevDisabled = !Model.PreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.NextPage ? "disabled" : "";
+}
+
+<a asp-action="List"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="List"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>
+@section Scripts{
+
+    <script src="~/js/add-favorite.js"></script>
+    <script src="~/js/apply-shorten.js"></script>
+}

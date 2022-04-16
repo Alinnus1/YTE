@@ -1,0 +1,125 @@
+﻿@model YTE.Common.DTOS.PaginatedList<YTE.BusinessLogic.Implementation.Film.Model.ListFilmModel>
+@inject YTE.Common.DTOS.CurrentUserDto CurrentUser
+<h1 class="py-3">Films</h1>
+
+@if (CurrentUser.Roles.Contains("Admin") || CurrentUser.Roles.Contains("ModFilm"))
+
+{
+    <a class="btn btn-outline-success" href="/Film/Create" style="float: right;">Add a new film</a>
+}
+<link href="~/css/input.css" rel="stylesheet" />
+<form href="/Film/List" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by Title: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-outline-primary" />
+            <a class="btn btn-outline-secondary" href="/Film/List">Clear filter</a>
+        </p>
+    </div>
+</form>
+
+<hr />
+<div class="card-columns">
+    @foreach (var item in Model)
+    {
+
+
+        <div class="card shadow-sm p-3 mb-5 bg-white rounded ">
+            <img class="card-img-top" src="@item.Poster" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">@item.Name</h5>
+                <p class="card-text"><b>@item.Author</b>'s film sits at <b>@item.Length </b>watchtime. For the moment this film has <b>@item.NoReviews </b>reviews and the average score based on those reviews is <i>@item.Average </i>.</p>
+                <hr />
+                <a class="btn btn-outline-secondary" href="/Film/Details/@item.Id">Details</a>
+                <br />
+                @if (CurrentUser.IsAuthenticated)
+
+                {
+
+                    @if (item.EligibleFavoriteList)
+
+                    {
+                        @if (!item.AddedToFavoriteList)
+
+                        {
+                            <button id="favorite"  class="btn btn-outline-warning" onclick="addToFavorite('@item.Id')">Add to favorites</button>
+                            <br />
+
+                        }
+                        else
+                        {
+
+                            <button id="removefavorite" class="btn btn-outline-danger" onclick="removeFromFavorite('@item.Id')">Remove from favorites</button>
+                            <br />
+
+                        }
+
+                    }
+                    else
+                    {
+                        @if (!item.AddedToWatchList)
+
+                        {
+                            <button id="favorite" class="btn btn-outline-info" onclick="addToWatchList('@item.Id')">Add to watchlist</button>
+                            <br />
+
+                        }
+                        else
+                        {
+
+                            <button id="removefavorite" class="btn btn-outline-danger" onclick="removeFromWatchList('@item.Id')">Remove from watchlist</button>
+                            <br />
+
+                        }
+                    }
+                }
+                <br />
+
+
+                @if (CurrentUser.Roles.Contains("Admin") || CurrentUser.Roles.Contains("ModFilm"))
+
+                {
+                    <i>Admin or Mod actions </i>
+                    <hr />
+                    <a class="btn btn-outline-dark" href="/Film/Edit/@item.Id">Edit</a>
+                    <br />
+                    <span id="confirmDeleteSpan_@item.Id" style="display:none">
+                        <span>Are you sure you want to delete?</span>
+                        <a href="/Film/Delete/@item.Id" style=" cursor:pointer;" type="submit" class="btn btn-danger">Yes</a>
+                        <a class="btn btn-primary" style=" cursor:pointer;" onclick="confirmDelete('@item.Id', false)">No</a>
+                    </span>
+                    <span id="deleteSpan_@item.Id">
+                        <a class="btn btn-outline-danger" style=" cursor:pointer;" onclick="confirmDelete('@item.Id',true)">Delete</a>
+                    </span>
+
+                }
+            </div>
+            <div class="card-footer">
+                <small class="text-muted">Released at @item.ReleaseDate.ToShortDateString()</small>
+            </div>
+        </div>
+
+
+    }
+</div>
+@{
+    var prevDisabled = !Model.PreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.NextPage ? "disabled" : "";
+}
+
+<a asp-action="List"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="List"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>
+@section Scripts{
+    <script src="~/js/delete.js"></script>
+    <script src="~/js/add-favorite.js"></script>
+}

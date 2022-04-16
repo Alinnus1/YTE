@@ -1,0 +1,32 @@
+﻿@model YTE.BusinessLogic.Implementation.Account.Model.ConfirmationEmailModel
+
+@if (Model.IsEmailConfirmed)
+{
+    <p class="py-3 alert alert-success" role="alert">Your account is set and ready to go. Press <a href="/UserAccount/Login/">here</a> to log in</p>;
+}
+else
+{
+<p>
+    @if (Model.IsTokenExpired)
+        {
+            <p class="py-3 alert alert-danger" role="alert">  Your email is not confirmed. Your email activation link has expired. Try to resend the email confirmation link!</p>
+        }
+        else
+        {
+  
+            <p  class="py-3 alert alert-danger" role="alert"> An unexpected error has occured! Try to resend the email confirmation link or contact us!</p>
+        }
+
+
+        <form action="/UserAccount/ResendConfirmation" method="get">
+
+            <div class="form-actions no-color">
+            <p>
+                Insert your email: <input type="email" name="id" />
+                <input type="submit" value="Send" class="btn btn-default" /> |
+                <a href="/Home/Index">Go to home screen</a>
+            </p>
+            </div>
+        </form>
+</p>
+}

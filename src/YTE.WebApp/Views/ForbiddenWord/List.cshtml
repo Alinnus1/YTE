@@ -1,0 +1,46 @@
+﻿@model IEnumerable<YTE.BusinessLogic.Implementation.ForbiddenWord.Model.ListForbiddenWordModel>
+
+
+
+<h1 class="py-3">List of forbidden words</h1>
+
+
+<a class="btn btn-outline-success" href="/ForbiddenWord/Create" style="float:right" >Create forbidden word</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Word
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Word
+                </td>
+                <td>
+                    <span id="confirmDeleteSpan_@item.Id" style="display:none">
+                        <span>Are you sure you want to delete?</span>
+                        <a href="/ForbiddenWord/Delete/@item.Id" type="submit" class="btn btn-danger">Yes</a>
+                        <a  class="btn btn-primary" onclick="confirmDelete('@item.Id', false)">No</a>
+                    </span>
+                    <span id="deleteSpan_@item.Id">
+                        <a class="btn btn-outline-danger" onclick="confirmDelete('@item.Id',true)">Delete</a>
+                    </span>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts{
+    <script src="~/js/delete.js"></script>
+
+}
+

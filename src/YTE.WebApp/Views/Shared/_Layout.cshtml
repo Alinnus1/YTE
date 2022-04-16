@@ -1,0 +1,263 @@
+﻿@inject YTE.Common.DTOS.CurrentUserDto CurrentUser
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - YTE</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">YTE</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav flex-grow-1">
+
+                        <li class="nav-item">
+                            <div class="btn-group">
+                                <a class="nav-link text-dark  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style=" cursor:pointer;">
+                                    Discover Art
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="/Film/List">Films</a>
+                                    <a class="dropdown-item" href="/Manga/List">Mangas</a>
+                                    <a class="dropdown-item" href="/VideoGame/List">VideoGames</a>
+
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="/UserProfile/List">User Profiles</a>
+                        </li>
+                        @if (CurrentUser.Roles.Contains("Admin"))
+
+                        {
+                            <li class="nav-item">
+                                <div class="btn-group">
+                                    <a class="nav-link text-dark  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style=" cursor:pointer;">
+                                        Admin Panel
+                                    </a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="/Admin/UserList">Users</a>
+                                        <a class="dropdown-item" href="/Genre/List">Genres</a>
+                                        <a class="dropdown-item" href="/ForbiddenWord/List">Forbidden words</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a style=" cursor:pointer;" class="dropdown-item" data-toggle="modal" data-target="#ModalCenter">Duties of an Admin </a>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                        @if (CurrentUser.Roles.Contains("ModFilm"))
+
+                        {
+                            <li class="nav-item">
+                                <div class="btn-group">
+                                    <a class="nav-link text-dark  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style=" cursor:pointer;">
+                                        Film Moderator Panel
+                                    </a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="/Film/Create">Add a new film</a>
+                                        <a class="dropdown-item" href="/Film/List">List of films</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a style=" cursor:pointer;" class="dropdown-item" data-toggle="modal" data-target="#ModalCenterFilm">Duties of a film moderator </a>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                        @if (CurrentUser.Roles.Contains("ModManga"))
+
+                        {
+                            <li class="nav-item">
+                                <div class="btn-group">
+                                    <a class="nav-link text-dark  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style=" cursor:pointer;">
+                                        Manga Moderator Panel
+                                    </a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="/Manga/Create">Add a new manga</a>
+                                        <a class="dropdown-item" href="/Manga/List">List of mangas</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" style=" cursor:pointer;"data-toggle="modal" data-target="#ModalCenterManga">Duties of a manga moderator </a>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                        @if (CurrentUser.Roles.Contains("ModVideoGame"))
+
+                        {
+                            <li class="nav-item">
+                                <div class="btn-group">
+                                    <a class="nav-link text-dark  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style=" cursor:pointer;">
+                                        Video Game Moderator Panel
+                                    </a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="/VideoGame/Create">Add a new video game</a>
+                                        <a class="dropdown-item" href="/VideoGame/List">List of video game</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a style=" cursor:pointer;" class="dropdown-item" data-toggle="modal" data-target="#ModalCenterVideoGame">Duties of a video game moderator </a>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <div>
+                    @if (CurrentUser.IsAuthenticated)
+                    {
+                        <a href="/UserAccount/Edit"><img src="@Url.Action("Picture","UserAccount", new { id = CurrentUser.Id })" width=50 height=50 style=" border-radius:50% ;cursor:pointer;" /></a>
+
+                        <div class="btn-group">
+                            <a class=" dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false " style=" cursor:pointer;">
+                                <b><i>@CurrentUser.UserName</i></b>
+                            </a>
+                            <div class="dropdown-menu" style=" cursor:pointer;">
+                                <a class="dropdown-item" href="/UserProfile/Details/@CurrentUser.UserName">Your profile</a>
+                                <a class="dropdown-item" href="/UserAccount/Details">
+                                Account Preferences</a>
+                                <a class="dropdown-item" href="/UserAccount/Edit">Edit your account settings</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item"  href="/UserAccount/Logout">Log out</a>
+                            </div>
+                        </div>                        
+
+                    }
+                    else
+                    {
+                        <a href="/UserAccount/Login">Log in</a>
+                        <a href="/UserAccount/Register">Register</a>
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="modal fade" id="ModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Duties of an Admin</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        You have control of almost every aspect of YTE.
+                        <br />
+                        Besides every user related permision, you are capable of moderating <u>Films, Movies, Mangas, Reviews, <b>Users</b>, Genres, Forbidden words</u>. This means that you can <b>create</b>,<b>edit </b>and <b>delete </b>each instances of the mentioned objects.
+                        <br />
+                        Please be resonable and use this <i>power</i> to create a beautiful platform.
+
+                        <hr />
+                        <i>With great power comes great responsibility! <br />Thank you for your dedication and time!</i>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="modal fade" id="ModalCenterFilm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Duties of a film moderator</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            You have control of YTE's the film section.
+                            <br />
+                            Besides every user related permision, you are capable of moderating <u>Films</u>. This means that you can <b>create</b>,<b>edit </b>and <b>delete </b>each instances of any film that is present in YTE.
+                            <br />
+                            Please be resonable and use this <i>power</i> to create a beautiful platform.
+
+                            <hr />
+                            <i>With great power comes great responsibility! <br />Thank you for your dedication and time!</i>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="modal fade" id="ModalCenterManga" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Duties of a manga moderator</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                You have control of YTE's the manga section.
+                                <br />
+                                Besides every user related permision, you are capable of moderating <u>Mangas</u>. This means that you can <b>create</b>,<b>edit </b>and <b>delete </b>each instances of any manga that is present in YTE.
+                                <br />
+                                Please be resonable and use this <i>power</i> to create a beautiful platform.
+
+                                <hr />
+                                <i>With great power comes great responsibility! <br />Thank you for your dedication and time!</i>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="modal fade" id="ModalCenterVideoGame" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Duties of a video game moderator</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    You have control of YTE's the video game section.
+                                    <br />
+                                    Besides every user related permision, you are capable of moderating <u>VideoGames</u>. This means that you can <b>create</b>,<b>edit </b>and <b>delete </b>each instances of any video game that is present in YTE.
+                                    <br />
+                                    Please be resonable and use this <i>power</i> to create a beautiful platform.
+
+                                    <hr />
+                                    <i>With great power comes great responsibility! <br />Thank you for your dedication and time!</i>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <main role="main" class="pb-3">
+                        @RenderBody()
+                    </main>
+                </div>
+
+                <footer class="border-top footer text-muted">
+                    <div class="container">
+                        &copy; 2020 - YTE - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                    </div>
+                </footer>
+                <script src="~/lib/jquery/dist/jquery.min.js"></script>
+                <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+                <script src="~/js/site.js" asp-append-version="true"></script>
+                @RenderSection("Scripts", required: false)
+</body>
+</html>

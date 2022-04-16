@@ -1,0 +1,24 @@
+﻿@model YTE.BusinessLogic.Implementation.Account.Model.SendForgotPassEmailModel
+
+<h2 class="py-3">Status:</h2>
+@if (Model.IsEmailSent)
+{
+    <p class="alert alert-success" role="alert">We've just sent you a new email regarding your request. Be sure to check your inbox or your spam folder! Thank you for using YTE.</p>
+}
+else if (!Model.IsUserFound)
+{
+    <p class="alert alert-danger" role="alert">There is no account associated with the email you inserted. Try to resend the request email again below or <a href="/UserAccount/Register">create a new account!</a></p>
+}
+
+
+
+<form action="/UserAccount/ResetPassConfirmation" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Forgot your password? <br />
+            Insert your mail here: <input type="email" name="id" />
+            <input type="submit" value="Send" class="btn btn-primary" />
+
+        </p>
+    </div>
+</form>

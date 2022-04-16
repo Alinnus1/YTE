@@ -1,0 +1,44 @@
+﻿@model YTE.BusinessLogic.Implementation.ArtReview.Model.EditArtReviewModel
+
+
+
+<h1 class="py-3">Edit your review <i>@ViewBag.Name</i></h1>
+
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label class="control-label">Score</label>
+                <input id="Score" asp-for="Score" step="0.1" type="number" class="form-control" />
+                <span asp-validation-for="Score" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Experienced at</label>
+                <input asp-for="ExperiencedAt"  type="date"  class="form-control" />
+                <span asp-validation-for="ExperiencedAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Review</label>
+                <textarea asp-for="Review" class="form-control" ></textarea>
+                <span asp-validation-for="Review" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a href="/ArtReview/ListReviewsCurrent">Back to your list of reviews!</a>
+</div>
+@*<script>
+    document.getElementById('Score').value = parseFloat(document.getElementById('Score').value).toFixed(1)
+</script>*@
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

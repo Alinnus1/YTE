@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="FluentValidation" Version="10.3.0" />
+    <PackageReference Include="MailKit" Version="2.15.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
+    <PackageReference Include="MimeKit" Version="2.15.0" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\YTE.DataAccess\YTE.DataAccess.csproj" />
+    <ProjectReference Include="..\YTE.Entities\YTE.Entities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Implementation\FavoriteList\Validation\" />
+    <Folder Include="Implementation\FollowList\Validation\" />
+    <Folder Include="Implementation\UserProfile\Validation\" />
+    <Folder Include="Implementation\WatchList\Validation\" />
+  </ItemGroup>
+
+  
+
+</Project>

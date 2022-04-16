@@ -1,0 +1,140 @@
+﻿@model YTE.BusinessLogic.Implementation.UserProfile.Model.DetailsUserProfileModel
+@inject YTE.Common.DTOS.CurrentUserDto CurrentUser
+
+<div class="py-3"><h1 style=" text-align: center;"><i>@Model.UserName</i>'s profile</h1></div>
+
+<div>
+
+    <hr />
+    <div class="card shadow-sm p-3 mb-5 bg-white rounded " style="width: 18rem; margin: 0 auto; /* Added */ float: none; /* Added */ margin-bottom: 10px; /* Added */">
+        <img style="padding: 30px 30px 30px 30px;  border-radius: 50% " height="250px"src="@Model.Image" class="card-img-top" >
+        <div class="card-body">
+            <h5 class="card-title">@Model.UserName</h5>
+            <p class="card-text">This user is <b>@Model.Age </b> years old. He joined YTE on <b>@Model.JoinDate.ToShortDateString()</b>. Since then this user published <b>@Model.NoReviews</b> reviews. Thanks to those reviews he accumulated <b>@Model.NoFollowers</b> followers.   </p>
+            @if (CurrentUser.Id != Model.Id)
+            {
+                <div class="text-center">
+                    @if (Model.Followed)
+                    {
+                        <button class="btn btn-outline-dark" onclick="removeFromFollow('@Model.Id')">Unfollow</button>
+                        <button  class="btn btn-outline-info" data-toggle="popover" title="Unfollowing"  style="margin: 0; padding: 0; font-size: 14px;  border-radius: 50%;  width: 37px; height: 37px; transition: transform 2s; position: relative; " data-content="You'll no longer receive @Model.UserName's reviews via email!">i</button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-outline-dark " onclick="addToFollow('@Model.Id')">Follow</button>
+                        <button class="btn btn-outline-info" data-toggle="popover" title="Following"  style="margin: 0; padding: 0; font-size: 14px;  border-radius: 50%;  width: 37px; height: 37px; transition: transform 2s; position: relative; " data-content="You'll start receiving weekly emails regarding this person's reviews published in that span of time!">i</button>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+    <br />
+    <div class="text-center">
+        <div class="btn-group " role="group">
+            <a type="button" class="btn btn-outline-warning" href="/FollowList/Of/@Model.UserName">People that @Model.UserName follows</a>
+            <a type="button" class="btn btn-outline-warning" href="/FollowList/FollowersOf/@Model.UserName">People that follow @Model.UserName</a>
+
+        </div>
+
+    </div>
+    <br />
+    <br />
+    <div class="btn-group" role="group">
+        <a type="button" class="btn btn-outline-secondary" href="/WatchList/List/@Model.UserName">@Model.UserName's WatchList </a>
+        <a type="button" class="btn btn-outline-secondary" href="/FavoriteList/List/@Model.UserName">@Model.UserName's FavoriteList </a>
+        <a type="button" class="btn btn-outline-secondary" href="/ArtReview/ListReviewsOf/@Model.UserName">@Model.UserName's Reviews </a>
+        <a type="button" class="btn btn-outline-secondary" href="/ArtReview/ListFilmReviewsOf/@Model.UserName">@Model.UserName's Film Reviews </a>
+        <a type="button" class="btn btn-outline-secondary" href="/ArtReview/ListMangaReviewsOf/@Model.UserName">@Model.UserName's Manga Reviews </a>
+        <a type="button" class="btn btn-outline-secondary" href="/ArtReview/ListGameReviewsOf/@Model.UserName">@Model.UserName's VideoGame Reviews </a>
+    </div>
+    
+    <table class=" table">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Score
+                </th>
+                <th>
+                    Experienced at
+                </th>
+                <th>
+                    Date of review
+                </th>
+                <th>
+                    Review
+                </th>
+                <th></th>
+
+            </tr>
+        </thead>
+    </table>
+
+
+    <h4>Recent Reviews</h4>
+    @if (Model.RecentReviews.Count == 0)
+    {
+        <i>No Reviews yet</i>
+        <br />
+    }
+    else
+    {
+        <div>
+            <table class="table">
+
+                <tbody>
+
+
+                    @foreach (var item in Model.RecentReviews)
+                    {
+                        <partial name="_ListReview" model="@item" />
+                    }
+
+                </tbody>
+
+            </table>
+        </div>
+        <div>
+            <h4>
+                Most Positive Reviews
+            </h4>
+            <table class="table">
+
+                <tbody>
+
+                    @foreach (var item in Model.MostPositiveReviews)
+                    {
+                        <partial name="_ListReview" model="@item" />
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div>
+
+            <h4>Most Negative Reviews</h4>
+            <table class="table">
+
+                <tbody>
+                    @foreach (var item in Model.MostNegativeReviews)
+                    {
+                        <partial name="_ListReview" model="@item" />
+                    }
+                </tbody>
+            </table>
+
+        </div>
+
+    }
+
+
+
+
+    @section Scripts {
+        <script src="~/js/jquery-shorten.js"></script>
+        <script src="~/js/apply-shorten.js"></script>
+        <script src="~/js/delete.js"></script>
+        <script src="~/js/add-popover.js"></script>
+        <script src="~/js/add-follow.js"></script>
+    }

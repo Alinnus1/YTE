@@ -1,0 +1,63 @@
+﻿@model YTE.BusinessLogic.Implementation.ArtObject.Model.CreateArtObjectModel
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h1>View</h1>
+
+<h4>ArtObjectModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class=" form-group">
+                <select id="art-type-dropdown" class="form-control" asp-items="@ViewBag.artObjectTypes"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Author" class="control-label"></label>
+                <input asp-for="Author" class="form-control" />
+                <span asp-validation-for="Author" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReleaseDate" class="control-label"></label>
+                <input asp-for="ReleaseDate" class="form-control" />
+                <span asp-validation-for="ReleaseDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Language" class="control-label"></label>
+                <input asp-for="Language" class="form-control" />
+                <span asp-validation-for="Language" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div id="specific-fields" class=" form-group">
+
+            </div>
+            <div class="form-group">
+                <button id="create" type="submit" class="btn btn-primary">Create</button> 
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a  asp-action="Index">Back to List</a>
+</div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/validate-length.js"></script>
+<script src="~/js/art-type-dropdown.js"></script>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

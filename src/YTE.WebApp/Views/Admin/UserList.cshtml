@@ -1,0 +1,78 @@
+﻿@model YTE.Common.DTOS.PaginatedList<YTE.BusinessLogic.Implementation.Admin.Model.ListUserModel>
+
+
+<h1 class="py-3">List of users</h1>
+
+<link href="~/css/input.css" rel="stylesheet" />
+<form href="/Admin/UserList" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by UserName: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input class="btn btn-outline-primary"  type="submit" value="Search"/>
+            <a class="btn btn-outline-secondary" href="/Admin/UserList">Clear filter</a>
+        </p>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Email
+            </th>
+            <th>
+                UserName
+            </th>
+            <th>
+                Profile Image
+            </th>
+            <th>
+                Date of Join
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Email
+                </td>
+                <td>
+                    @item.UserName
+                </td>
+                <td>
+                    <img src="@item.Image" width="100" height="100" />
+                </td>
+                <td>
+                    @item.JoinDate.ToShortDateString()
+                </td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <a class="btn btn-outline-dark" href="/Admin/EditUser/@item.Id">Edit</a>
+                        <a class="btn btn-outline-secondary" href="/Admin/UserDetails/@item.Id">Preferences</a>
+                        <a class="btn btn-outline-secondary" href="/UserProfile/Details/@item.UserName">Profile</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@{
+    var prevDisabled = !Model.PreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.NextPage ? "disabled" : "";
+}
+
+<a asp-action="UserList"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="UserList"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>

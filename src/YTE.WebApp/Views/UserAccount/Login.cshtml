@@ -1,0 +1,68 @@
+﻿@model YTE.BusinessLogic.Implementation.Account.Model.LoginModel
+
+
+
+<h1 class="py-3">Login</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        @if (Model.EmailUnConfirmed)
+        {
+            <div><span style="color:red">Your account is created but is not confirmed. Check your email inbox</span></div>
+            <form action="/UserAccount/ResendConfirmation" method="get">
+                <div class="form-actions no-color">
+                    <p>
+                        Insert your email to resend the email confirmation: <input type="email" name="id" />
+                        <input type="submit" value="Send" class="btn btn-primary" /> 
+
+                    </p>
+                </div>
+            </form>
+        }
+        else if (Model.AreCredentialsInvalid)
+        {
+            <div><span style="color:red">Invalid credentials</span></div>
+            
+        }
+
+        <form action="/UserAccount/Login" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label class="control-label" for="Email">Email</label>
+                <input class="form-control" type="text" id="Email" name="Email">
+                <span asp-validation-for="Email" class="text-danger"></span>
+                @*<span class="text-danger field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>*@
+            </div>
+            <div class="form-group">
+                @*<label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>*@
+                <label class="control-label" for="Password">Password</label>
+                <input type="password" class="form-control" id="Password" name="Password">
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Log in" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a href="/Home/Index">Back to Home</a>
+    <form action="/UserAccount/ResetPassConfirmation" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Forgot your password? <br />
+                Insert your mail here: <input type="email" name="id" />
+                <input type="submit" value="Send" class="btn btn-primary" />
+
+            </p>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
