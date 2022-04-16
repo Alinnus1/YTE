@@ -16,12 +16,12 @@ namespace YTE.BusinessLogic.Implementation.MailSender
     public class MailSenderService : BaseService
     {
         private readonly MailSenderConfig MailSenderConfig;
-        public MailSenderService(ServiceDependencies serviceDependencies,IOptions<MailSenderConfig> options) : base(serviceDependencies)
+        public MailSenderService(ServiceDependencies serviceDependencies, IOptions<MailSenderConfig> options) : base(serviceDependencies)
         {
             this.MailSenderConfig = options.Value;
         }
 
-        public async Task SendFollowNotification(Guid followerId,Guid followedId)
+        public async Task SendFollowNotification(Guid followerId, Guid followedId)
         {
             var follower = UnitOfWork.Users.Get()
                             .FirstOrDefault(u => u.Id == followerId);
@@ -75,7 +75,7 @@ namespace YTE.BusinessLogic.Implementation.MailSender
 
                     message.Subject = "You've lost a follower!";
                     message.Body = new TextPart("html")
-{
+                    {
                         Text = $"Hello {followed.UserName}. We are sad to tell you that {follower.UserName} stopped following you! If you want to stop receiving notifications just click <a href='https://localhost:44383/UserAccount/Edit'>here</a> and edit your account settings."
                     };
                     using (var sender = new SmtpClient())
@@ -91,12 +91,11 @@ namespace YTE.BusinessLogic.Implementation.MailSender
 
         }
 
-        public async Task SendConfirmationEmail(Guid userId,string email, string tokenId)
+        public async Task SendConfirmationEmail(Guid userId, string email, string tokenId)
         {
 
             if (userId != null && tokenId != null)
             {
-
                 var message = new MimeMessage();
                 message.From.Add(new MailboxAddress(MailSenderConfig.Displayname, MailSenderConfig.Sender));
 
@@ -114,17 +113,13 @@ namespace YTE.BusinessLogic.Implementation.MailSender
                     await sender.SendAsync(message);
                     await sender.DisconnectAsync(quit: true);
                 }
-                
             }
-
-
         }
 
         public async Task SendForgotPassEmail(Guid userId, string email, string tokenId)
         {
             if (userId != null && tokenId != null)
             {
-
                 var message = new MimeMessage();
                 message.From.Add(new MailboxAddress(MailSenderConfig.Displayname, MailSenderConfig.Sender));
 
@@ -142,7 +137,6 @@ namespace YTE.BusinessLogic.Implementation.MailSender
                     await sender.SendAsync(message);
                     await sender.DisconnectAsync(quit: true);
                 }
-
             }
         }
 
