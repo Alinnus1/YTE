@@ -5,7 +5,7 @@ using YTE.Common;
 
 namespace YTE.Entities
 {
-    public partial class VideoGameGenreVideoGame: IEntity
+    public partial class VideoGameGenreVideoGame : IEntity
     {
         public int GenreId { get; set; }
         public Guid VideoGameId { get; set; }

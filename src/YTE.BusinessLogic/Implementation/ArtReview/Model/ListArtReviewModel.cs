@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace YTE.BusinessLogic.Implementation.ArtReview.Model
 {
-    public class ListArtReviewModel 
+    public class ListArtReviewModel
     {
 
         public Guid ArtObjectId { get; set; }

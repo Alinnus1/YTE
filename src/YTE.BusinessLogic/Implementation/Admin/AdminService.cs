@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using YTE.BusinessLogic.Base;
 using YTE.BusinessLogic.Implementation.Account;
@@ -14,7 +13,6 @@ using YTE.Common.Exceptions;
 using YTE.Common.Extensions;
 using YTE.DataAccess;
 using YTE.Entities;
-using static System.Net.WebRequestMethods;
 
 namespace YTE.BusinessLogic.Implementation.Admin
 {
@@ -42,8 +40,8 @@ namespace YTE.BusinessLogic.Implementation.Admin
                 .Where(a => a.UserName.Contains(searchString))
                 .Select(a => Mapper.Map<User, ListUserModel>(a));
             var paginatedUsers = PaginatedList<ListUserModel>.Create(users, pageNumber, 25);
-            return paginatedUsers;
 
+            return paginatedUsers;
         }
 
         public DetailsUserModel GetUser(Guid id)
@@ -56,10 +54,12 @@ namespace YTE.BusinessLogic.Implementation.Admin
                 .Where(a => a.Id == id)
                 .Select(a => Mapper.Map<User, DetailsUserModel>(a))
                 .FirstOrDefault();
+
             if (user == null)
             {
                 throw new NotFoundErrorException("User Not Found");
             }
+
             return user;
         }
 
@@ -79,10 +79,13 @@ namespace YTE.BusinessLogic.Implementation.Admin
         {
             ExecuteInTransaction(uow =>
             {
-
                 var user = uow.Users.Get()
                     .Include(u => u.Image)
                     .FirstOrDefault(u => u.Id == model.Id);
+                if (user == null)
+                {
+                    return;
+                }
 
                 EditUserValidator.Validate(model).ThenThrow(model);
                 user.UserName = model.UserName;
@@ -95,6 +98,7 @@ namespace YTE.BusinessLogic.Implementation.Admin
                 {
                     user.PasswordHash = UserAccountService.ComputeSha256Hash(model.NewPassword);
                 }
+
                 ImageService.SetImage(model, uow, user);
                 RoleService.SetRoles(model, uow, user);
 
@@ -111,11 +115,8 @@ namespace YTE.BusinessLogic.Implementation.Admin
                     .FirstOrDefault(u => u.Id == id);
 
                 uow.Users.Delete(user);
-
                 uow.SaveChanges();
             });
-
         }
-
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YTE.Common;
+﻿using YTE.Common;
 
 namespace YTE.Entities
 {

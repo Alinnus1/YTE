@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Implementation.Film;
 using YTE.BusinessLogic.Implementation.Film.Model;
 using YTE.BusinessLogic.Implementation.Genre;
@@ -41,22 +37,22 @@ namespace YTE.WebApp.Controllers
                 return View("Error_NotFound");
 
             }
-            
+
             Service.CreateNewFilm(model);
 
             return RedirectToAction("List", "Film");
         }
 
         [HttpGet]
-        public IActionResult List(string currentFilter,string searchString, int pageNumber = 1)
+        public IActionResult List(string currentFilter, string searchString, int pageNumber = 1)
         {
             if (searchString == null)
             {
                 searchString = currentFilter;
             }
             ViewData["CurrentFilter"] = searchString;
-            var model = Service.GetFilmsFilter( searchString, pageNumber);
-           
+            var model = Service.GetFilmsFilter(searchString, pageNumber);
+
             return View(model);
         }
 
@@ -73,7 +69,7 @@ namespace YTE.WebApp.Controllers
         [HttpGet]
         public IActionResult Edit(Guid id)
         {
-            
+
             var model = Service.EditFilm(id);
             return View(model);
         }
@@ -82,7 +78,7 @@ namespace YTE.WebApp.Controllers
         [HttpPost]
         public IActionResult Edit(Guid id, EditFilmModel input)
         {
-            if (input  == null)
+            if (input == null)
             {
                 return View("Error_NotFound");
 

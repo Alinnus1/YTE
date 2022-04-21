@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Base;
 using YTE.BusinessLogic.Implementation.Film.Model;
 using YTE.BusinessLogic.Implementation.Genre.Model;
@@ -28,7 +26,6 @@ namespace YTE.BusinessLogic.Implementation.Genre
         }
         public List<ListGenreModel> GetGenres()
         {
-
             var listGenres1 = UnitOfWork.MangaGenres.Get()
                 .Select(a => Mapper.Map<Entities.MangaGenre, ListGenreModel>(a))
                 .ToList();
@@ -50,7 +47,7 @@ namespace YTE.BusinessLogic.Implementation.Genre
             switch (id)
             {
                 case (int)GenreType.FilmGenre:
-                    genreList= UnitOfWork.FilmGenres.Get()
+                    genreList = UnitOfWork.FilmGenres.Get()
                         .Select(a => Mapper.Map<Entities.FilmGenre, ListGenreModel>(a))
                         .ToList();
                     break;
@@ -66,7 +63,6 @@ namespace YTE.BusinessLogic.Implementation.Genre
                     break;
                 default:
                     break;
-
             }
             return genreList;
         }
@@ -79,7 +75,7 @@ namespace YTE.BusinessLogic.Implementation.Genre
                 {
                     case (int)GenreType.MangaGenre:
                         var mangaGenre = uow.MangaGenres.Get()
-                                .FirstOrDefault(a=>a.Id == id);
+                                .FirstOrDefault(a => a.Id == id);
                         uow.MangaGenres.Delete(mangaGenre);
                         uow.SaveChanges();
                         break;
@@ -179,7 +175,6 @@ namespace YTE.BusinessLogic.Implementation.Genre
                     Value = g.Genre.Id
                 })
                 .ToList();
-
         }
         public void CreateVideoGameGenreVideoGame(UnitOfWork uow, Entities.VideoGame videogame, int selectedId)
         {
@@ -219,9 +214,6 @@ namespace YTE.BusinessLogic.Implementation.Genre
             {
                 DeleteVideoGameGenreVideoGameR(uow, videogame, currentGenreIds);
             }
-
-
-            
         }
 
         public void DeleteVideoGameGenreVideoGameR(UnitOfWork uow, Entities.VideoGame videogame, List<int> currentGenreIds)
@@ -267,7 +259,6 @@ namespace YTE.BusinessLogic.Implementation.Genre
                     Value = g.Genre.Id
                 })
                 .ToList();
-
         }
 
         public void CreateFilmGenreFilm(UnitOfWork uow, Entities.Film film, int selectedId)
@@ -280,7 +271,6 @@ namespace YTE.BusinessLogic.Implementation.Genre
 
             uow.FilmGenresFilm.Insert(relation);
         }
-
 
         public void SetFilmGenres(EditFilmModel model, UnitOfWork uow, Entities.Film film)
         {
@@ -307,9 +297,6 @@ namespace YTE.BusinessLogic.Implementation.Genre
             {
                 DeleteFilmGenreFilmR(uow, film, currentGenreIds);
             }
-
-
-
         }
 
         public void DeleteFilmGenreFilmR(UnitOfWork uow, Entities.Film film, List<int> currentGenreIds)
@@ -346,10 +333,9 @@ namespace YTE.BusinessLogic.Implementation.Genre
                     Value = g.Genre.Id
                 })
                 .ToList();
-
         }
 
-        public List<string> GetMangaGenresOfManga (Guid id)
+        public List<string> GetMangaGenresOfManga(Guid id)
         {
             return UnitOfWork.MangaGenresManga.Get()
                 .Where(g => g.MangaId == id)
@@ -376,7 +362,6 @@ namespace YTE.BusinessLogic.Implementation.Genre
                  .Select(a => a.GenreId)
                 .ToList();
 
-
             if (model.selectedGenres != null)
             {
                 var upComingGenreIds = model.selectedGenres;
@@ -394,8 +379,6 @@ namespace YTE.BusinessLogic.Implementation.Genre
             {
                 DeleteMangaGenreMangaR(uow, manga, currentGenreIds);
             }
-
-
         }
 
         private void DeleteMangaGenreMangaR(UnitOfWork uow, Entities.Manga manga, List<int> currentGenreIds)
@@ -408,6 +391,5 @@ namespace YTE.BusinessLogic.Implementation.Genre
             }
         }
         #endregion
-
     }
 }

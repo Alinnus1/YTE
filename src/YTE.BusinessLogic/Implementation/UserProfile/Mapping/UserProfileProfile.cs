@@ -1,9 +1,5 @@
 ﻿using AutoMapper;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Implementation.UserProfile.Model;
 using YTE.Entities;
 
@@ -17,7 +13,7 @@ namespace YTE.BusinessLogic.Implementation.UserProfile.Mapping
                 .ForMember(a => a.Image, a => a.MapFrom(s => $"data:image/gif;base64,{Convert.ToBase64String(s.Image.Content)}"))
                 .ForMember(a => a.NoReviews, a => a.MapFrom(s => s.ArtReviews.Count));
 
-            CreateMap<User,DetailsUserProfileModel>()
+            CreateMap<User, DetailsUserProfileModel>()
                 .ForMember(a => a.Image, a => a.MapFrom(s => $"data:image/gif;base64,{Convert.ToBase64String(s.Image.Content)}"))
                 .ForMember(a => a.Age, a => a.MapFrom(s => GetAge(s.Age)))
                 .ForMember(a => a.NoReviews, a => a.MapFrom(s => s.ArtReviews.Count));

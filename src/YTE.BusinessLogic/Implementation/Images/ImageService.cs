@@ -1,15 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Base;
-using YTE.BusinessLogic.Implementation.Account.Model;
-using YTE.BusinessLogic.Implementation.Film.Model;
 using YTE.Common;
 using YTE.DataAccess;
 using YTE.Entities;
@@ -27,29 +21,28 @@ namespace YTE.BusinessLogic.Implementation.Images
         {
             if (model.Image != null)
             {
-
-                var imagetemp = System.Drawing.Image.FromStream(model.Image.OpenReadStream());
-                var resized = new Bitmap(imagetemp, new Size(250, 250));
-                using var imageStream = new MemoryStream();
-                resized.Save(imageStream, ImageFormat.Jpeg);
-                var imageBytes = imageStream.ToArray();
-
-                var image = new Image()
-                {
-                    Id = Guid.NewGuid(),
-                    Content = imageBytes,
-                    ImageName = user.UserName + "_profile_picture",
-                    IsActive = true
-
-                };
-
-                uow.Images.Insert(image);
-                if (user.Image.ImageName != "stock_profile_picture_img")
-                {
-                    user.Image.IsActive = false;
-                }
-                user.ImageId = image.Id;
+                return;
             }
+            var imagetemp = System.Drawing.Image.FromStream(model.Image.OpenReadStream());
+            var resized = new Bitmap(imagetemp, new Size(250, 250));
+            using var imageStream = new MemoryStream();
+            resized.Save(imageStream, ImageFormat.Jpeg);
+            var imageBytes = imageStream.ToArray();
+
+            var image = new Image()
+            {
+                Id = Guid.NewGuid(),
+                Content = imageBytes,
+                ImageName = user.UserName + "_profile_picture",
+                IsActive = true
+            };
+
+            uow.Images.Insert(image);
+            if (user.Image.ImageName != "stock_profile_picture_img")
+            {
+                user.Image.IsActive = false;
+            }
+            user.ImageId = image.Id;
         }
 
         public void SetStockImage(User user, UnitOfWork uow)
@@ -102,7 +95,7 @@ namespace YTE.BusinessLogic.Implementation.Images
                 .FirstOrDefault(i => i.ImageName == "stock_poster_background_img");
 
             artObject.PosterId = stock.Id;
-            artObject.BackgroundId= stock.Id;
+            artObject.BackgroundId = stock.Id;
 
         }
         public void SetPoster(IEditArtModel model, UnitOfWork uow, Entities.ArtObject artObject)

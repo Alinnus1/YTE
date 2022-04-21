@@ -1,11 +1,6 @@
 ﻿using FluentValidation;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Implementation.Film.Model;
-using YTE.BusinessLogic.Implementation.Manga.Model;
 
 namespace YTE.BusinessLogic.Implementation.Manga.Validation
 {
@@ -49,7 +44,7 @@ namespace YTE.BusinessLogic.Implementation.Manga.Validation
         private bool BetweenRange(DateTime date)
         {
             DateTime dateMin = new DateTime(1878, 1, 1, 0, 0, 0);
-            DateTime dateMax =  DateTime.Now;
+            DateTime dateMax = DateTime.Now;
             int result1 = DateTime.Compare(dateMin, date);
             int result2 = DateTime.Compare(date, dateMax);
 

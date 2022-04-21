@@ -1,15 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Implementation.FavoriteList;
 using YTE.Code.Base;
 
 namespace YTE.WebApp.Controllers
 {
-    [Authorize(Roles ="Admin,User,ModManga,ModFilm,ModVideoGame")]
+    [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame")]
     public class FavoriteListController : BaseController
     {
         private readonly FavoriteListService Service;
@@ -19,14 +16,14 @@ namespace YTE.WebApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult List(string id,int pageNumber = 1)
+        public IActionResult List(string id, int pageNumber = 1)
         {
-            var model = Service.GetOf(id,pageNumber);
+            var model = Service.GetOf(id, pageNumber);
             return View(model);
         }
 
         [HttpPost]
-        public void Add( Guid id)
+        public void Add(Guid id)
         {
             Service.Add(CurrentUser.Id, id);
         }
@@ -34,7 +31,7 @@ namespace YTE.WebApp.Controllers
         [HttpPost]
         public void Remove(Guid id)
         {
-            Service.Remove( id);
+            Service.Remove(id);
         }
     }
 }

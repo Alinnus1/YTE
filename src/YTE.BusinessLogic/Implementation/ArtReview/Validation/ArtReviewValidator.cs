@@ -1,9 +1,6 @@
 ﻿using FluentValidation;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Implementation.ArtReview.Model;
 using YTE.DataAccess;
 
@@ -21,7 +18,7 @@ namespace YTE.BusinessLogic.Implementation.ArtReview.Validation
                 .GreaterThanOrEqualTo(0).WithMessage("Score can not be lower than 0!")
                 .LessThanOrEqualTo(10).WithMessage("Score can not be greater than 10!");
 
-            RuleFor(x=> x.ExperiencedAt)
+            RuleFor(x => x.ExperiencedAt)
                 .NotEmpty().WithMessage("Required field!")
                 .Must(BetweenRange).WithMessage("Date of experience must be between the release date and present!");
 
@@ -29,7 +26,7 @@ namespace YTE.BusinessLogic.Implementation.ArtReview.Validation
                 .Must(FilterForbiddenWords).WithMessage("You are not allowed to use bad mannered words!");
         }
 
-        private bool BetweenRange(IArtReviewModel model,DateTime date)
+        private bool BetweenRange(IArtReviewModel model, DateTime date)
         {
             DateTime dateMin = uow.ArtObjects.Get()
                                 .Where(a => a.Id == model.ArtObjectId)
@@ -39,7 +36,7 @@ namespace YTE.BusinessLogic.Implementation.ArtReview.Validation
             int result1 = DateTime.Compare(dateMin, date);
             int result2 = DateTime.Compare(date, dateMax);
 
-            if (result1 <= 0 && result2 <=0)
+            if (result1 <= 0 && result2 <= 0)
             {
                 return true;
             }
@@ -52,7 +49,7 @@ namespace YTE.BusinessLogic.Implementation.ArtReview.Validation
         private bool FilterForbiddenWords(IArtReviewModel model, string review)
         {
             var forbiddenWords = uow.ForbiddenWords.Get()
-                                    .Select(f=>f.Word)
+                                    .Select(f => f.Word)
                                     .ToList();
             var hasNy = forbiddenWords.Any(c => review.Contains(c, StringComparison.OrdinalIgnoreCase));
 

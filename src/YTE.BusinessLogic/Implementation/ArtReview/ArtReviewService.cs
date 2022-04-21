@@ -2,14 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Base;
 using YTE.BusinessLogic.Implementation.ArtReview.Model;
 using YTE.BusinessLogic.Implementation.ArtReview.Validation;
 using YTE.BusinessLogic.Implementation.FavoriteList;
-using YTE.BusinessLogic.Implementation.UserProfile.Model;
 using YTE.BusinessLogic.Implementation.WatchList;
 using YTE.Common.DTOS;
 using YTE.Common.Extensions;
@@ -86,8 +82,7 @@ namespace YTE.BusinessLogic.Implementation.ArtReview
                      .OrderBy(column, desc)
                      .Select(a => Mapper.Map<Entities.ArtReview, ListUserProfileArtReviewModel>(a))
                      .Take(3)
-                     .ToList()
-                     ;
+                     .ToList();
         }
 
         public bool DeleteArtReviewOfCurrent(Guid id, string username)
@@ -113,7 +108,6 @@ namespace YTE.BusinessLogic.Implementation.ArtReview
                     return false;
                 }
             });
-
         }
 
         public int GetNumberOfReviewsOfArt(Guid id)
@@ -131,7 +125,6 @@ namespace YTE.BusinessLogic.Implementation.ArtReview
                 .Where(a => a.ArtObjectId == id && a.User.UserName == username && a.ArtObject.IsDeleted == false)
                 .Select(a => Mapper.Map<Entities.ArtReview, EditArtReviewModel>(a))
                 .FirstOrDefault();
-
         }
 
         public bool UpdateArtReviewOfCurrent(EditArtReviewModel model, Guid id, string username)
@@ -176,7 +169,6 @@ namespace YTE.BusinessLogic.Implementation.ArtReview
                 .Any(a => a.ArtObjectId == id && a.User.UserName == username);
         }
 
-
         public PaginatedList<ListUserArtReviewModel> GetSpecificUserReviewsOfGames(string username, string type, bool desc, int pageNumber)
         {
             var reviews = UnitOfWork.ArtReview.Get()
@@ -204,6 +196,7 @@ namespace YTE.BusinessLogic.Implementation.ArtReview
                      .OrderBy(type, desc)
                      .Select(a => Mapper.Map<Entities.ArtReview, ListUserArtReviewModel>(a));
             var paginatedReviews = PaginatedList<ListUserArtReviewModel>.Create(reviews, pageNumber, 10);
+
             return paginatedReviews;
         }
 
@@ -218,6 +211,7 @@ namespace YTE.BusinessLogic.Implementation.ArtReview
                     .OrderBy(type, desc)
                     .Select(a => Mapper.Map<Entities.ArtReview, ListUserArtReviewModel>(a));
             var pagintaedReviews = PaginatedList<ListUserArtReviewModel>.Create(reviews, pageNumber, 10);
+
             return pagintaedReviews;
         }
 
@@ -231,9 +225,9 @@ namespace YTE.BusinessLogic.Implementation.ArtReview
                     .OrderBy(type, desc)
                     .Select(a => Mapper.Map<Entities.ArtReview, ListUserArtReviewModel>(a));
             var paginatedReviews = PaginatedList<ListUserArtReviewModel>.Create(reviews, pageNumber, 10);
+
             return paginatedReviews;
         }
-
 
         public decimal GetAverageOfArt(Guid id)
         {
@@ -241,6 +235,7 @@ namespace YTE.BusinessLogic.Implementation.ArtReview
                 .Include(a => a.ArtObject)
                 .Where(a => a.ArtObjectId == id)
                 .Select(a => a.Score);
+
             if (listScores.Count() == 0)
             {
                 return 0;
@@ -249,9 +244,6 @@ namespace YTE.BusinessLogic.Implementation.ArtReview
             {
                 return Math.Round(listScores.Average(), 1);
             }
-
         }
-
-
     }
 }

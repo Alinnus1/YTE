@@ -12,7 +12,7 @@ namespace YTE.WebApp.Controllers
     {
 
         private readonly AdminService Service;
-        public AdminController(ControllerDependencies dependencies,AdminService adminService)
+        public AdminController(ControllerDependencies dependencies, AdminService adminService)
             : base(dependencies)
         {
             this.Service = adminService;
@@ -26,14 +26,14 @@ namespace YTE.WebApp.Controllers
 
 
         [HttpGet]
-        public IActionResult UserList(string currentFilter,string searchString,int pageNumber =1)
+        public IActionResult UserList(string currentFilter, string searchString, int pageNumber = 1)
         {
             if (searchString == null)
             {
                 searchString = currentFilter;
             }
             ViewData["CurrentFilter"] = searchString;
-            var model = Service.GetUsers(searchString,pageNumber);
+            var model = Service.GetUsers(searchString, pageNumber);
             return View(model);
         }
 

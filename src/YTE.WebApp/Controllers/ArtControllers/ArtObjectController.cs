@@ -1,9 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Implementation.ArtObject;
 using YTE.BusinessLogic.Implementation.ArtObject.Model;
 using YTE.Code.Base;
@@ -16,7 +11,7 @@ namespace YTE.WebApp.Controllers
 
         public ArtObjectController(ControllerDependencies dependencies, ArtObjectService service) : base(dependencies)
         {
-            this.Service= service;
+            this.Service = service;
         }
 
         [HttpGet]

@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
-using System.Collections.Generic;
 using YTE.BusinessLogic.Implementation.Genre;
-using YTE.BusinessLogic.Implementation.Manga.Model;
 using YTE.BusinessLogic.Implementation.VideoGame;
 using YTE.BusinessLogic.Implementation.VideoGame.Model;
 using YTE.Code.Base;
@@ -16,10 +13,10 @@ namespace YTE.WebApp.Controllers
         private readonly VideoGameService Service;
         private readonly GenreService GenreService;
 
-        public VideoGameController(ControllerDependencies dependencies, VideoGameService service,GenreService genreService) : base(dependencies)
+        public VideoGameController(ControllerDependencies dependencies, VideoGameService service, GenreService genreService) : base(dependencies)
         {
             this.Service = service;
-            this.GenreService = genreService; 
+            this.GenreService = genreService;
         }
 
         [Authorize(Roles = "ModVideoGame,Admin")]
@@ -39,14 +36,14 @@ namespace YTE.WebApp.Controllers
                 return View("Error_NotFound");
 
             }
-            
+
             Service.CreateNewVideoGame(model);
 
             return RedirectToAction("List", "VideoGame");
         }
 
         [HttpGet]
-        public IActionResult List(string currentFilter,string searchString, int pageNumber = 1)
+        public IActionResult List(string currentFilter, string searchString, int pageNumber = 1)
         {
             if (searchString == null)
             {
@@ -54,12 +51,12 @@ namespace YTE.WebApp.Controllers
             }
             ViewData["CurrentFilter"] = searchString;
 
-            var model = Service.GetVideoGamesFilter( searchString, pageNumber);
+            var model = Service.GetVideoGamesFilter(searchString, pageNumber);
 
             return View(model);
         }
 
-        
+
         [HttpGet]
         public IActionResult Details(Guid id)
         {

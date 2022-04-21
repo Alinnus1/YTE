@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using System.Linq;
 using YTE.BusinessLogic.Base;
 using YTE.BusinessLogic.Implementation.ArtObject;
@@ -17,7 +16,6 @@ using YTE.Common.DTOS;
 using YTE.Common.Exceptions;
 using YTE.Common.Extensions;
 using YTE.DataAccess;
-using YTE.Entities;
 using YTE.Entities.Enums;
 
 namespace YTE.BusinessLogic.Implementation.VideoGame
@@ -32,7 +30,7 @@ namespace YTE.BusinessLogic.Implementation.VideoGame
         private readonly ArtReviewService ArtReviewService;
         private readonly ArtObjectService ArtObjectService;
 
-        public VideoGameService(ServiceDependencies serviceDependencies, ImageService imageService,GenreService genreService, FavoriteListService favoriteListService, WatchListService watchListService, ArtReviewService artReviewService,ArtObjectService artObjectService) : base(serviceDependencies)
+        public VideoGameService(ServiceDependencies serviceDependencies, ImageService imageService, GenreService genreService, FavoriteListService favoriteListService, WatchListService watchListService, ArtReviewService artReviewService, ArtObjectService artObjectService) : base(serviceDependencies)
         {
             this.VideoGameValidator = new VideoGameValidator();
             this.ImageService = imageService;
@@ -76,7 +74,7 @@ namespace YTE.BusinessLogic.Implementation.VideoGame
             });
         }
 
-        public List<ListVideoGameModel> GetVideoGamesFilter( string searchString, int pageNumber)
+        public List<ListVideoGameModel> GetVideoGamesFilter(string searchString, int pageNumber)
         {
             if (String.IsNullOrEmpty(searchString))
             {
@@ -97,10 +95,11 @@ namespace YTE.BusinessLogic.Implementation.VideoGame
                 a.Average = ArtReviewService.GetAverageOfArt(a.Id);
                 a.NoReviews = ArtReviewService.GetNumberOfReviewsOfArt(a.Id);
             });
+
             return paginatedVideogames;
         }
 
-        
+
         public DetailsVideoGameModel DetailsVideoGame(Guid id)
         {
             var videogame = UnitOfWork.VideoGames.Get()
@@ -124,6 +123,7 @@ namespace YTE.BusinessLogic.Implementation.VideoGame
             detailsVideoGame.NoReviews = ArtReviewService.GetNumberOfReviewsOfArt(id);
             detailsVideoGame.EligibleFavoriteList = FavoriteService.CheckExperienced(CurrentUser.Id, detailsVideoGame.Id);
             detailsVideoGame.AddedToFavoriteList = FavoriteService.CheckAdded(CurrentUser.Id, detailsVideoGame.Id);
+
             return detailsVideoGame;
         }
         public EditVideoGameModel EditVideoGame(Guid id)
@@ -156,7 +156,7 @@ namespace YTE.BusinessLogic.Implementation.VideoGame
 
             });
         }
-        
+
 
         public void DeleteVideoGame(Guid id)
         {

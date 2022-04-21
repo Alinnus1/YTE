@@ -10,7 +10,7 @@ namespace YTE.DataAccess.EntityFramework.Configurations
         {
             builder.ToTable("UsersRoles");
 
-            builder.HasKey(ur => new { ur.RoleId, ur.UserId});
+            builder.HasKey(ur => new { ur.RoleId, ur.UserId });
         }
     }
 }

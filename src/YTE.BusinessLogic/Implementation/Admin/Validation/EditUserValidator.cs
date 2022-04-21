@@ -1,9 +1,5 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Implementation.Admin.Model;
 using YTE.DataAccess;
 
@@ -41,7 +37,7 @@ namespace YTE.BusinessLogic.Implementation.Admin.Validation
                                 .Where(u => u.Id == model.Id)
                                 .Select(u => u.Email)
                                 .FirstOrDefault();
-                    
+
             emails.Remove(currentEmail);
             return !emails.Contains(email);
         }

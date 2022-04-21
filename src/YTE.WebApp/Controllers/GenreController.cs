@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Implementation.Genre;
 using YTE.BusinessLogic.Implementation.Genre.Model;
 using YTE.Code.Base;
@@ -15,7 +13,7 @@ namespace YTE.WebApp.Controllers.GenreControllers
     public class GenreController : BaseController
     {
         private readonly GenreService Service;
-        public GenreController(ControllerDependencies dependencies, GenreService service):base(dependencies)
+        public GenreController(ControllerDependencies dependencies, GenreService service) : base(dependencies)
         {
             this.Service = service;
         }
@@ -58,7 +56,7 @@ namespace YTE.WebApp.Controllers.GenreControllers
         }
 
         [HttpGet]
-        public IActionResult Delete(int id,int type)
+        public IActionResult Delete(int id, int type)
         {
             Service.DeleteGenre(id, type);
 

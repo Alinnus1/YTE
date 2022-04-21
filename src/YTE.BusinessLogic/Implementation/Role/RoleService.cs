@@ -1,9 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Base;
 using YTE.BusinessLogic.Implementation.Admin.Model;
 using YTE.Common.DTOS;
@@ -21,7 +18,7 @@ namespace YTE.BusinessLogic.Implementation.Role
         public List<ListItem<string, int>> GetRoles()
         {
             return UnitOfWork.Roles.Get()
-                .Where(r=> r.Name != "User")
+                .Where(r => r.Name != "User")
                 .Select(r => new ListItem<string, int>
                 {
                     Text = $"{r.Name}",
@@ -32,8 +29,7 @@ namespace YTE.BusinessLogic.Implementation.Role
 
         public List<ListItem<string, int>> GetRolesOfUser(Guid id)
         {
-
-            return  UnitOfWork.Users.Get()
+            return UnitOfWork.Users.Get()
                 .Where(u => u.Id == id)
                 .Select(u => u.UserRoles.Select(ur => ur.Role).Where(r => r.Name != "User").Select(r => new ListItem<string, int>
                 {

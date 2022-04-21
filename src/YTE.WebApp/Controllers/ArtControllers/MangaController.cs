@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
-using System.Collections.Generic;
-using YTE.BusinessLogic.Implementation.Film.Model;
 using YTE.BusinessLogic.Implementation.Genre;
 using YTE.BusinessLogic.Implementation.Manga;
 using YTE.BusinessLogic.Implementation.Manga.Model;
@@ -11,7 +8,7 @@ using YTE.Code.Base;
 
 namespace YTE.WebApp.Controllers
 {
-    
+
     public class MangaController : BaseController
     {
         private readonly MangaService Service;
@@ -40,14 +37,14 @@ namespace YTE.WebApp.Controllers
                 return View("Error_NotFound");
 
             }
-            
+
             Service.CreateNewManga(model);
 
             return RedirectToAction("List", "Manga");
         }
 
         [HttpGet]
-        public IActionResult List(string currentFilter,string searchString,int pageNumber = 1)
+        public IActionResult List(string currentFilter, string searchString, int pageNumber = 1)
         {
             if (searchString == null)
             {
@@ -55,11 +52,11 @@ namespace YTE.WebApp.Controllers
             }
             ViewData["CurrentFilter"] = searchString;
 
-            var model = Service.GetMangasFilter( searchString, pageNumber);
+            var model = Service.GetMangasFilter(searchString, pageNumber);
 
             return View(model);
         }
-        
+
         [HttpGet]
         public IActionResult Details(Guid id)
         {
@@ -86,7 +83,7 @@ namespace YTE.WebApp.Controllers
                 return View("Error_NotFound");
 
             }
-            Service.UpdateManga( input);
+            Service.UpdateManga(input);
 
             return RedirectToAction("Details", "Manga", new
             {

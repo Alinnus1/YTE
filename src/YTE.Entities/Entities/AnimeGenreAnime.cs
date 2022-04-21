@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using YTE.Common;
 
 #nullable disable
 
 namespace YTE.Entities
 {
-    public partial class AnimeGenreAnime 
+    public partial class AnimeGenreAnime
     {
         public int GenreId { get; set; }
         public Guid AnimeId { get; set; }

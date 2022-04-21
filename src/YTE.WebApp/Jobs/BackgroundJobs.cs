@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+﻿using Hangfire;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using YTE.BusinessLogic.Implementation.Account;
 using YTE.BusinessLogic.Implementation.FollowList;
 using YTE.BusinessLogic.Implementation.Images;
-using YTE.BusinessLogic.Implementation.Account;
 using YTE.BusinessLogic.Implementation.Token;
-using Hangfire;
 
 namespace YTE.WebApp.Jobs
 {
@@ -41,7 +37,7 @@ namespace YTE.WebApp.Jobs
 
 
 
-            
+
         }
     }
 }

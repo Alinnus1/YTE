@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Implementation.ForbiddenWord;
 using YTE.BusinessLogic.Implementation.ForbiddenWord.Model;
 using YTE.Code.Base;
@@ -14,7 +10,7 @@ namespace YTE.WebApp.Controllers
     public class ForbiddenWordController : BaseController
     {
         private readonly ForbiddenWordService Service;
-        public ForbiddenWordController(ControllerDependencies dependencies,ForbiddenWordService forbiddenWordService) : base(dependencies)
+        public ForbiddenWordController(ControllerDependencies dependencies, ForbiddenWordService forbiddenWordService) : base(dependencies)
         {
             this.Service = forbiddenWordService;
         }

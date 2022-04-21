@@ -18,7 +18,7 @@ namespace YTE.BusinessLogic.Implementation.Genre.Validation
                 .MaximumLength(50).WithMessage("Genre name can not be longer than 50 letters!")
                 .Matches(@"^[a-zA-Z- ]*$").WithMessage("Genre name can have only letters!")
                 .Must(IsUnique).WithMessage("Genre already added!");
-                
+
         }
         private bool IsUnique(CreateGenreModel model, string name)
         {
@@ -27,7 +27,7 @@ namespace YTE.BusinessLogic.Implementation.Genre.Validation
             {
                 case (int)GenreType.MangaGenre:
                     var mangaGenres = uow.MangaGenres.Get()
-                            .Select(mg=>mg.Name)
+                            .Select(mg => mg.Name)
                             .ToList();
                     result = !mangaGenres.Contains(name);
                     break;
@@ -45,7 +45,7 @@ namespace YTE.BusinessLogic.Implementation.Genre.Validation
                     break;
 
                 default:
-                    
+
                     break;
 
             }

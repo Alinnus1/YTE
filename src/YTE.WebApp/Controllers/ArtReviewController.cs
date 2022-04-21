@@ -1,32 +1,29 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Implementation.ArtReview;
 using YTE.BusinessLogic.Implementation.ArtReview.Model;
 using YTE.Code.Base;
 
 namespace YTE.WebApp.Controllers
 {
-   
+
     public class ArtReviewController : BaseController
     {
         private readonly ArtReviewService Service;
 
-        public ArtReviewController(ControllerDependencies dependencies,ArtReviewService service) : base(dependencies)
+        public ArtReviewController(ControllerDependencies dependencies, ArtReviewService service) : base(dependencies)
         {
             this.Service = service;
         }
 
         [HttpGet]
-        public IActionResult ListReviewsOfArt(Guid id, string sortOrder,int pageNumber = 1)
+        public IActionResult ListReviewsOfArt(Guid id, string sortOrder, int pageNumber = 1)
         {
             ViewData["ScoreSortParm"] = String.IsNullOrEmpty(sortOrder) ? "score_asc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
-            var model = Service.GetReviewsOfArt(id,"Score",true, pageNumber);
+            var model = Service.GetReviewsOfArt(id, "Score", true, pageNumber);
 
             switch (sortOrder)
             {
@@ -40,7 +37,7 @@ namespace YTE.WebApp.Controllers
                     model = Service.GetReviewsOfArt(id, "Date", true, pageNumber);
                     break;
                 default:
-                    
+
                     break;
             }
 
@@ -49,7 +46,7 @@ namespace YTE.WebApp.Controllers
 
         #region Specific User
         [HttpGet]
-        public IActionResult ListReviewsOf(string id, string sortOrder,int pageNumber = 1)
+        public IActionResult ListReviewsOf(string id, string sortOrder, int pageNumber = 1)
         {
             ViewData["CurrentSort"] = sortOrder;
             ViewData["ScoreSortParm"] = String.IsNullOrEmpty(sortOrder) ? "score_asc" : "";
@@ -128,7 +125,7 @@ namespace YTE.WebApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult ListGameReviewsOf(string id, string sortOrder, int pageNumber=1)
+        public IActionResult ListGameReviewsOf(string id, string sortOrder, int pageNumber = 1)
         {
             ViewData["CurrentSort"] = sortOrder;
             ViewData["ScoreSortParm"] = String.IsNullOrEmpty(sortOrder) ? "score_asc" : "";
@@ -163,7 +160,7 @@ namespace YTE.WebApp.Controllers
         {
             var model = new CreateArtReviewModel();
             model.ArtObjectId = id;
-            if (!Service.Check(id,CurrentUser.UserName))
+            if (!Service.Check(id, CurrentUser.UserName))
             {
                 return View(model);
             }
@@ -173,7 +170,7 @@ namespace YTE.WebApp.Controllers
                 return Redirect(urlAnterior);
             }
         }
-    
+
         [HttpPost]
         [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame")]
         public IActionResult Create(CreateArtReviewModel model)
@@ -182,9 +179,9 @@ namespace YTE.WebApp.Controllers
             {
                 return View("Error_NotFound");
             }
-            Service.CreateArtReview( model);
+            Service.CreateArtReview(model);
 
-            return RedirectToAction("ListReviewsOfArt","ArtReview",new { id = model.ArtObjectId});
+            return RedirectToAction("ListReviewsOfArt", "ArtReview", new { id = model.ArtObjectId });
         }
 
 
@@ -205,7 +202,7 @@ namespace YTE.WebApp.Controllers
             {
                 return View("Error_");
             }
-            if (Service.UpdateArtReviewOfCurrent( model, id, type))
+            if (Service.UpdateArtReviewOfCurrent(model, id, type))
             {
                 return RedirectToAction("ListReviewsOfArt", "ArtReview", new { id = id });
             }
@@ -222,7 +219,7 @@ namespace YTE.WebApp.Controllers
         [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame")]
         public IActionResult Delete(Guid id, string type)
         {
-            if (Service.DeleteArtReviewOfCurrent( id, type))
+            if (Service.DeleteArtReviewOfCurrent(id, type))
             {
                 string urlAnterior = Request.Headers["Referer"].ToString();
                 return Redirect(urlAnterior);

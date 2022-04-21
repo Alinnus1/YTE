@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Base;
 using YTE.BusinessLogic.Implementation.Account;
 using YTE.BusinessLogic.Implementation.Admin;
@@ -87,7 +86,7 @@ namespace YTE.Code.ExtensionMethods
                     UserName = httpContext.User.Identity.Name,
                     Email = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value,
                     Roles = list
-                    
+
                 };
             });
 
