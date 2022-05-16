@@ -24,7 +24,6 @@ namespace YTE.WebApp.Controllers
         }
 
         [HttpGet]
-
         [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame")]
         public IActionResult Details()
         {
@@ -34,7 +33,6 @@ namespace YTE.WebApp.Controllers
         }
 
         [HttpGet]
-
         [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame")]
         public IActionResult Edit()
         {
@@ -44,7 +42,6 @@ namespace YTE.WebApp.Controllers
         }
 
         [HttpPost]
-
         [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame")]
         public IActionResult Edit(EditUserAccountModel model)
         {
@@ -64,7 +61,6 @@ namespace YTE.WebApp.Controllers
         }
 
         [HttpGet]
-
         [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame")]
         public IActionResult Delete()
         {
@@ -74,7 +70,6 @@ namespace YTE.WebApp.Controllers
         }
 
         [HttpPost]
-
         [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame")]
         public async Task<IActionResult> Delete(DeleteUserAccountModel model)
         {
@@ -89,6 +84,7 @@ namespace YTE.WebApp.Controllers
             }
 
             ModelState.AddModelError(string.Empty, "Password does not match the current password!");
+
             return View(model);
         }
 
@@ -103,7 +99,6 @@ namespace YTE.WebApp.Controllers
         }
 
         [HttpPost]
-
         [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame")]
         public IActionResult ChangePassword(ChangePassModel model)
         {
@@ -111,7 +106,6 @@ namespace YTE.WebApp.Controllers
             {
                 return View("Error_NotFound");
             }
-
             if (Service.ChangePassword(model))
             {
                 return RedirectToAction("Details", "UserAccount");
@@ -187,7 +181,6 @@ namespace YTE.WebApp.Controllers
             }
             else
             {
-
                 await LogIn(user);
             }
 
@@ -238,6 +231,7 @@ namespace YTE.WebApp.Controllers
         public IActionResult ConfirmationEmail(Guid id, string type)
         {
             var model = Service.ConfirmEmail(id, type);
+
             return View(model);
         }
 
@@ -245,6 +239,7 @@ namespace YTE.WebApp.Controllers
         public IActionResult ResendConfirmation(string id)
         {
             var model = Service.ResendConfirmation(id);
+
             return View(model);
         }
 
@@ -252,6 +247,7 @@ namespace YTE.WebApp.Controllers
         public IActionResult ResetPassConfirmation(string id)
         {
             var model = Service.ResetPassEmail(id);
+
             return View(model);
         }
 
@@ -259,6 +255,7 @@ namespace YTE.WebApp.Controllers
         public IActionResult ResetPassword(Guid id, string type)
         {
             var model = Service.ResetPasswordForm(id, type);
+
             return View(model);
         }
 
@@ -266,6 +263,7 @@ namespace YTE.WebApp.Controllers
         public IActionResult ResetPassword(Guid id, string type, ForgotPassModel model)
         {
             Service.ResetPassword(model);
+
             return RedirectToAction("Login", "UserAccount");
         }
     }

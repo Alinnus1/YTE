@@ -10,7 +10,6 @@ namespace YTE.Controllers
         public HomeController(ControllerDependencies dependencies)
            : base(dependencies)
         {
-
         }
 
         public IActionResult Index()

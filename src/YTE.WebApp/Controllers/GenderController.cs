@@ -30,6 +30,7 @@ namespace YTE.WebApp.Controllers
         {
             var genreList = Service.GetGenderOfUser(id);
             var genreListG = new SelectList(genreList, "Value", "Text");
+
             return Json(genreListG);
         }
     }

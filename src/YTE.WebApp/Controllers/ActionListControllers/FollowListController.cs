@@ -23,8 +23,10 @@ namespace YTE.WebApp.Controllers.ActionListControllers
                 searchString = currentFilter;
             }
             ViewData["CurrentFilter"] = searchString;
-            var model = Service.GetUserFollowings(id, searchString, pageNumber);
             ViewData["UserName"] = Service.GetFollowerUserName(id);
+
+            var model = Service.GetUserFollowings(id, searchString, pageNumber);
+
             return View(model);
         }
 
@@ -36,8 +38,10 @@ namespace YTE.WebApp.Controllers.ActionListControllers
                 searchString = currentFilter;
             }
             ViewData["CurrentFilter"] = searchString;
-            var model = Service.GetFollowersOf(id, searchString, pageNumber);
             ViewData["UserName"] = Service.GetFollowerUserName(id);
+
+            var model = Service.GetFollowersOf(id, searchString, pageNumber);
+
             return View(model);
         }
 

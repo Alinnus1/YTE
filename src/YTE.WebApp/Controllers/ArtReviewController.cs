@@ -51,8 +51,10 @@ namespace YTE.WebApp.Controllers
             ViewData["CurrentSort"] = sortOrder;
             ViewData["ScoreSortParm"] = String.IsNullOrEmpty(sortOrder) ? "score_asc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
             var model = Service.GetSpecificUserReviewsOfArt(id, "Score", true, pageNumber);
             ViewBag.UserName = model.FirstOrDefault()?.UserName;
+
             switch (sortOrder)
             {
                 case "score_asc":
@@ -68,6 +70,7 @@ namespace YTE.WebApp.Controllers
 
                     break;
             }
+
             return View(model);
         }
 
@@ -77,8 +80,10 @@ namespace YTE.WebApp.Controllers
             ViewData["CurrentSort"] = sortOrder;
             ViewData["ScoreSortParm"] = String.IsNullOrEmpty(sortOrder) ? "score_asc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
             var model = Service.GetSpecificUserReviewsOfFilms(id, "Score", true, pageNumber);
             ViewBag.UserName = model.FirstOrDefault()?.UserName;
+
             switch (sortOrder)
             {
                 case "score_asc":
@@ -104,8 +109,10 @@ namespace YTE.WebApp.Controllers
             ViewData["CurrentSort"] = sortOrder;
             ViewData["ScoreSortParm"] = String.IsNullOrEmpty(sortOrder) ? "score_asc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
             var model = Service.GetSpecificUserReviewsOfMangas(id, "Score", true, pageNumber);
             ViewBag.UserName = model.FirstOrDefault()?.UserName;
+
             switch (sortOrder)
             {
                 case "score_asc":
@@ -121,6 +128,7 @@ namespace YTE.WebApp.Controllers
 
                     break;
             }
+
             return View(model);
         }
 
@@ -130,8 +138,10 @@ namespace YTE.WebApp.Controllers
             ViewData["CurrentSort"] = sortOrder;
             ViewData["ScoreSortParm"] = String.IsNullOrEmpty(sortOrder) ? "score_asc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
             var model = Service.GetSpecificUserReviewsOfGames(id, "Score", true, pageNumber);
             ViewBag.UserName = model.FirstOrDefault()?.UserName;
+
             switch (sortOrder)
             {
                 case "score_asc":
@@ -166,8 +176,9 @@ namespace YTE.WebApp.Controllers
             }
             else
             {
-                string urlAnterior = Request.Headers["Referer"].ToString();
-                return Redirect(urlAnterior);
+                var previousUrl = Request.Headers["Referer"].ToString();
+
+                return Redirect(previousUrl);
             }
         }
 
@@ -190,7 +201,9 @@ namespace YTE.WebApp.Controllers
         public IActionResult Edit(Guid id, string type)
         {
             var model = Service.EditArtReview(id, type);
+
             ViewBag.Name = model.ArtName;
+
             return View(model);
         }
 
@@ -209,9 +222,9 @@ namespace YTE.WebApp.Controllers
             else
             {
                 ModelState.AddModelError(string.Empty, "Some error has occured!");
+
                 return View(model);
             }
-
         }
 
 
@@ -219,19 +232,21 @@ namespace YTE.WebApp.Controllers
         [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame")]
         public IActionResult Delete(Guid id, string type)
         {
+            var previousUrl = string.Empty;
+
             if (Service.DeleteArtReviewOfCurrent(id, type))
             {
-                string urlAnterior = Request.Headers["Referer"].ToString();
-                return Redirect(urlAnterior);
+                previousUrl = Request.Headers["Referer"].ToString();
 
+                return Redirect(previousUrl);
             }
             else
             {
                 ModelState.AddModelError(string.Empty, "Your operation could not be completed!");
-                string urlAnterior = Request.Headers["Referer"].ToString();
-                return Redirect(urlAnterior);
-            }
+                previousUrl = Request.Headers["Referer"].ToString();
 
+                return Redirect(previousUrl);
+            }
         }
 
         [HttpGet]

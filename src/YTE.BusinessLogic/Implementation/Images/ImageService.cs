@@ -89,6 +89,7 @@ namespace YTE.BusinessLogic.Implementation.Images
                 artObject.BackgroundId = backgroundIdtOrg;
             }
         }
+
         public void SetStockPosterBackground(UnitOfWork uow, Entities.ArtObject artObject)
         {
             var stock = uow.Images.Get()
@@ -96,8 +97,8 @@ namespace YTE.BusinessLogic.Implementation.Images
 
             artObject.PosterId = stock.Id;
             artObject.BackgroundId = stock.Id;
-
         }
+
         public void SetPoster(IEditArtModel model, UnitOfWork uow, Entities.ArtObject artObject)
         {
             var posterIdtOrg = uow.ArtObjects.Get()

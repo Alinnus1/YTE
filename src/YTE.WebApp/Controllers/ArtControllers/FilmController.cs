@@ -19,8 +19,8 @@ namespace YTE.WebApp.Controllers
             this.GenreService = genreService;
         }
 
-        [Authorize(Roles = "ModFilm,Admin")]
         [HttpGet]
+        [Authorize(Roles = "ModFilm,Admin")]
         public IActionResult Create()
         {
             var model = new CreateFilmModel();
@@ -28,8 +28,8 @@ namespace YTE.WebApp.Controllers
             return View("Create", model);
         }
 
-        [Authorize(Roles = "ModFilm,Admin")]
         [HttpPost]
+        [Authorize(Roles = "ModFilm,Admin")]
         public IActionResult Create(CreateFilmModel model)
         {
             if (model == null)
@@ -37,7 +37,6 @@ namespace YTE.WebApp.Controllers
                 return View("Error_NotFound");
 
             }
-
             Service.CreateNewFilm(model);
 
             return RedirectToAction("List", "Film");
@@ -51,6 +50,7 @@ namespace YTE.WebApp.Controllers
                 searchString = currentFilter;
             }
             ViewData["CurrentFilter"] = searchString;
+
             var model = Service.GetFilmsFilter(searchString, pageNumber);
 
             return View(model);
@@ -61,21 +61,23 @@ namespace YTE.WebApp.Controllers
         {
             var model = Service.DetailsFilm(id);
             model.GenreList = GenreService.GetFilmGenresOfFilm(id);
+
             ViewBag.Name = model.Name;
+
             return View(model);
         }
 
-        [Authorize(Roles = "ModFilm,Admin")]
         [HttpGet]
+        [Authorize(Roles = "ModFilm,Admin")]
         public IActionResult Edit(Guid id)
         {
-
             var model = Service.EditFilm(id);
+
             return View(model);
         }
 
-        [Authorize(Roles = "ModFilm,Admin")]
         [HttpPost]
+        [Authorize(Roles = "ModFilm,Admin")]
         public IActionResult Edit(Guid id, EditFilmModel input)
         {
             if (input == null)
@@ -91,8 +93,8 @@ namespace YTE.WebApp.Controllers
             });
         }
 
-        [Authorize(Roles = "ModFilm,Admin")]
         [HttpGet]
+        [Authorize(Roles = "ModFilm,Admin")]
         public IActionResult Delete(Guid id)
         {
             Service.DeleteFilm(id);
@@ -108,7 +110,5 @@ namespace YTE.WebApp.Controllers
 
             return Json(attributesList);
         }
-
-
     }
 }

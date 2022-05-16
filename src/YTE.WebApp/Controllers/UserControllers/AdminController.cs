@@ -33,7 +33,9 @@ namespace YTE.WebApp.Controllers
                 searchString = currentFilter;
             }
             ViewData["CurrentFilter"] = searchString;
+
             var model = Service.GetUsers(searchString, pageNumber);
+
             return View(model);
         }
 
@@ -41,6 +43,7 @@ namespace YTE.WebApp.Controllers
         public IActionResult UserDetails(Guid id)
         {
             var model = Service.GetUser(id);
+
             return View(model);
         }
 
@@ -48,8 +51,8 @@ namespace YTE.WebApp.Controllers
         public IActionResult EditUser(Guid id)
         {
             var model = Service.EditUser(id);
-            return View(model);
 
+            return View(model);
         }
 
         [HttpPost]
@@ -59,8 +62,8 @@ namespace YTE.WebApp.Controllers
             {
                 return View("Error_NotFound");
             }
-
             Service.UpdateUser(model);
+
             return RedirectToAction("UserDetails", "Admin", new { id = model.Id });
         }
 

@@ -30,14 +30,6 @@ namespace YTE.WebApp.Jobs
             RecurringJob.AddOrUpdate(nameof(FollowService.SendFollowingLogicNotifications),
                 () => FollowService.SendFollowingLogicNotifications(),
                 Cron.Weekly);
-
-
-
-
-
-
-
-
         }
     }
 }

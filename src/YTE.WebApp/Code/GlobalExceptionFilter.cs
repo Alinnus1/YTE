@@ -60,7 +60,6 @@ namespace YTE.Code
                         ViewName = "Views/Shared/Error_InternalServerError.cshtml"
                     };
                     break;
-
             }
         }
     }

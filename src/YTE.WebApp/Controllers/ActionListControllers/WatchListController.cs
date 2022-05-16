@@ -19,6 +19,7 @@ namespace YTE.WebApp.Controllers
         public IActionResult List(string id, int pageNumber = 1)
         {
             var model = Service.GetOf(id, pageNumber);
+
             return View(model);
         }
 

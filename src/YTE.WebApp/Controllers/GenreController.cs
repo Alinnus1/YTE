@@ -24,7 +24,6 @@ namespace YTE.WebApp.Controllers.GenreControllers
         {
             var model = new CreateGenreModel();
 
-
             return View(model);
         }
 
@@ -36,6 +35,7 @@ namespace YTE.WebApp.Controllers.GenreControllers
                 return View("Error_NotFound");
             }
             Service.CreateNewGenre(model);
+
             return RedirectToAction("List", "Genre");
         }
 
@@ -88,6 +88,7 @@ namespace YTE.WebApp.Controllers.GenreControllers
         {
             var genreList = Service.GetFilmGenresOfFilmS(id);
             var genreListG = new SelectList(genreList, "Value", "Text");
+
             return Json(genreListG);
         }
         #endregion
@@ -107,6 +108,7 @@ namespace YTE.WebApp.Controllers.GenreControllers
         {
             var genreList = Service.GetMangaGenresOfMangaS(id);
             var genreListG = new SelectList(genreList, "Value", "Text");
+
             return Json(genreListG);
         }
         #endregion
@@ -126,9 +128,9 @@ namespace YTE.WebApp.Controllers.GenreControllers
         {
             var genreList = Service.GetVideoGameGenresOfGameS(id);
             var genreListG = new SelectList(genreList, "Value", "Text");
+
             return Json(genreListG);
         }
         #endregion
-
     }
 }

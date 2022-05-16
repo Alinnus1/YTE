@@ -23,9 +23,6 @@ namespace YTE.BusinessLogic.Implementation.Account.Mappin
                 .ForMember(a => a.Gender, a => a.MapFrom(s => s.Gender.Name))
                 .ForMember(a => a.Age, a => a.MapFrom(s => GetAge(s.Age)))
                 .ForMember(a => a.Image, a => a.MapFrom(s => $"data:image/gif;base64,{Convert.ToBase64String(s.Image.Content)}"));
-
-
-
         }
         public int GetAge(DateTime birth)
         {

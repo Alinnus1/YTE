@@ -19,6 +19,7 @@ namespace YTE.WebApp.Controllers
         public IActionResult Create()
         {
             var model = new CreateForbiddenWordModel();
+
             return View(model);
         }
 
@@ -30,6 +31,7 @@ namespace YTE.WebApp.Controllers
                 return View("Error_NotFound");
             }
             Service.CreateNewForbiddenWord(model);
+
             return RedirectToAction("List", "ForbiddenWord");
         }
 
@@ -37,6 +39,7 @@ namespace YTE.WebApp.Controllers
         public IActionResult List()
         {
             var model = Service.GetForbiddenWords();
+
             return View(model);
         }
 
@@ -44,6 +47,7 @@ namespace YTE.WebApp.Controllers
         public IActionResult Delete(int id)
         {
             Service.DeleteForbiddenWord(id);
+
             return RedirectToAction("List", "ForbiddenWord");
         }
     }

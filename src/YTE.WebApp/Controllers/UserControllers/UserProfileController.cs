@@ -41,8 +41,5 @@ namespace YTE.WebApp.Controllers
             var model = Service.GetUserProfile(id);
             return View(model);
         }
-
-
-
     }
 }
