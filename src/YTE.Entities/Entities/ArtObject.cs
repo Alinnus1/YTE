@@ -33,7 +33,6 @@ namespace YTE.Entities
         public virtual Book Book { get; set; }
         public virtual Film Film { get; set; }
         public virtual Manga Manga { get; set; }
-        public virtual Tvseries Tvseries { get; set; }
         public virtual VideoGame VideoGame { get; set; }
         public virtual ICollection<ArtReview> ArtReviews { get; set; }
         public virtual ICollection<WatchList> WatchLists { get; set; }

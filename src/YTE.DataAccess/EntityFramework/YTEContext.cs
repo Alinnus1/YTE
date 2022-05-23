@@ -42,9 +42,6 @@ namespace YTE.Entities.Context
         public virtual DbSet<MangaGenre> MangaGenres { get; set; }
         public virtual DbSet<MangaGenreManga> MangaGenreMangas { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
-        public virtual DbSet<Tvseries> Tvseries { get; set; }
-        public virtual DbSet<TvseriesGenre> TvseriesGenres { get; set; }
-        public virtual DbSet<TvseriesGenreTvseries> TvseriesGenreTvseries { get; set; }
         public virtual DbSet<Token> Tokens { get; set; }
         public virtual DbSet<TokenType> TokenTypes { get; set; }
         public virtual DbSet<User> Users { get; set; }
@@ -458,54 +455,6 @@ namespace YTE.Entities.Context
                     .HasMaxLength(20);
             });
 
-            modelBuilder.Entity<Tvseries>(entity =>
-            {
-                entity.ToTable("TVSeries");
-
-                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
-
-                entity.Property(e => e.IsFinished).HasColumnName("isFinished");
-
-                entity.HasOne(d => d.ArtObject)
-                    .WithOne(p => p.Tvseries)
-                    .HasForeignKey<Tvseries>(d => d.Id)
-                    .HasConstraintName("FK_TVSeries_ArtObject");
-            });
-
-            modelBuilder.Entity<TvseriesGenre>(entity =>
-            {
-                entity.ToTable("TVSeriesGenre");
-
-                entity.HasIndex(e => e.Name, "IX_TVSeriesGenre")
-                    .IsUnique();
-
-                entity.HasIndex(e => e.Name, "IX_TVSeriesGenre_1")
-                    .IsUnique();
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
-            });
-
-            modelBuilder.Entity<TvseriesGenreTvseries>(entity =>
-            {
-                entity.HasKey(e => new { e.GenreId, e.TvseriesId })
-                    .HasName("PK_Genre_TVSeries");
-
-                entity.ToTable("TVSeriesGenre_TVSeries");
-
-                entity.Property(e => e.TvseriesId).HasColumnName("TVSeriesId");
-
-                entity.HasOne(d => d.Genre)
-                    .WithMany(p => p.TvseriesGenreTvseries)
-                    .HasForeignKey(d => d.GenreId)
-                    .HasConstraintName("FK_Genre_TVSeries_TVSeriesGenre");
-
-                entity.HasOne(d => d.Tvseries)
-                    .WithMany(p => p.TvseriesGenreTvseries)
-                    .HasForeignKey(d => d.TvseriesId)
-                    .HasConstraintName("FK_Genre_TVSeries_TVSeries");
-            });
             modelBuilder.Entity<Token>(entity =>
             {
                 entity.ToTable("Token");
