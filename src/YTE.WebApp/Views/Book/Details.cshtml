@@ -1,0 +1,174 @@
+﻿@model YTE.BusinessLogic.Implementation.Book.Model.DetailsBookModel
+@inject YTE.Common.DTOS.CurrentUserDto CurrentUser
+
+<div class="py-3" ><h1 style=" text-align: center;"> <i>"@Model.Name"</i></h1></div>
+
+<div>
+    <hr />
+    <div class="card shadow-sm p-3 mb-5 bg-white rounded " style="width: 25rem; margin: 0 auto; /* Added */ float: none; /* Added */ margin-bottom: 10px; /* Added */">
+        <img src="@Model.Poster" class="card-img-top">
+        <div class="card-body">
+            <p class="card-text"> A @Model.Language book released in <b>@Model.ReleaseDate.ToShortDateString()</b> by <b>@Model.Author </b> has a proud <i>@Model.NoPages </i> number of pages encapsulated in <i>@Model.NoChapters</i> chapters. For the moment this book has <b>@Model.NoReviews </b>reviews and the average score based on those reviews is <i>@Model.Average </i>. Read the synopsis below.  </p>
+            <hr />
+
+
+            @if (!CurrentUser.IsAuthenticated)
+            {
+                <a class="btn btn-outline-success" style=" cursor:pointer;" tabindex="0" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="Publishing reviews is the heart of YTE and we would love to let anyone do it. Unfortunetly the internet is not always a kind place so in order to start publishing your thoughts on art pieces we have to get to know you. Log in and follow the steps to begin your journey on YTE."> Create Review</a>
+            }
+            else
+            {
+                <a style=" cursor:pointer;" class="btn btn-outline-success" id="check" href="/ArtReview/Create/@Model.Id">Create Review</a>
+            }
+
+            <a class="btn btn-outline-secondary" href="/ArtReview/ListReviewsOfArt/@Model.Id">See all reviews</a>
+            @if (CurrentUser.IsAuthenticated)
+            {
+                @if (Model.EligibleFavoriteList)
+
+                {
+                    @if (!Model.AddedToFavoriteList)
+
+                    {
+                        <button id="favorite" class="btn btn-outline-warning" onclick="addToFavorite('@Model.Id')">Add to favorites</button>
+
+                    }
+                    else
+                    {
+
+                        <button id="removefavorite" class="btn btn-outline-danger" onclick="removeFromFavorite('@Model.Id')">Remove from favorites</button>
+
+                    }
+
+                }
+                else
+                {
+                    @if (!Model.AddedToWatchList)
+
+                    {
+                        <button id="favorite" class="btn btn-outline-info" onclick="addToWatchList('@Model.Id')">Add to watchlist</button>
+
+                    }
+                    else
+                    {
+
+                        <button id="removefavorite" class="btn btn-outline-danger" onclick="removeFromWatchList('@Model.Id')">Remove from watchlist</button>
+
+                    }
+                }
+            }
+            @if (CurrentUser.Roles.Contains("Admin") || CurrentUser.Roles.Contains("ModBook"))
+            {
+                <a class="btn btn-outline-dark" href="/Book/Edit/@Model.Id">Edit</a>
+                <br />
+                <span id="confirmDeleteSpan_@Model.Id" style="display:none">
+                    <span>Are you sure you want to delete?</span>
+                    <a href="/Book/Delete/@Model.Id" style=" cursor:pointer;" type="submit" class="btn btn-danger">Yes</a>
+                    <a class="btn btn-primary" style=" cursor:pointer;" onclick="confirmDelete('@Model.Id', false)">No</a>
+                </span>
+                <span id="deleteSpan_@Model.Id">
+                    <a style=" cursor:pointer;" class="btn btn-outline-danger" onclick="confirmDelete('@Model.Id',true)">Delete</a>
+                </span>
+            }
+            <div class="card-footer">
+                @if (Model.GenreList.Count() != 0)
+
+                {
+                <small class="text-muted">@foreach (var genre in Model.GenreList)
+                {@genre<span> </span>}</small>
+                }
+                else
+
+                {
+                    <small class="text-muted">No genres associated</small>
+                }
+            </div>
+        </div>
+    </div>
+    <hr />
+</div>
+    <div>
+        <b>Synopsis: </b><p class="shorten">@Model.Description</p>
+    </div>
+    <table class=" table">
+        <thead>
+            <tr>
+                <th>
+                    User
+                </th>
+                <th>
+                    Score
+                </th>
+                <th>
+                    Experienced at
+                </th>
+                <th>
+                    Date of review
+                </th>
+                <th>
+                    Review
+                </th>
+                <th></th>
+
+            </tr>
+        </thead>
+    </table>
+    <h4>Recent Reviews</h4>
+    @if (Model.RecentReviews.Count == 0)
+    {
+        <i>No Reviews yet</i>
+        <br />
+    }
+    else
+    {
+        <div>
+            <table class="table">
+
+                <tbody>
+                    @foreach (var item in Model.RecentReviews)
+                    {
+                        <partial name="_ListArtReview" model="@item" />
+                    }
+
+                </tbody>
+
+            </table>
+        </div>
+        <div>
+            <h4>
+                Most Positive Reviews
+            </h4>
+            <table class="table">
+
+                <tbody>
+
+                    @foreach (var item in Model.MostPositiveReviews)
+                    {
+                        <partial name="_ListArtReview" model="@item" />
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div>
+
+            <h4>Most Negative Reviews</h4>
+            <table class="table">
+
+                <tbody>
+                    @foreach (var item in Model.MostNegativeReviews)
+                    {
+                        <partial name="_ListArtReview" model="@item" />
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    }
+    @section Scripts{
+
+        <script src="~/js/jquery-shorten.js"></script>
+        <script src="~/js/apply-shorten.js"></script>
+        <script src="~/js/delete.js"></script>
+        <script src="~/js/add-favorite.js"></script>
+        <script src="~/js/add-popover.js"></script>
+    }

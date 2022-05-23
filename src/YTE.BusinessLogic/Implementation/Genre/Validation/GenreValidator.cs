@@ -43,7 +43,12 @@ namespace YTE.BusinessLogic.Implementation.Genre.Validation
                             .ToList();
                     result = !videoGameGenres.Contains(name);
                     break;
-
+                case (int)GenreType.BookGenre:
+                    var bookGenres = uow.BookGenres.Get()
+                            .Select(bg => bg.Name)
+                            .ToList();
+                    result = !bookGenres.Contains(name);
+                    break;
                 default:
 
                     break;

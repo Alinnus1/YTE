@@ -15,7 +15,6 @@ namespace YTE.WebApp.Controllers
             this.Service = service;
         }
 
-
         [HttpGet]
         public JsonResult Show()
         {

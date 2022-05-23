@@ -1,11 +1,15 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using YTE.BusinessLogic.Base;
 using YTE.BusinessLogic.Implementation.ArtObject;
 using YTE.BusinessLogic.Implementation.ArtReview;
+using YTE.BusinessLogic.Implementation.Book.Model;
+using YTE.BusinessLogic.Implementation.Book.Validation;
 using YTE.BusinessLogic.Implementation.FavoriteList;
 using YTE.BusinessLogic.Implementation.Film.Model;
 using YTE.BusinessLogic.Implementation.Genre;
@@ -16,13 +20,14 @@ using YTE.Common.DTOS;
 using YTE.Common.Exceptions;
 using YTE.Common.Extensions;
 using YTE.DataAccess;
+using YTE.Entities;
 using YTE.Entities.Enums;
 
-namespace YTE.BusinessLogic.Implementation.Film
+namespace YTE.BusinessLogic.Implementation.Book
 {
-    public class FilmService : BaseService
+    public class BookService : BaseService
     {
-        private readonly FilmValidator FilmValidator;
+        private readonly BookValidator BookValidator;
         private readonly ImageService ImageService;
         private readonly GenreService GenreService;
         private readonly FavoriteListService FavoriteService;
@@ -30,9 +35,9 @@ namespace YTE.BusinessLogic.Implementation.Film
         private readonly ArtReviewService ArtReviewService;
         private readonly ArtObjectService ArtObjectService;
 
-        public FilmService(ServiceDependencies serviceDependencies, ImageService imageService, GenreService genreService, FavoriteListService favoriteListService, WatchListService watchListService, ArtReviewService artReviewService, ArtObjectService artObjectService) : base(serviceDependencies)
+        public BookService(ServiceDependencies serviceDependencies, ImageService imageService, GenreService genreService, FavoriteListService favoriteListService, WatchListService watchListService, ArtReviewService artReviewService, ArtObjectService artObjectService) : base(serviceDependencies)
         {
-            this.FilmValidator = new FilmValidator();
+            this.BookValidator = new BookValidator();
             this.ImageService = imageService;
             this.GenreService = genreService;
             this.FavoriteService = favoriteListService;
@@ -41,31 +46,31 @@ namespace YTE.BusinessLogic.Implementation.Film
             this.ArtObjectService = artObjectService;
         }
 
-        public List<string> GetFilmAttributes()
+        public List<string> GetBookAttributes()
         {
-            return Enum.GetNames(typeof(FilmAttributes))
-                .ToList();
+            return Enum.GetNames(typeof(BookAttributes)).ToList();
         }
 
-        public void CreateNewFilm(CreateFilmModel model)
+        public void CreateNewBook(CreateBookModel model)
         {
             ExecuteInTransaction(uow =>
             {
-                FilmValidator.Validate(model).ThenThrow(model);
+                BookValidator.Validate(model).ThenThrow(model);
 
-                var artObject = Mapper.Map<CreateFilmModel, Entities.ArtObject>(model);
+                var artObject = Mapper.Map<CreateBookModel, Entities.ArtObject>(model);
                 ImageService.SetStockPosterBackground(uow, artObject);
-                artObject.TypeId = (int)ArtObjectTypes.Film;
+                artObject.TypeId = (int)ArtObjectTypes.Book;
                 uow.ArtObjects.Insert(artObject);
 
-                var film = Mapper.Map<CreateFilmModel, Entities.Film>(model);
-                film.Id = artObject.Id;
-                uow.Films.Insert(film);
+                var book = Mapper.Map<CreateBookModel, Entities.Book>(model);
+                book.Id = artObject.Id;
+                uow.Books.Insert(book);
+
                 if (model.selectedGenres != null)
                 {
                     foreach (var selectedId in model.selectedGenres)
                     {
-                        GenreService.CreateFilmGenreFilm(uow, film, selectedId);
+                        GenreService.CreateBookGenreBook(uow, book, selectedId);
                     }
                 }
 
@@ -73,21 +78,21 @@ namespace YTE.BusinessLogic.Implementation.Film
             });
         }
 
-        public PaginatedList<ListFilmModel> GetFilmsFilter(string searchString, int pageNumber)
+        public PaginatedList<ListBookModel> GetBooksFilter(string searchString, int pageNumber)
         {
             if (String.IsNullOrEmpty(searchString))
             {
                 searchString = "";
             }
 
-            var films = UnitOfWork.Films.Get()
-                .Include(a => a.ArtObject)
-                .Include(a => a.ArtObject.Poster)
-                .Where(a => a.ArtObject.IsDeleted == false && a.ArtObject.Name.Contains(searchString))
-                .Select(a => Mapper.Map<Entities.Film, ListFilmModel>(a));
-            var paginatedFilms = PaginatedList<ListFilmModel>.Create(films, pageNumber, 10);
+            var books = UnitOfWork.Books.Get()
+                    .Include(a => a.ArtObject)
+                    .Include(a => a.ArtObject.Poster)
+                    .Where(a => a.ArtObject.IsDeleted == false && a.ArtObject.Name.Contains(searchString))
+                    .Select(a => Mapper.Map<Entities.Book, ListBookModel>(a));
+            var paginatedBooks = PaginatedList<ListBookModel>.Create(books, pageNumber, 10);
 
-            paginatedFilms.ForEach(f =>
+            paginatedBooks.ForEach(f =>
             {
                 f.AddedToFavoriteList = FavoriteService.CheckAdded(CurrentUser.Id, f.Id);
                 f.EligibleFavoriteList = FavoriteService.CheckExperienced(CurrentUser.Id, f.Id);
@@ -96,73 +101,73 @@ namespace YTE.BusinessLogic.Implementation.Film
                 f.NoReviews = ArtReviewService.GetNumberOfReviewsOfArt(f.Id);
             });
 
-            return paginatedFilms;
+            return paginatedBooks;
         }
 
-        public DetailsFilmModel DetailsFilm(Guid id)
+        public DetailsBookModel DetailsBook(Guid id)
         {
-            var film = UnitOfWork.Films.Get()
+            var book = UnitOfWork.Books.Get()
                 .Include(a => a.ArtObject)
                 .Include(a => a.ArtObject.Background)
                 .Include(a => a.ArtObject.Poster)
                 .FirstOrDefault(a => a.Id == id);
 
-            if (film == null)
+            if (book == null)
             {
                 throw new NotFoundErrorException("User Not Found");
             }
 
-            var filmDetails = Mapper.Map<Entities.Film, DetailsFilmModel>(film);
-            filmDetails.AddedToFavoriteList = FavoriteService.CheckAdded(CurrentUser.Id, filmDetails.Id);
-            filmDetails.EligibleFavoriteList = FavoriteService.CheckExperienced(CurrentUser.Id, filmDetails.Id);
-            filmDetails.AddedToWatchList = WatchListService.CheckAdded(CurrentUser.UserName, filmDetails.Id);
-            filmDetails.MostNegativeReviews = ArtReviewService.GetReviewsOfArtForDetails(id, "Score", false);
-            filmDetails.MostPositiveReviews = ArtReviewService.GetReviewsOfArtForDetails(id, "Score", true);
-            filmDetails.RecentReviews = ArtReviewService.GetReviewsOfArtForDetails(id, "Date", true);
-            filmDetails.Average = ArtReviewService.GetAverageOfArt(id);
-            filmDetails.NoReviews = ArtReviewService.GetNumberOfReviewsOfArt(id);
+            var bookDetails = Mapper.Map<Entities.Book, DetailsBookModel>(book);
+            bookDetails.AddedToFavoriteList = FavoriteService.CheckAdded(CurrentUser.Id, bookDetails.Id);
+            bookDetails.EligibleFavoriteList = FavoriteService.CheckExperienced(CurrentUser.Id, bookDetails.Id);
+            bookDetails.AddedToWatchList = WatchListService.CheckAdded(CurrentUser.UserName, bookDetails.Id);
+            bookDetails.MostNegativeReviews = ArtReviewService.GetReviewsOfArtForDetails(id, "Score", false);
+            bookDetails.MostPositiveReviews = ArtReviewService.GetReviewsOfArtForDetails(id, "Score", true);
+            bookDetails.RecentReviews = ArtReviewService.GetReviewsOfArtForDetails(id, "Date", true);
+            bookDetails.Average = ArtReviewService.GetAverageOfArt(id);
+            bookDetails.NoReviews = ArtReviewService.GetNumberOfReviewsOfArt(id);
 
-            return filmDetails;
+            return bookDetails;
         }
 
-        public string GetFilmName(Guid id)
+        public string GetBookName(Guid id)
         {
-            return UnitOfWork.Films.Get()
+            return UnitOfWork.Books.Get()
                 .Include(f => f.ArtObject)
                 .Where(f => f.Id == id)
                 .Select(f => f.ArtObject.Name)
                 .FirstOrDefault();
         }
 
-        public EditFilmModel EditFilm(Guid id)
+        public EditBookModel EditBook(Guid id)
         {
-            var film = UnitOfWork.Films.Get()
+            var book = UnitOfWork.Books.Get()
                 .Include(a => a.ArtObject)
                 .FirstOrDefault(a => a.Id == id);
 
-            return Mapper.Map<Entities.Film, EditFilmModel>(film);
+            return Mapper.Map<Entities.Book, EditBookModel>(book);
         }
 
-        public void UpdateFilm(EditFilmModel model)
+        public void UpdateBook(EditBookModel model)
         {
             ExecuteInTransaction(uow =>
             {
-                FilmValidator.Validate(model).ThenThrow(model);
+                BookValidator.Validate(model).ThenThrow(model);
                 var artObject = ArtObjectService.EditArtObject(model, uow);
 
                 ImageService.SetPoster(model, uow, artObject);
                 ImageService.SetBackground(model, uow, artObject);
 
-                var film = Mapper.Map<EditFilmModel, Entities.Film>(model);
+                var book = Mapper.Map<EditBookModel, Entities.Book>(model);
 
                 uow.ArtObjects.Update(artObject);
-                uow.Films.Update(film);
-                GenreService.SetFilmGenres(model, uow, film);
+                uow.Books.Update(book);
+                GenreService.SetBookGenres(model, uow, book);
                 uow.SaveChanges();
             });
         }
 
-        public void DeleteFilm(Guid id)
+        public void DeleteBook(Guid id)
         {
             ExecuteInTransaction(uow =>
             {

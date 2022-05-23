@@ -21,6 +21,9 @@ namespace YTE.DataAccess
         public readonly IRepository<VideoGame> VideoGames;
         public readonly IRepository<VideoGameGenre> VideoGameGenres;
         public readonly IRepository<VideoGameGenreVideoGame> VideoGameGenresVideoGame;
+        public readonly IRepository<Book> Books;
+        public readonly IRepository<BookGenre> BookGenres;
+        public readonly IRepository<BookGenreBook> BookGenresBook;
         public readonly IRepository<Image> Images;
         public readonly IRepository<Role> Roles;
         public readonly IRepository<UserRole> UserRoles;
@@ -47,6 +50,9 @@ namespace YTE.DataAccess
             this.VideoGames = new BaseRepository<VideoGame>(Context);
             this.VideoGameGenres = new BaseRepository<VideoGameGenre>(Context);
             this.VideoGameGenresVideoGame = new BaseRepository<VideoGameGenreVideoGame>(Context);
+            this.Books = new BaseRepository<Book>(Context);
+            this.BookGenres = new BaseRepository<BookGenre>(Context);
+            this.BookGenresBook = new BaseRepository<BookGenreBook>(Context);
             this.Images = new BaseRepository<Image>(Context);
             this.Roles = new BaseRepository<Role>(Context);
             this.UserRoles = new BaseRepository<UserRole>(Context);

@@ -10,8 +10,8 @@ namespace YTE.BusinessLogic.Implementation.Manga.Validation
         {
             RuleFor(r => r.Name)
                 .NotEmpty().WithMessage("Required field!")
-                .MinimumLength(3).WithMessage("Manga name must have at least 3 letters!")
-                .MaximumLength(100).WithMessage("Manga name can not be longer than 100 letters!");
+                .MinimumLength(3).WithMessage("Film name must have at least 3 letters!")
+                .MaximumLength(100).WithMessage("Film name can not be longer than 100 letters!");
 
             RuleFor(r => r.Author)
                 .NotEmpty().WithMessage("Required field!")
@@ -58,6 +58,7 @@ namespace YTE.BusinessLogic.Implementation.Manga.Validation
             }
         }
 
+        // poate reusim sa facem chestia asta in common astfel incat sa nu mai scriem acelasi cod de mai multe ori.
         private bool BetweenRangeSpan(TimeSpan timespan)
         {
             TimeSpan timeMin = new TimeSpan(0, 0, 2);

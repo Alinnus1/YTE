@@ -4,6 +4,7 @@
     {
         MangaGenre = 1,
         FilmGenre = 2,
-        VideoGameGenre = 3
+        VideoGameGenre = 3,
+        BookGenre = 4,
     }
 }

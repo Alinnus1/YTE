@@ -9,6 +9,7 @@ using YTE.BusinessLogic.Implementation.Account;
 using YTE.BusinessLogic.Implementation.Admin;
 using YTE.BusinessLogic.Implementation.ArtObject;
 using YTE.BusinessLogic.Implementation.ArtReview;
+using YTE.BusinessLogic.Implementation.Book;
 using YTE.BusinessLogic.Implementation.FavoriteList;
 using YTE.BusinessLogic.Implementation.Film;
 using YTE.BusinessLogic.Implementation.FollowList;
@@ -45,6 +46,7 @@ namespace YTE.Code.ExtensionMethods
             services.AddScoped<ArtObjectService>();
             services.AddScoped<MangaService>();
             services.AddScoped<VideoGameService>();
+            services.AddScoped<BookService>();
             services.AddScoped<GenreService>();
             services.AddScoped<AdminService>();
             services.AddScoped<GenderService>();

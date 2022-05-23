@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using YTE.BusinessLogic.Base;
+using YTE.BusinessLogic.Implementation.Book.Model;
 using YTE.BusinessLogic.Implementation.Film.Model;
 using YTE.BusinessLogic.Implementation.Genre.Model;
 using YTE.BusinessLogic.Implementation.Genre.Validation;
@@ -27,17 +28,22 @@ namespace YTE.BusinessLogic.Implementation.Genre
         public List<ListGenreModel> GetGenres()
         {
             var listGenres1 = UnitOfWork.MangaGenres.Get()
-                .Select(a => Mapper.Map<Entities.MangaGenre, ListGenreModel>(a))
+                .Select(a => Mapper.Map<MangaGenre, ListGenreModel>(a))
                 .ToList();
             var listGenres2 = UnitOfWork.FilmGenres.Get()
-                .Select(a => Mapper.Map<Entities.FilmGenre, ListGenreModel>(a))
+                .Select(a => Mapper.Map<FilmGenre, ListGenreModel>(a))
                 .ToList();
             var listGenres3 = UnitOfWork.VideoGameGenres.Get()
-                .Select(a => Mapper.Map<Entities.VideoGameGenre, ListGenreModel>(a))
+                .Select(a => Mapper.Map<VideoGameGenre, ListGenreModel>(a))
+                .ToList();
+            var listGenres4 = UnitOfWork.BookGenres.Get()
+                .Select(a => Mapper.Map<BookGenre, ListGenreModel>(a))
                 .ToList();
 
             listGenres2.ForEach(a => listGenres1.Add(a));
             listGenres3.ForEach(a => listGenres1.Add(a));
+            listGenres4.ForEach(a => listGenres1.Add(a));
+
             return listGenres1;
         }
 
@@ -48,17 +54,22 @@ namespace YTE.BusinessLogic.Implementation.Genre
             {
                 case (int)GenreType.FilmGenre:
                     genreList = UnitOfWork.FilmGenres.Get()
-                        .Select(a => Mapper.Map<Entities.FilmGenre, ListGenreModel>(a))
+                        .Select(a => Mapper.Map<FilmGenre, ListGenreModel>(a))
                         .ToList();
                     break;
                 case (int)GenreType.MangaGenre:
                     genreList = UnitOfWork.MangaGenres.Get()
-                        .Select(a => Mapper.Map<Entities.MangaGenre, ListGenreModel>(a))
+                        .Select(a => Mapper.Map<MangaGenre, ListGenreModel>(a))
                         .ToList();
                     break;
                 case (int)GenreType.VideoGameGenre:
                     genreList = UnitOfWork.VideoGameGenres.Get()
-                        .Select(a => Mapper.Map<Entities.VideoGameGenre, ListGenreModel>(a))
+                        .Select(a => Mapper.Map<VideoGameGenre, ListGenreModel>(a))
+                        .ToList();
+                    break;
+                case (int)GenreType.BookGenre:
+                    genreList = UnitOfWork.BookGenres.Get()
+                        .Select(a => Mapper.Map<BookGenre, ListGenreModel>(a))
                         .ToList();
                     break;
                 default:
@@ -91,6 +102,12 @@ namespace YTE.BusinessLogic.Implementation.Genre
                         uow.VideoGameGenres.Delete(videoGameGenre);
                         uow.SaveChanges();
                         break;
+                    case (int)GenreType.BookGenre:
+                        var bookGenre = uow.BookGenres.Get()
+                                .FirstOrDefault(a => a.Id == id);
+                        uow.BookGenres.Delete(bookGenre);
+                        uow.SaveChanges();
+                        break;
                     default:
                         uow.SaveChanges();
                         break;
@@ -118,6 +135,11 @@ namespace YTE.BusinessLogic.Implementation.Genre
                     case (int)GenreType.VideoGameGenre:
                         var videoGameGenre = Mapper.Map<CreateGenreModel, VideoGameGenre>(model);
                         uow.VideoGameGenres.Insert(videoGameGenre);
+                        uow.SaveChanges();
+                        break;
+                    case (int)GenreType.BookGenre:
+                        var bookGenre = Mapper.Map<CreateGenreModel, BookGenre>(model);
+                        uow.BookGenres.Insert(bookGenre);
                         uow.SaveChanges();
                         break;
                     default:
@@ -390,6 +412,88 @@ namespace YTE.BusinessLogic.Implementation.Genre
                 uow.MangaGenresManga.Delete(x);
             }
         }
+        #endregion
+        #region Book Genres
+        public List<ListItem<string, int>> GetBookGenres()
+        {
+            return UnitOfWork.BookGenres.Get()
+                .Select(g => new ListItem<string, int>
+                {
+                    Text = $"{g.Name}",
+                    Value = g.Id
+                })
+                .ToList();
+        }
+
+        public List<ListItem<string, int>> GetBookGenresOfBookS(Guid id)
+        {
+            return UnitOfWork.BookGenresBook.Get()
+                .Where(g => g.BookId == id)
+                .Include(g => g.Genre)
+                .Select(g => new ListItem<string, int>
+                {
+                    Text = $"{g.Genre.Name}",
+                    Value = g.Genre.Id
+                })
+                .ToList();
+        }
+
+        public List<string> GetBookGenresOfBook(Guid id)
+        {
+            return UnitOfWork.BookGenresBook.Get()
+                .Where(g => g.BookId == id)
+                .Include(g => g.Genre)
+                .Select(g => g.Genre.Name)
+                .ToList();
+        }
+
+        public void CreateBookGenreBook(UnitOfWork uow, Entities.Book book, int selectedId)
+        {
+            var relation = new BookGenreBook()
+            {
+                GenreId = selectedId,
+                BookId = book.Id
+            };
+
+            uow.BookGenresBook.Insert(relation);
+        }
+
+        public void SetBookGenres(EditBookModel model, UnitOfWork uow, Entities.Book book)
+        {
+            var currentGenreIds = uow.BookGenresBook.Get()
+                 .Where(a => a.BookId == book.Id)
+                 .Select(a => a.GenreId)
+                .ToList();
+
+            if (model.selectedGenres != null)
+            {
+                var upComingGenreIds = model.selectedGenres;
+                var common = currentGenreIds.Intersect(upComingGenreIds).ToList();
+                currentGenreIds.RemoveAll(x => common.Contains(x));
+                upComingGenreIds.RemoveAll(x => common.Contains(x));
+                DeleteBookGenreBookR(uow, book, currentGenreIds);
+
+                foreach (var genreId in upComingGenreIds)
+                {
+                    CreateBookGenreBook(uow, book, genreId);
+                }
+            }
+            else
+            {
+                DeleteBookGenreBookR(uow, book, currentGenreIds);
+            }
+        }
+
+        private void DeleteBookGenreBookR(UnitOfWork uow, Entities.Book book, List<int> currentGenreIds)
+        {
+            foreach (var genreId in currentGenreIds)
+            {
+                var x = uow.BookGenresBook.Get()
+                        .FirstOrDefault(x => x.BookId == book.Id && x.GenreId == genreId);
+                uow.BookGenresBook.Delete(x);
+            }
+        }
+
         #endregion
     }
 }

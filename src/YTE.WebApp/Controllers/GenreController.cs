@@ -18,7 +18,6 @@ namespace YTE.WebApp.Controllers.GenreControllers
             this.Service = service;
         }
 
-
         [HttpGet]
         public IActionResult Create()
         {
@@ -82,7 +81,6 @@ namespace YTE.WebApp.Controllers.GenreControllers
             return Json(genreListG);
         }
 
-
         [HttpGet]
         public JsonResult ShowSpecificFilmGenres(Guid id)
         {
@@ -101,7 +99,6 @@ namespace YTE.WebApp.Controllers.GenreControllers
 
             return Json(genreListG);
         }
-
 
         [HttpGet]
         public JsonResult ShowSpecificMangaGenres(Guid id)
@@ -122,11 +119,29 @@ namespace YTE.WebApp.Controllers.GenreControllers
             return Json(genreListG);
         }
 
-
         [HttpGet]
         public JsonResult ShowSpecificVideoGameGenres(Guid id)
         {
             var genreList = Service.GetVideoGameGenresOfGameS(id);
+            var genreListG = new SelectList(genreList, "Value", "Text");
+
+            return Json(genreListG);
+        }
+        #endregion
+        #region Book
+        [HttpGet]
+        public JsonResult ShowBookGenres()
+        {
+            var genreList = Service.GetBookGenres();
+            var genreListG = new SelectList(genreList, "Value", "Text");
+
+            return Json(genreListG);
+        }
+
+        [HttpGet]
+        public JsonResult ShowSpecificBookGenres(Guid id)
+        {
+            var genreList = Service.GetBookGenresOfBookS(id);
             var genreListG = new SelectList(genreList, "Value", "Text");
 
             return Json(genreListG);

@@ -1,44 +1,44 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using YTE.BusinessLogic.Implementation.Film;
-using YTE.BusinessLogic.Implementation.Film.Model;
+﻿using Microsoft.AspNetCore.Mvc;
+using YTE.BusinessLogic.Implementation.Book;
 using YTE.BusinessLogic.Implementation.Genre;
 using YTE.Code.Base;
+using Microsoft.AspNetCore.Authorization;
+using YTE.BusinessLogic.Implementation.Book.Model;
+using System;
 
-namespace YTE.WebApp.Controllers
+namespace YTE.WebApp.Controllers.ArtControllers
 {
-    public class FilmController : BaseController
+    public class BookController : BaseController
     {
-        private readonly FilmService Service;
+        private readonly BookService Service;
         private readonly GenreService GenreService;
 
-        public FilmController(ControllerDependencies dependencies, FilmService service, GenreService genreService) : base(dependencies)
+        public BookController(ControllerDependencies dependencies, BookService service, GenreService genreService) : base(dependencies)
         {
             this.Service = service;
             this.GenreService = genreService;
         }
 
         [HttpGet]
-        [Authorize(Roles = "ModFilm,Admin")]
+        [Authorize(Roles = "ModBook,Admin")]
         public IActionResult Create()
         {
-            var model = new CreateFilmModel();
+            var model = new CreateBookModel();
 
             return View("Create", model);
         }
 
         [HttpPost]
-        [Authorize(Roles = "ModFilm,Admin")]
-        public IActionResult Create(CreateFilmModel model)
+        [Authorize(Roles = "ModBook,Admin")]
+        public IActionResult Create(CreateBookModel model)
         {
             if (model == null)
             {
                 return View("Error_NotFound");
             }
-            Service.CreateNewFilm(model);
+            Service.CreateNewBook(model);
 
-            return RedirectToAction("List", "Film");
+            return RedirectToAction("List","Book");
         }
 
         [HttpGet]
@@ -50,7 +50,7 @@ namespace YTE.WebApp.Controllers
             }
             ViewData["CurrentFilter"] = searchString;
 
-            var model = Service.GetFilmsFilter(searchString, pageNumber);
+            var model = Service.GetBooksFilter(searchString, pageNumber);
 
             return View(model);
         }
@@ -58,8 +58,8 @@ namespace YTE.WebApp.Controllers
         [HttpGet]
         public IActionResult Details(Guid id)
         {
-            var model = Service.DetailsFilm(id);
-            model.GenreList = GenreService.GetFilmGenresOfFilm(id);
+            var model = Service.DetailsBook(id);
+            model.GenreList = GenreService.GetBookGenresOfBook(id);
 
             ViewBag.Name = model.Name;
 
@@ -67,45 +67,45 @@ namespace YTE.WebApp.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "ModFilm,Admin")]
+        [Authorize(Roles = "ModBook,Admin")]
         public IActionResult Edit(Guid id)
         {
-            var model = Service.EditFilm(id);
+            var model = Service.EditBook(id);
 
             return View(model);
         }
 
         [HttpPost]
-        [Authorize(Roles = "ModFilm,Admin")]
-        public IActionResult Edit(Guid id, EditFilmModel input)
+        [Authorize(Roles = "ModBook,Admin")]
+        public IActionResult Edit(Guid id, EditBookModel input)
         {
             if (input == null)
             {
                 return View("Error_NotFound");
 
             }
-            Service.UpdateFilm(input);
+            Service.UpdateBook(input);
 
-            return RedirectToAction("Details", "Film", new
+            return RedirectToAction("Details", "Book", new
             {
                 id = id
             });
         }
 
         [HttpGet]
-        [Authorize(Roles = "ModFilm,Admin")]
+        [Authorize(Roles = "ModBook,Admin")]
         public IActionResult Delete(Guid id)
         {
-            Service.DeleteFilm(id);
+            Service.DeleteBook(id);
 
-            return RedirectToAction("List", "Film");
+            return RedirectToAction("List", "Book");
         }
 
 
         [HttpGet]
         public JsonResult Attributes()
         {
-            var attributesList = Service.GetFilmAttributes();
+            var attributesList = Service.GetBookAttributes();
 
             return Json(attributesList);
         }

@@ -1,35 +1,36 @@
-﻿@model YTE.Common.DTOS.PaginatedList<YTE.BusinessLogic.Implementation.Manga.Model.ListMangaModel>
+﻿@model YTE.Common.DTOS.PaginatedList<YTE.BusinessLogic.Implementation.Book.Model.ListBookModel>
 @inject YTE.Common.DTOS.CurrentUserDto CurrentUser
-<h1  class="py-3" >Mangas</h1>
+<h1 class="py-3">Books</h1>
 
-@if (CurrentUser.Roles.Contains("Admin") || CurrentUser.Roles.Contains("ModManga"))
+@if (CurrentUser.Roles.Contains("Admin") || CurrentUser.Roles.Contains("ModBook"))
+
 {
-
-    <a class="btn btn-outline-success" href="/Film/Create" style="float: right;">Add a new manga</a>
+    <a class="btn btn-outline-success" href="/Book/Create" style="float: right;">Add a new book</a>
 }
-
 <link href="~/css/input.css" rel="stylesheet" />
-<form href="/Manga/List" method="get">
+<form href="/Book/List" method="get">
     <div class="form-actions no-color">
         <p>
             Find by Title: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
             <input type="submit" value="Search" class="btn btn-outline-primary" />
-            <a class="btn btn-outline-secondary" href="/Manga/List">Clear filter</a>
+            <a class="btn btn-outline-secondary" href="/Book/List">Clear filter</a>
         </p>
     </div>
 </form>
-<hr />
 
+<hr />
 <div class="card-columns">
     @foreach (var item in Model)
     {
+
+
         <div class="card shadow-sm p-3 mb-5 bg-white rounded ">
             <img class="card-img-top" src="@item.Poster" alt="Card image cap">
             <div class="card-body">
                 <h5 class="card-title">@item.Name</h5>
-                <p class="card-text"><b>@item.Author</b>'s manga sits at <b>@item.NoChapters </b>chapters. For the moment this manga has <b>@item.NoReviews </b>reviews and the average score based on those reviews is <i>@item.Average </i>.</p>
+                <p class="card-text"><b>@item.Author</b>'s book sits at <b>@item.NoPages </b>pages. For the moment this book has <b>@item.NoReviews </b>reviews and the average score based on those reviews is <i>@item.Average </i>.</p>
                 <hr />
-                <a class="btn btn-outline-secondary" href="/Manga/Details/@item.Id">Details</a>
+                <a class="btn btn-outline-secondary" href="/Book/Details/@item.Id">Details</a>
                 <br />
                 @if (CurrentUser.IsAuthenticated)
 
@@ -41,14 +42,14 @@
                         @if (!item.AddedToFavoriteList)
 
                         {
-                            <button id="favorite" href="#" class="btn btn-outline-warning" onclick="addToFavorite('@item.Id')">Add to favorites</button>
+                            <button id="favorite"  class="btn btn-outline-warning" onclick="addToFavorite('@item.Id')">Add to favorites</button>
                             <br />
 
                         }
                         else
                         {
 
-                            <button id="removefavorite" href="#" class="btn btn-outline-danger" onclick="removeFromFavorite('@item.Id')">Remove from favorites</button>
+                            <button id="removefavorite" class="btn btn-outline-danger" onclick="removeFromFavorite('@item.Id')">Remove from favorites</button>
                             <br />
 
                         }
@@ -59,14 +60,14 @@
                         @if (!item.AddedToWatchList)
 
                         {
-                            <button id="favorite" href="#" class="btn btn-outline-info" onclick="addToWatchList('@item.Id')">Add to watchlist</button>
+                            <button id="favorite" class="btn btn-outline-info" onclick="addToWatchList('@item.Id')">Add to watchlist</button>
                             <br />
 
                         }
                         else
                         {
 
-                            <button id="removefavorite" href="#" class="btn btn-outline-danger" onclick="removeFromWatchList('@item.Id')">Remove from watchlist</button>
+                            <button id="removefavorite" class="btn btn-outline-danger" onclick="removeFromWatchList('@item.Id')">Remove from watchlist</button>
                             <br />
 
                         }
@@ -75,20 +76,20 @@
                 <br />
 
 
-                @if (CurrentUser.Roles.Contains("Admin") || CurrentUser.Roles.Contains("ModManga"))
+                @if (CurrentUser.Roles.Contains("Admin") || CurrentUser.Roles.Contains("ModBook"))
 
                 {
                     <i>Admin or Mod actions </i>
                     <hr />
-                    <a class="btn btn-outline-dark" href="/Manga/Edit/@item.Id">Edit</a>
+                    <a class="btn btn-outline-dark" href="/Book/Edit/@item.Id">Edit</a>
                     <br />
                     <span id="confirmDeleteSpan_@item.Id" style="display:none">
                         <span>Are you sure you want to delete?</span>
-                        <a href="/Manga/Delete/@item.Id" type="submit" class="btn btn-danger">Yes</a>
-                        <a class="btn btn-primary" onclick="confirmDelete('@item.Id', false)">No</a>
+                        <a href="/Book/Delete/@item.Id" style=" cursor:pointer;" type="submit" class="btn btn-danger">Yes</a>
+                        <a class="btn btn-primary" style=" cursor:pointer;" onclick="confirmDelete('@item.Id', false)">No</a>
                     </span>
                     <span id="deleteSpan_@item.Id">
-                        <a class="btn btn-outline-danger" onclick="confirmDelete('@item.Id',true)">Delete</a>
+                        <a class="btn btn-outline-danger" style=" cursor:pointer;" onclick="confirmDelete('@item.Id',true)">Delete</a>
                     </span>
 
                 }
@@ -105,15 +106,16 @@
     var prevDisabled = !Model.PreviousPage ? "disabled" : "";
     var nextDisabled = !Model.NextPage ? "disabled" : "";
 }
+
 <a asp-action="List"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
    asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
    class="btn btn-default @prevDisabled">
     Previous
 </a>
 <a asp-action="List"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
    asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
    class="btn btn-default @nextDisabled">
     Next
 </a>
