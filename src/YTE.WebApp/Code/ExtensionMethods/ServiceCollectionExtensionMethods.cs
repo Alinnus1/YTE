@@ -7,6 +7,7 @@ using System.Security.Claims;
 using YTE.BusinessLogic.Base;
 using YTE.BusinessLogic.Implementation.Account;
 using YTE.BusinessLogic.Implementation.Admin;
+using YTE.BusinessLogic.Implementation.Album;
 using YTE.BusinessLogic.Implementation.ArtObject;
 using YTE.BusinessLogic.Implementation.ArtReview;
 using YTE.BusinessLogic.Implementation.Book;
@@ -47,6 +48,7 @@ namespace YTE.Code.ExtensionMethods
             services.AddScoped<MangaService>();
             services.AddScoped<VideoGameService>();
             services.AddScoped<BookService>();
+            services.AddScoped<AlbumService>();
             services.AddScoped<GenreService>();
             services.AddScoped<AdminService>();
             services.AddScoped<GenderService>();

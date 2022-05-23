@@ -6,6 +6,6 @@
         Manga = 2,
         VideoGame = 3,
         Book = 4,
-
+        Album = 5,
     }
 }

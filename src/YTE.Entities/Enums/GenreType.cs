@@ -6,5 +6,6 @@
         FilmGenre = 2,
         VideoGameGenre = 3,
         BookGenre = 4,
+        AlbumGenre = 5,
     }
 }

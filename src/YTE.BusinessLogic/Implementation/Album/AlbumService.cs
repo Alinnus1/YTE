@@ -7,10 +7,10 @@ using YTE.BusinessLogic.Base;
 using YTE.BusinessLogic.Implementation.ArtObject;
 using YTE.BusinessLogic.Implementation.ArtReview;
 using YTE.BusinessLogic.Implementation.FavoriteList;
-using YTE.BusinessLogic.Implementation.Film.Model;
+using YTE.BusinessLogic.Implementation.Album.Model;
 using YTE.BusinessLogic.Implementation.Genre;
 using YTE.BusinessLogic.Implementation.Images;
-using YTE.BusinessLogic.Implementation.Film.Validation;
+using YTE.BusinessLogic.Implementation.Album.Validation;
 using YTE.BusinessLogic.Implementation.WatchList;
 using YTE.Common.DTOS;
 using YTE.Common.Exceptions;
@@ -18,11 +18,11 @@ using YTE.Common.Extensions;
 using YTE.DataAccess;
 using YTE.Entities.Enums;
 
-namespace YTE.BusinessLogic.Implementation.Film
+namespace YTE.BusinessLogic.Implementation.Album
 {
-    public class FilmService : BaseService
+    public class AlbumService : BaseService
     {
-        private readonly FilmValidator FilmValidator;
+        private readonly AlbumValidator AlbumValidator;
         private readonly ImageService ImageService;
         private readonly GenreService GenreService;
         private readonly FavoriteListService FavoriteService;
@@ -30,9 +30,9 @@ namespace YTE.BusinessLogic.Implementation.Film
         private readonly ArtReviewService ArtReviewService;
         private readonly ArtObjectService ArtObjectService;
 
-        public FilmService(ServiceDependencies serviceDependencies, ImageService imageService, GenreService genreService, FavoriteListService favoriteListService, WatchListService watchListService, ArtReviewService artReviewService, ArtObjectService artObjectService) : base(serviceDependencies)
+        public AlbumService(ServiceDependencies serviceDependencies, ImageService imageService, GenreService genreService, FavoriteListService favoriteListService, WatchListService watchListService, ArtReviewService artReviewService, ArtObjectService artObjectService) : base(serviceDependencies)
         {
-            this.FilmValidator = new FilmValidator();
+            this.AlbumValidator = new AlbumValidator();
             this.ImageService = imageService;
             this.GenreService = genreService;
             this.FavoriteService = favoriteListService;
@@ -41,31 +41,31 @@ namespace YTE.BusinessLogic.Implementation.Film
             this.ArtObjectService = artObjectService;
         }
 
-        public List<string> GetFilmAttributes()
+        public List<string> GetAlbumAttributes()
         {
-            return Enum.GetNames(typeof(FilmAttributes))
+            return Enum.GetNames(typeof(AlbumAttributes))
                 .ToList();
         }
 
-        public void CreateNewFilm(CreateFilmModel model)
+        public void CreateNewAlbum(CreateAlbumModel model)
         {
             ExecuteInTransaction(uow =>
             {
-                FilmValidator.Validate(model).ThenThrow(model);
+                AlbumValidator.Validate(model).ThenThrow(model);
 
-                var artObject = Mapper.Map<CreateFilmModel, Entities.ArtObject>(model);
+                var artObject = Mapper.Map<CreateAlbumModel, Entities.ArtObject>(model);
                 ImageService.SetStockPosterBackground(uow, artObject);
-                artObject.TypeId = (int)ArtObjectTypes.Film;
+                artObject.TypeId = (int)ArtObjectTypes.Album;
                 uow.ArtObjects.Insert(artObject);
 
-                var film = Mapper.Map<CreateFilmModel, Entities.Film>(model);
-                film.Id = artObject.Id;
-                uow.Films.Insert(film);
+                var album = Mapper.Map<CreateAlbumModel, Entities.Album>(model);
+                album.Id = artObject.Id;
+                uow.Albums.Insert(album);
                 if (model.selectedGenres != null)
                 {
                     foreach (var selectedId in model.selectedGenres)
                     {
-                        GenreService.CreateFilmGenreFilm(uow, film, selectedId);
+                        GenreService.CreateAlbumGenreAlbum(uow, album, selectedId);
                     }
                 }
 
@@ -73,21 +73,21 @@ namespace YTE.BusinessLogic.Implementation.Film
             });
         }
 
-        public PaginatedList<ListFilmModel> GetFilmsFilter(string searchString, int pageNumber)
+        public PaginatedList<ListAlbumModel> GetAlbumsFilter(string searchString, int pageNumber)
         {
             if (String.IsNullOrEmpty(searchString))
             {
                 searchString = "";
             }
 
-            var films = UnitOfWork.Films.Get()
+            var albums = UnitOfWork.Albums.Get()
                 .Include(a => a.ArtObject)
                 .Include(a => a.ArtObject.Poster)
                 .Where(a => a.ArtObject.IsDeleted == false && a.ArtObject.Name.Contains(searchString))
-                .Select(a => Mapper.Map<Entities.Film, ListFilmModel>(a));
-            var paginatedFilms = PaginatedList<ListFilmModel>.Create(films, pageNumber, 10);
+                .Select(a => Mapper.Map<Entities.Album, ListAlbumModel>(a));
+            var paginatedAlbums = PaginatedList<ListAlbumModel>.Create(albums, pageNumber, 10);
 
-            paginatedFilms.ForEach(f =>
+            paginatedAlbums.ForEach(f =>
             {
                 f.AddedToFavoriteList = FavoriteService.CheckAdded(CurrentUser.Id, f.Id);
                 f.EligibleFavoriteList = FavoriteService.CheckExperienced(CurrentUser.Id, f.Id);
@@ -96,73 +96,73 @@ namespace YTE.BusinessLogic.Implementation.Film
                 f.NoReviews = ArtReviewService.GetNumberOfReviewsOfArt(f.Id);
             });
 
-            return paginatedFilms;
+            return paginatedAlbums;
         }
 
-        public DetailsFilmModel DetailsFilm(Guid id)
+        public DetailsAlbumModel DetailsAlbum(Guid id)
         {
-            var film = UnitOfWork.Films.Get()
+            var album = UnitOfWork.Albums.Get()
                 .Include(a => a.ArtObject)
                 .Include(a => a.ArtObject.Background)
                 .Include(a => a.ArtObject.Poster)
                 .FirstOrDefault(a => a.Id == id);
 
-            if (film == null)
+            if (album == null)
             {
                 throw new NotFoundErrorException("User Not Found");
             }
 
-            var filmDetails = Mapper.Map<Entities.Film, DetailsFilmModel>(film);
-            filmDetails.AddedToFavoriteList = FavoriteService.CheckAdded(CurrentUser.Id, filmDetails.Id);
-            filmDetails.EligibleFavoriteList = FavoriteService.CheckExperienced(CurrentUser.Id, filmDetails.Id);
-            filmDetails.AddedToWatchList = WatchListService.CheckAdded(CurrentUser.UserName, filmDetails.Id);
-            filmDetails.MostNegativeReviews = ArtReviewService.GetReviewsOfArtForDetails(id, "Score", false);
-            filmDetails.MostPositiveReviews = ArtReviewService.GetReviewsOfArtForDetails(id, "Score", true);
-            filmDetails.RecentReviews = ArtReviewService.GetReviewsOfArtForDetails(id, "Date", true);
-            filmDetails.Average = ArtReviewService.GetAverageOfArt(id);
-            filmDetails.NoReviews = ArtReviewService.GetNumberOfReviewsOfArt(id);
+            var albumDetails = Mapper.Map<Entities.Album, DetailsAlbumModel>(album);
+            albumDetails.AddedToFavoriteList = FavoriteService.CheckAdded(CurrentUser.Id, albumDetails.Id);
+            albumDetails.EligibleFavoriteList = FavoriteService.CheckExperienced(CurrentUser.Id, albumDetails.Id);
+            albumDetails.AddedToWatchList = WatchListService.CheckAdded(CurrentUser.UserName, albumDetails.Id);
+            albumDetails.MostNegativeReviews = ArtReviewService.GetReviewsOfArtForDetails(id, "Score", false);
+            albumDetails.MostPositiveReviews = ArtReviewService.GetReviewsOfArtForDetails(id, "Score", true);
+            albumDetails.RecentReviews = ArtReviewService.GetReviewsOfArtForDetails(id, "Date", true);
+            albumDetails.Average = ArtReviewService.GetAverageOfArt(id);
+            albumDetails.NoReviews = ArtReviewService.GetNumberOfReviewsOfArt(id);
 
-            return filmDetails;
+            return albumDetails;
         }
 
-        public string GetFilmName(Guid id)
+        public string GetAlbumName(Guid id)
         {
-            return UnitOfWork.Films.Get()
+            return UnitOfWork.Albums.Get()
                 .Include(f => f.ArtObject)
                 .Where(f => f.Id == id)
                 .Select(f => f.ArtObject.Name)
                 .FirstOrDefault();
         }
 
-        public EditFilmModel EditFilm(Guid id)
+        public EditAlbumModel EditAlbum(Guid id)
         {
-            var film = UnitOfWork.Films.Get()
+            var album = UnitOfWork.Albums.Get()
                 .Include(a => a.ArtObject)
                 .FirstOrDefault(a => a.Id == id);
 
-            return Mapper.Map<Entities.Film, EditFilmModel>(film);
+            return Mapper.Map<Entities.Album, EditAlbumModel>(album);
         }
 
-        public void UpdateFilm(EditFilmModel model)
+        public void UpdateAlbum(EditAlbumModel model)
         {
             ExecuteInTransaction(uow =>
             {
-                FilmValidator.Validate(model).ThenThrow(model);
+                AlbumValidator.Validate(model).ThenThrow(model);
                 var artObject = ArtObjectService.EditArtObject(model, uow);
 
                 ImageService.SetPoster(model, uow, artObject);
                 ImageService.SetBackground(model, uow, artObject);
 
-                var film = Mapper.Map<EditFilmModel, Entities.Film>(model);
+                var album = Mapper.Map<EditAlbumModel, Entities.Album>(model);
 
                 uow.ArtObjects.Update(artObject);
-                uow.Films.Update(film);
-                GenreService.SetFilmGenres(model, uow, film);
+                uow.Albums.Update(album);
+                GenreService.SetAlbumGenres(model, uow, album);
                 uow.SaveChanges();
             });
         }
 
-        public void DeleteFilm(Guid id)
+        public void DeleteAlbum(Guid id)
         {
             ExecuteInTransaction(uow =>
             {

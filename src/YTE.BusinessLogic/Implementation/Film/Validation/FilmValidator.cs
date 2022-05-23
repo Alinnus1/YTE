@@ -2,7 +2,7 @@
 using System;
 using YTE.BusinessLogic.Implementation.Film.Model;
 
-namespace YTE.BusinessLogic.Implementation.Manga.Validation
+namespace YTE.BusinessLogic.Implementation.Film.Validation
 {
     public class FilmValidator : AbstractValidator<IFilmModel>
     {

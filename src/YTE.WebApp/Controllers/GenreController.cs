@@ -147,5 +147,24 @@ namespace YTE.WebApp.Controllers.GenreControllers
             return Json(genreListG);
         }
         #endregion
+        #region Album
+        [HttpGet]
+        public JsonResult ShowAlbumGenres()
+        {
+            var genreList = Service.GetAlbumGenres();
+            var genreListG = new SelectList(genreList, "Value", "Text");
+
+            return Json(genreListG);
+        }
+
+        [HttpGet]
+        public JsonResult ShowSpecificAlbumGenres(Guid id)
+        {
+            var genreList = Service.GetAlbumGenresOfAlbumS(id);
+            var genreListG = new SelectList(genreList, "Value", "Text");
+
+            return Json(genreListG);
+        }
+        #endregion
     }
 }

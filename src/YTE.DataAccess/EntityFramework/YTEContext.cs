@@ -75,6 +75,8 @@ namespace YTE.Entities.Context
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
+                entity.Property(e => e.Length).HasColumnType("time(7)");
+
                 entity.HasOne(d => d.ArtObject)
                     .WithOne(p => p.Album)
                     .HasForeignKey<Album>(d => d.Id)
@@ -92,7 +94,7 @@ namespace YTE.Entities.Context
 
             modelBuilder.Entity<AlbumGenreAlbum>(entity =>
             {
-                entity.HasKey(e => new { e.GenreId, e.MusicArtId })
+                entity.HasKey(e => new { e.GenreId, e.AlbumId })
                     .HasName("PK_Genre_MusicArt");
 
                 entity.ToTable("AlbumGenre_Album");
@@ -100,12 +102,12 @@ namespace YTE.Entities.Context
                 entity.HasOne(d => d.Genre)
                     .WithMany(p => p.AlbumGenreAlbums)
                     .HasForeignKey(d => d.GenreId)
-                    .HasConstraintName("FK_Genre_MusicArt_MusicGenre");
+                    .HasConstraintName("FK_Genre_Album_AlbumGenre");
 
-                entity.HasOne(d => d.MusicArt)
+                entity.HasOne(d => d.Album)
                     .WithMany(p => p.AlbumGenreAlbums)
-                    .HasForeignKey(d => d.MusicArtId)
-                    .HasConstraintName("FK_Genre_MusicArt_Album");
+                    .HasForeignKey(d => d.AlbumId)
+                    .HasConstraintName("FK_Genre_Album_Album");
             });
 
             modelBuilder.Entity<Anime>(entity =>

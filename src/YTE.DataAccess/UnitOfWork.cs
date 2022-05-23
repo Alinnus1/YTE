@@ -24,6 +24,9 @@ namespace YTE.DataAccess
         public readonly IRepository<Book> Books;
         public readonly IRepository<BookGenre> BookGenres;
         public readonly IRepository<BookGenreBook> BookGenresBook;
+        public readonly IRepository<Album> Albums;
+        public readonly IRepository<AlbumGenre> AlbumGenres;
+        public readonly IRepository<AlbumGenreAlbum> AlbumGenresAlbum;
         public readonly IRepository<Image> Images;
         public readonly IRepository<Role> Roles;
         public readonly IRepository<UserRole> UserRoles;
@@ -53,6 +56,9 @@ namespace YTE.DataAccess
             this.Books = new BaseRepository<Book>(Context);
             this.BookGenres = new BaseRepository<BookGenre>(Context);
             this.BookGenresBook = new BaseRepository<BookGenreBook>(Context);
+            this.Albums = new BaseRepository<Album>(Context);
+            this.AlbumGenres = new BaseRepository<AlbumGenre>(Context);
+            this.AlbumGenresAlbum = new BaseRepository<AlbumGenreAlbum>(Context);
             this.Images = new BaseRepository<Image>(Context);
             this.Roles = new BaseRepository<Role>(Context);
             this.UserRoles = new BaseRepository<UserRole>(Context);
