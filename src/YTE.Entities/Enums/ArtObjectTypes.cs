@@ -7,5 +7,6 @@
         VideoGame = 3,
         Book = 4,
         Album = 5,
+        Anime = 6,
     }
 }

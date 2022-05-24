@@ -19,6 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Implementation\Anime\Mapping\" />
+    <Folder Include="Implementation\Anime\Validation\" />
     <Folder Include="Implementation\FavoriteList\Validation\" />
     <Folder Include="Implementation\FollowList\Validation\" />
     <Folder Include="Implementation\UserProfile\Validation\" />

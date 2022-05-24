@@ -27,6 +27,9 @@ namespace YTE.DataAccess
         public readonly IRepository<Album> Albums;
         public readonly IRepository<AlbumGenre> AlbumGenres;
         public readonly IRepository<AlbumGenreAlbum> AlbumGenresAlbum;
+        public readonly IRepository<Anime> Animes;
+        public readonly IRepository<AnimeGenre> AnimeGenres;
+        public readonly IRepository<AnimeGenreAnime> AnimeGenresAnime;
         public readonly IRepository<Image> Images;
         public readonly IRepository<Role> Roles;
         public readonly IRepository<UserRole> UserRoles;
@@ -59,6 +62,9 @@ namespace YTE.DataAccess
             this.Albums = new BaseRepository<Album>(Context);
             this.AlbumGenres = new BaseRepository<AlbumGenre>(Context);
             this.AlbumGenresAlbum = new BaseRepository<AlbumGenreAlbum>(Context);
+            this.Animes = new BaseRepository<Anime>(Context);
+            this.AnimeGenres = new BaseRepository<AnimeGenre>(Context);
+            this.AnimeGenresAnime = new BaseRepository<AnimeGenreAnime>(Context);
             this.Images = new BaseRepository<Image>(Context);
             this.Roles = new BaseRepository<Role>(Context);
             this.UserRoles = new BaseRepository<UserRole>(Context);
