@@ -113,7 +113,7 @@
                 <div>
                     @if (CurrentUser.IsAuthenticated)
                     {
-                        <a href="/UserAccount/Edit"><img src="@Url.Action("Picture","UserAccount", new { id = CurrentUser.Id })" width=50 height=50 style=" border-radius:50% ;cursor:pointer;" /></a>
+                        <a href="/UserProfile/Details/@CurrentUser.UserName"><img src="@Url.Action("Picture","UserAccount", new { id = CurrentUser.Id })" width=50 height=50 style=" border-radius:50% ;cursor:pointer;" /></a>
 
                         <div class="btn-group">
                             <a class=" dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false " style=" cursor:pointer;">

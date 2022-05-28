@@ -22,9 +22,6 @@ namespace YTE.Entities.Context
         public virtual DbSet<Album> Albums { get; set; }
         public virtual DbSet<AlbumGenre> AlbumGenres { get; set; }
         public virtual DbSet<AlbumGenreAlbum> AlbumGenreAlbums { get; set; }
-        public virtual DbSet<Anime> Animes { get; set; }
-        public virtual DbSet<AnimeGenre> AnimeGenres { get; set; }
-        public virtual DbSet<AnimeGenreAnime> AnimeGenreAnimes { get; set; }
         public virtual DbSet<ArtObject> ArtObjects { get; set; }
         public virtual DbSet<ArtObjectType> ArtObjectTypes { get; set; }
         public virtual DbSet<ArtReview> ArtReviews { get; set; }
@@ -105,68 +102,6 @@ namespace YTE.Entities.Context
                     .WithMany(p => p.AlbumGenreAlbums)
                     .HasForeignKey(d => d.AlbumId)
                     .HasConstraintName("FK_Genre_Album_Album");
-            });
-
-            modelBuilder.Entity<Anime>(entity =>
-            {
-                entity.ToTable("Anime");
-
-                entity.HasIndex(e => e.MangaId, "IX_Manga_ASC");
-
-                entity.HasIndex(e => e.MangaId, "IX_Manga_DESC");
-
-                entity.HasIndex(e => e.Studio, "IX_Studio_ASC");
-
-                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
-
-                entity.Property(e => e.IsFinished).HasColumnName("isFinished");
-
-                entity.Property(e => e.Studio).HasMaxLength(50);
-
-                entity.HasOne(d => d.ArtObject)
-                    .WithOne(p => p.Anime)
-                    .HasForeignKey<Anime>(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Anime_ArtObject");
-
-                entity.HasOne(d => d.Manga)
-                    .WithMany(p => p.Animes)
-                    .HasForeignKey(d => d.MangaId)
-                    .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK_Anime_Manga");
-            });
-
-            modelBuilder.Entity<AnimeGenre>(entity =>
-            {
-                entity.ToTable("AnimeGenre");
-
-                entity.HasIndex(e => e.Name, "IX_AnimeGenre")
-                    .IsUnique();
-
-                entity.HasIndex(e => e.Name, "IX_AnimeGenre_1")
-                    .IsUnique();
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
-            });
-
-            modelBuilder.Entity<AnimeGenreAnime>(entity =>
-            {
-                entity.HasKey(e => new { e.GenreId, e.AnimeId })
-                    .HasName("PK_Genre_Anime");
-
-                entity.ToTable("AnimeGenre_Anime");
-
-                entity.HasOne(d => d.Anime)
-                    .WithMany(p => p.AnimeGenreAnimes)
-                    .HasForeignKey(d => d.AnimeId)
-                    .HasConstraintName("FK_Genre_Anime_Anime");
-
-                entity.HasOne(d => d.Genre)
-                    .WithMany(p => p.AnimeGenreAnimes)
-                    .HasForeignKey(d => d.GenreId)
-                    .HasConstraintName("FK_Genre_Anime_AnimeGenre");
             });
 
             modelBuilder.Entity<ArtObject>(entity =>

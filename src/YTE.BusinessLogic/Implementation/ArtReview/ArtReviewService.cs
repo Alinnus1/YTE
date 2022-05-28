@@ -215,6 +215,36 @@ namespace YTE.BusinessLogic.Implementation.ArtReview
             return pagintaedReviews;
         }
 
+        public PaginatedList<ListUserArtReviewModel> GetSpecificUserReviewsOfBooks(string username, string type, bool desc, int pageNumber)
+        {
+            var reviews = UnitOfWork.ArtReview.Get()
+                    .Include(a => a.User)
+                    .Where(a => a.User.UserName == username)
+                    .Include(a => a.ArtObject)
+                        .ThenInclude(a => a.Book)
+                    .Where(a => a.ArtObject.Book.Id == a.ArtObject.Id && a.ArtObject.IsDeleted == false)
+                    .OrderBy(type, desc)
+                    .Select(a => Mapper.Map<Entities.ArtReview, ListUserArtReviewModel>(a));
+            var pagintaedReviews = PaginatedList<ListUserArtReviewModel>.Create(reviews, pageNumber, 10);
+
+            return pagintaedReviews;
+        }
+
+        public PaginatedList<ListUserArtReviewModel> GetSpecificUserReviewsOfAlbums(string username, string type, bool desc, int pageNumber)
+        {
+            var reviews = UnitOfWork.ArtReview.Get()
+                    .Include(a => a.User)
+                    .Where(a => a.User.UserName == username)
+                    .Include(a => a.ArtObject)
+                        .ThenInclude(a => a.Album)
+                    .Where(a => a.ArtObject.Album.Id == a.ArtObject.Id && a.ArtObject.IsDeleted == false)
+                    .OrderBy(type, desc)
+                    .Select(a => Mapper.Map<Entities.ArtReview, ListUserArtReviewModel>(a));
+            var pagintaedReviews = PaginatedList<ListUserArtReviewModel>.Create(reviews, pageNumber, 10);
+
+            return pagintaedReviews;
+        }
+
         public PaginatedList<ListUserArtReviewModel> GetSpecificUserReviewsOfArt(string username, string type, bool desc, int pageNumber)
         {
             var reviews = UnitOfWork.ArtReview.Get()

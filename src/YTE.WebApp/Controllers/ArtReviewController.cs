@@ -161,11 +161,69 @@ namespace YTE.WebApp.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public IActionResult ListBookReviewsOf(string id, string sortOrder, int pageNumber = 1)
+        {
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["ScoreSortParm"] = String.IsNullOrEmpty(sortOrder) ? "score_asc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+            var model = Service.GetSpecificUserReviewsOfBooks(id, "Score", true, pageNumber);
+            ViewBag.UserName = model.FirstOrDefault()?.UserName;
+
+            switch (sortOrder)
+            {
+                case "score_asc":
+                    model = Service.GetSpecificUserReviewsOfBooks(id, "Score", false, pageNumber);
+                    break;
+                case "Date":
+                    model = Service.GetSpecificUserReviewsOfBooks(id, "Date", false, pageNumber);
+                    break;
+                case "date_desc":
+                    model = Service.GetSpecificUserReviewsOfBooks(id, "Date", true, pageNumber);
+                    break;
+                default:
+
+                    break;
+            }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult ListAlbumReviewsOf(string id, string sortOrder, int pageNumber = 1)
+        {
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["ScoreSortParm"] = String.IsNullOrEmpty(sortOrder) ? "score_asc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+            var model = Service.GetSpecificUserReviewsOfAlbums(id, "Score", true, pageNumber);
+            ViewBag.UserName = model.FirstOrDefault()?.UserName;
+
+            switch (sortOrder)
+            {
+                case "score_asc":
+                    model = Service.GetSpecificUserReviewsOfAlbums(id, "Score", false, pageNumber);
+                    break;
+                case "Date":
+                    model = Service.GetSpecificUserReviewsOfAlbums(id, "Date", false, pageNumber);
+                    break;
+                case "date_desc":
+                    model = Service.GetSpecificUserReviewsOfAlbums(id, "Date", true, pageNumber);
+                    break;
+                default:
+
+                    break;
+            }
+
+            return View(model);
+        }
+
 
         #endregion
 
         [HttpGet]
-        [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame")]
+        [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame,ModBook,ModAlbum")]
         public IActionResult Create(Guid id)
         {
             var model = new CreateArtReviewModel();
@@ -183,7 +241,7 @@ namespace YTE.WebApp.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame")]
+        [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame,ModBook,ModAlbum")]
         public IActionResult Create(CreateArtReviewModel model)
         {
             if (model == null)
@@ -197,7 +255,7 @@ namespace YTE.WebApp.Controllers
 
 
         [HttpGet]
-        [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame")]
+        [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame,ModBook,ModAlbum")]
         public IActionResult Edit(Guid id, string type)
         {
             var model = Service.EditArtReview(id, type);
@@ -208,7 +266,7 @@ namespace YTE.WebApp.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame")]
+        [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame,ModBook,ModAlbum")]
         public IActionResult Edit(Guid id, string type, EditArtReviewModel model)
         {
             if (model == null)
@@ -229,7 +287,7 @@ namespace YTE.WebApp.Controllers
 
 
         [HttpGet]
-        [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame")]
+        [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame,ModBook,ModAlbum")]
         public IActionResult Delete(Guid id, string type)
         {
             var previousUrl = string.Empty;

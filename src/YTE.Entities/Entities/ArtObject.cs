@@ -29,7 +29,6 @@ namespace YTE.Entities
         public virtual Image Poster { get; set; }
         public virtual ArtObjectType Type { get; set; }
         public virtual Album Album { get; set; }
-        public virtual Anime Anime { get; set; }
         public virtual Book Book { get; set; }
         public virtual Film Film { get; set; }
         public virtual Manga Manga { get; set; }
