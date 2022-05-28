@@ -1,9 +1,5 @@
 ﻿using FluentValidation;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Implementation.VideoGame.Model;
 
 namespace YTE.BusinessLogic.Implementation.VideoGame.Validation
@@ -43,7 +39,7 @@ namespace YTE.BusinessLogic.Implementation.VideoGame.Validation
 
         private bool BetweenRange(DateTime date)
         {
-            DateTime dateMin = new DateTime(1958,1, 1, 0, 0, 0);
+            DateTime dateMin = new DateTime(1958, 1, 1, 0, 0, 0);
             DateTime dateMax = DateTime.Now;
             int result1 = DateTime.Compare(dateMin, date);
             int result2 = DateTime.Compare(date, dateMax);

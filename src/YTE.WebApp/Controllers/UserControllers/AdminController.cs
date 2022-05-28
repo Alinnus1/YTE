@@ -12,7 +12,7 @@ namespace YTE.WebApp.Controllers
     {
 
         private readonly AdminService Service;
-        public AdminController(ControllerDependencies dependencies,AdminService adminService)
+        public AdminController(ControllerDependencies dependencies, AdminService adminService)
             : base(dependencies)
         {
             this.Service = adminService;
@@ -26,14 +26,16 @@ namespace YTE.WebApp.Controllers
 
 
         [HttpGet]
-        public IActionResult UserList(string currentFilter,string searchString,int pageNumber =1)
+        public IActionResult UserList(string currentFilter, string searchString, int pageNumber = 1)
         {
             if (searchString == null)
             {
                 searchString = currentFilter;
             }
             ViewData["CurrentFilter"] = searchString;
-            var model = Service.GetUsers(searchString,pageNumber);
+
+            var model = Service.GetUsers(searchString, pageNumber);
+
             return View(model);
         }
 
@@ -41,6 +43,7 @@ namespace YTE.WebApp.Controllers
         public IActionResult UserDetails(Guid id)
         {
             var model = Service.GetUser(id);
+
             return View(model);
         }
 
@@ -48,8 +51,8 @@ namespace YTE.WebApp.Controllers
         public IActionResult EditUser(Guid id)
         {
             var model = Service.EditUser(id);
-            return View(model);
 
+            return View(model);
         }
 
         [HttpPost]
@@ -59,8 +62,8 @@ namespace YTE.WebApp.Controllers
             {
                 return View("Error_NotFound");
             }
-
             Service.UpdateUser(model);
+
             return RedirectToAction("UserDetails", "Admin", new { id = model.Id });
         }
 

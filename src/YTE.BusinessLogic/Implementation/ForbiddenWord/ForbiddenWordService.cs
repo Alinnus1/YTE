@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Base;
 using YTE.BusinessLogic.Implementation.ForbiddenWord.Model;
 using YTE.BusinessLogic.Implementation.ForbiddenWord.Validation;
@@ -43,12 +40,10 @@ namespace YTE.BusinessLogic.Implementation.ForbiddenWord
         {
             ExecuteInTransaction(uow =>
             {
-
                 forbiddenWordValidator.Validate(model).ThenThrow(model);
                 var word = Mapper.Map<CreateForbiddenWordModel, Entities.ForbiddenWord>(model);
                 uow.ForbiddenWords.Insert(word);
                 uow.SaveChanges();
-
             });
         }
     }

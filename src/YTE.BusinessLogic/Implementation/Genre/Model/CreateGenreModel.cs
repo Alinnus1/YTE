@@ -1,11 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace YTE.BusinessLogic.Implementation.Genre.Model
+﻿namespace YTE.BusinessLogic.Implementation.Genre.Model
 {
     public class CreateGenreModel
     {

@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Implementation.Role;
 using YTE.Code.Base;
 
@@ -13,6 +10,7 @@ namespace YTE.WebApp.Controllers
     {
         private readonly RoleService Service;
 
+        //authorize by admin.
         public RoleController(ControllerDependencies dependencies, RoleService roleService) : base(dependencies)
         {
             this.Service = roleService;
@@ -32,8 +30,8 @@ namespace YTE.WebApp.Controllers
         {
             var rolesList = Service.GetRolesOfUser(id);
             var rolesListG = new SelectList(rolesList, "Value", "Text");
+
             return Json(rolesListG);
         }
-
     }
 }

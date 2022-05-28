@@ -7,7 +7,7 @@ using YTE.Common;
 namespace YTE.Entities
 {
     public partial class ArtObject : IEntity
-    { 
+    {
         public ArtObject()
         {
             ArtReviews = new HashSet<ArtReview>();
@@ -29,14 +29,12 @@ namespace YTE.Entities
         public virtual Image Poster { get; set; }
         public virtual ArtObjectType Type { get; set; }
         public virtual Album Album { get; set; }
-        public virtual Anime Anime { get; set; }
         public virtual Book Book { get; set; }
         public virtual Film Film { get; set; }
         public virtual Manga Manga { get; set; }
-        public virtual Tvseries Tvseries { get; set; }
         public virtual VideoGame VideoGame { get; set; }
         public virtual ICollection<ArtReview> ArtReviews { get; set; }
-        public virtual ICollection<WatchList> WatchLists{ get; set; }
+        public virtual ICollection<WatchList> WatchLists { get; set; }
 
     }
 }

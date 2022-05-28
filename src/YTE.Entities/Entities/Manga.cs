@@ -10,7 +10,6 @@ namespace YTE.Entities
     {
         public Manga()
         {
-            Animes = new HashSet<Anime>();
             MangaGenreMangas = new HashSet<MangaGenreManga>();
         }
 
@@ -20,7 +19,6 @@ namespace YTE.Entities
         public bool IsFinished { get; set; }
 
         public virtual ArtObject ArtObject { get; set; }
-        public virtual ICollection<Anime> Animes { get; set; }
         public virtual ICollection<MangaGenreManga> MangaGenreMangas { get; set; }
     }
 }

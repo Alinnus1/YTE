@@ -1,16 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Base;
 using YTE.BusinessLogic.Implementation.ArtObject.Model;
-using YTE.BusinessLogic.Implementation.Film.Model;
 using YTE.Common;
-using YTE.Common.DTOS;
 using YTE.DataAccess;
-using YTE.Entities.Enums;
 
 namespace YTE.BusinessLogic.Implementation.ArtObject
 {
@@ -18,7 +12,6 @@ namespace YTE.BusinessLogic.Implementation.ArtObject
     {
         public ArtObjectService(ServiceDependencies serviceDependencies) : base(serviceDependencies)
         {
-
         }
 
         public void CreateNewArtObject(CreateArtObjectModel model)
@@ -28,11 +21,9 @@ namespace YTE.BusinessLogic.Implementation.ArtObject
                 var artObject = Mapper.Map<CreateArtObjectModel, Entities.ArtObject>(model);
 
                 uow.ArtObjects.Insert(artObject);
-
                 uow.SaveChanges();
             });
         }
-
 
         public List<CreateArtObjectModel> GetArtObjects()
         {
@@ -40,6 +31,7 @@ namespace YTE.BusinessLogic.Implementation.ArtObject
                 .Select(a => Mapper.Map<Entities.ArtObject, CreateArtObjectModel>(a))
                 .ToList();
         }
+
         public Entities.ArtObject EditArtObject(IEditArtModel model, UnitOfWork uow)
         {
             var artObject = uow.ArtObjects.Get()
@@ -54,7 +46,5 @@ namespace YTE.BusinessLogic.Implementation.ArtObject
             artObject.Description = model.Description;
             return artObject;
         }
-
-
     }
 }

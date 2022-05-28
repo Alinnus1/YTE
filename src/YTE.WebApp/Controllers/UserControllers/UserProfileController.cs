@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using YTE.BusinessLogic.Implementation.Film.Model;
 using YTE.BusinessLogic.Implementation.UserProfile;
 using YTE.BusinessLogic.Implementation.UserProfile.Model;
 using YTE.Code.Base;
@@ -19,7 +16,7 @@ namespace YTE.WebApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult List(string currentFilter,string searchString,int pageNumber= 1)
+        public IActionResult List(string currentFilter, string searchString, int pageNumber = 1)
         {
             if (searchString == null)
             {
@@ -33,7 +30,7 @@ namespace YTE.WebApp.Controllers
             }
             else
             {
-                model = Service.GetUserProfiles( pageNumber);
+                model = Service.GetUserProfiles(pageNumber);
             }
             return View(model);
         }
@@ -44,8 +41,5 @@ namespace YTE.WebApp.Controllers
             var model = Service.GetUserProfile(id);
             return View(model);
         }
-
-
-
     }
 }

@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Implementation.Film;
 using YTE.BusinessLogic.Implementation.Film.Model;
 using YTE.BusinessLogic.Implementation.Genre;
@@ -23,8 +19,8 @@ namespace YTE.WebApp.Controllers
             this.GenreService = genreService;
         }
 
-        [Authorize(Roles = "ModFilm,Admin")]
         [HttpGet]
+        [Authorize(Roles = "ModFilm,Admin")]
         public IActionResult Create()
         {
             var model = new CreateFilmModel();
@@ -32,31 +28,30 @@ namespace YTE.WebApp.Controllers
             return View("Create", model);
         }
 
-        [Authorize(Roles = "ModFilm,Admin")]
         [HttpPost]
+        [Authorize(Roles = "ModFilm,Admin")]
         public IActionResult Create(CreateFilmModel model)
         {
             if (model == null)
             {
                 return View("Error_NotFound");
-
             }
-            
             Service.CreateNewFilm(model);
 
             return RedirectToAction("List", "Film");
         }
 
         [HttpGet]
-        public IActionResult List(string currentFilter,string searchString, int pageNumber = 1)
+        public IActionResult List(string currentFilter, string searchString, int pageNumber = 1)
         {
             if (searchString == null)
             {
                 searchString = currentFilter;
             }
             ViewData["CurrentFilter"] = searchString;
-            var model = Service.GetFilmsFilter( searchString, pageNumber);
-           
+
+            var model = Service.GetFilmsFilter(searchString, pageNumber);
+
             return View(model);
         }
 
@@ -65,24 +60,26 @@ namespace YTE.WebApp.Controllers
         {
             var model = Service.DetailsFilm(id);
             model.GenreList = GenreService.GetFilmGenresOfFilm(id);
+
             ViewBag.Name = model.Name;
+
             return View(model);
         }
 
-        [Authorize(Roles = "ModFilm,Admin")]
         [HttpGet]
+        [Authorize(Roles = "ModFilm,Admin")]
         public IActionResult Edit(Guid id)
         {
-            
             var model = Service.EditFilm(id);
+
             return View(model);
         }
 
-        [Authorize(Roles = "ModFilm,Admin")]
         [HttpPost]
+        [Authorize(Roles = "ModFilm,Admin")]
         public IActionResult Edit(Guid id, EditFilmModel input)
         {
-            if (input  == null)
+            if (input == null)
             {
                 return View("Error_NotFound");
 
@@ -95,8 +92,8 @@ namespace YTE.WebApp.Controllers
             });
         }
 
-        [Authorize(Roles = "ModFilm,Admin")]
         [HttpGet]
+        [Authorize(Roles = "ModFilm,Admin")]
         public IActionResult Delete(Guid id)
         {
             Service.DeleteFilm(id);
@@ -112,7 +109,5 @@ namespace YTE.WebApp.Controllers
 
             return Json(attributesList);
         }
-
-
     }
 }

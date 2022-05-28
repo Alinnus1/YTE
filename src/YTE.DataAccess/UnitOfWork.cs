@@ -1,5 +1,4 @@
-﻿using System;
-using YTE.Common;
+﻿using YTE.Common;
 using YTE.Entities;
 using YTE.Entities.Context;
 
@@ -22,6 +21,12 @@ namespace YTE.DataAccess
         public readonly IRepository<VideoGame> VideoGames;
         public readonly IRepository<VideoGameGenre> VideoGameGenres;
         public readonly IRepository<VideoGameGenreVideoGame> VideoGameGenresVideoGame;
+        public readonly IRepository<Book> Books;
+        public readonly IRepository<BookGenre> BookGenres;
+        public readonly IRepository<BookGenreBook> BookGenresBook;
+        public readonly IRepository<Album> Albums;
+        public readonly IRepository<AlbumGenre> AlbumGenres;
+        public readonly IRepository<AlbumGenreAlbum> AlbumGenresAlbum;
         public readonly IRepository<Image> Images;
         public readonly IRepository<Role> Roles;
         public readonly IRepository<UserRole> UserRoles;
@@ -48,6 +53,12 @@ namespace YTE.DataAccess
             this.VideoGames = new BaseRepository<VideoGame>(Context);
             this.VideoGameGenres = new BaseRepository<VideoGameGenre>(Context);
             this.VideoGameGenresVideoGame = new BaseRepository<VideoGameGenreVideoGame>(Context);
+            this.Books = new BaseRepository<Book>(Context);
+            this.BookGenres = new BaseRepository<BookGenre>(Context);
+            this.BookGenresBook = new BaseRepository<BookGenreBook>(Context);
+            this.Albums = new BaseRepository<Album>(Context);
+            this.AlbumGenres = new BaseRepository<AlbumGenre>(Context);
+            this.AlbumGenresAlbum = new BaseRepository<AlbumGenreAlbum>(Context);
             this.Images = new BaseRepository<Image>(Context);
             this.Roles = new BaseRepository<Role>(Context);
             this.UserRoles = new BaseRepository<UserRole>(Context);

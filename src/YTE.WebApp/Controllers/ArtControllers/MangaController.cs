@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
-using System.Collections.Generic;
-using YTE.BusinessLogic.Implementation.Film.Model;
 using YTE.BusinessLogic.Implementation.Genre;
 using YTE.BusinessLogic.Implementation.Manga;
 using YTE.BusinessLogic.Implementation.Manga.Model;
@@ -11,7 +8,7 @@ using YTE.Code.Base;
 
 namespace YTE.WebApp.Controllers
 {
-    
+
     public class MangaController : BaseController
     {
         private readonly MangaService Service;
@@ -23,16 +20,17 @@ namespace YTE.WebApp.Controllers
             this.GenreService = genreService;
         }
 
-        [Authorize(Roles = "ModManga,Admin")]
         [HttpGet]
+        [Authorize(Roles = "ModManga,Admin")]
         public IActionResult Create()
         {
             var model = new CreateMangaModel();
 
             return View("Create", model);
         }
-        [Authorize(Roles = "ModManga,Admin")]
+
         [HttpPost]
+        [Authorize(Roles = "ModManga,Admin")]
         public IActionResult Create(CreateMangaModel model)
         {
             if (model == null)
@@ -40,14 +38,13 @@ namespace YTE.WebApp.Controllers
                 return View("Error_NotFound");
 
             }
-            
             Service.CreateNewManga(model);
 
             return RedirectToAction("List", "Manga");
         }
 
         [HttpGet]
-        public IActionResult List(string currentFilter,string searchString,int pageNumber = 1)
+        public IActionResult List(string currentFilter, string searchString, int pageNumber = 1)
         {
             if (searchString == null)
             {
@@ -55,30 +52,33 @@ namespace YTE.WebApp.Controllers
             }
             ViewData["CurrentFilter"] = searchString;
 
-            var model = Service.GetMangasFilter( searchString, pageNumber);
+            var model = Service.GetMangasFilter(searchString, pageNumber);
 
             return View(model);
         }
-        
+
         [HttpGet]
         public IActionResult Details(Guid id)
         {
             var model = Service.DetailsManga(id);
             model.GenreList = GenreService.GetMangaGenresOfManga(id);
+
             ViewBag.Name = model.Name;
+
             return View(model);
         }
 
-        [Authorize(Roles = "ModManga,Admin")]
         [HttpGet]
+        [Authorize(Roles = "ModManga,Admin")]
         public IActionResult Edit(Guid id)
         {
             var model = Service.EditManga(id);
+
             return View(model);
         }
 
-        [Authorize(Roles = "ModManga,Admin")]
         [HttpPost]
+        [Authorize(Roles = "ModManga,Admin")]
         public IActionResult Edit(Guid id, EditMangaModel input)
         {
             if (input == null)
@@ -86,7 +86,7 @@ namespace YTE.WebApp.Controllers
                 return View("Error_NotFound");
 
             }
-            Service.UpdateManga( input);
+            Service.UpdateManga(input);
 
             return RedirectToAction("Details", "Manga", new
             {
@@ -94,8 +94,8 @@ namespace YTE.WebApp.Controllers
             });
         }
 
-        [Authorize(Roles = "ModManga,Admin")]
         [HttpGet]
+        [Authorize(Roles = "ModManga,Admin")]
         public IActionResult Delete(Guid id)
         {
             Service.DeleteManga(id);
@@ -111,7 +111,5 @@ namespace YTE.WebApp.Controllers
 
             return Json(attributesList);
         }
-
-
     }
 }

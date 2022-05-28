@@ -1,15 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using YTE.BusinessLogic.Implementation.Account;
-using YTE.Code.Base;
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using YTE.BusinessLogic.Implementation.Account;
 using YTE.BusinessLogic.Implementation.Account.Model;
+using YTE.Code.Base;
 using YTE.Common.DTOS;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using Microsoft.AspNetCore.Authorization;
 
 namespace YTE.WebApp.Controllers
 {
@@ -25,7 +24,6 @@ namespace YTE.WebApp.Controllers
         }
 
         [HttpGet]
-
         [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame")]
         public IActionResult Details()
         {
@@ -35,7 +33,6 @@ namespace YTE.WebApp.Controllers
         }
 
         [HttpGet]
-
         [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame")]
         public IActionResult Edit()
         {
@@ -45,7 +42,6 @@ namespace YTE.WebApp.Controllers
         }
 
         [HttpPost]
-
         [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame")]
         public IActionResult Edit(EditUserAccountModel model)
         {
@@ -60,12 +56,11 @@ namespace YTE.WebApp.Controllers
 
             }
             ModelState.AddModelError(string.Empty, "Password does not match the current password!");
-            return View(model);
 
+            return View(model);
         }
 
         [HttpGet]
-
         [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame")]
         public IActionResult Delete()
         {
@@ -75,7 +70,6 @@ namespace YTE.WebApp.Controllers
         }
 
         [HttpPost]
-
         [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame")]
         public async Task<IActionResult> Delete(DeleteUserAccountModel model)
         {
@@ -88,9 +82,10 @@ namespace YTE.WebApp.Controllers
                 await Logout();
                 return RedirectToAction("Index", "Home");
             }
-            ModelState.AddModelError(string.Empty, "Password does not match the current password!");
-            return View(model);
 
+            ModelState.AddModelError(string.Empty, "Password does not match the current password!");
+
+            return View(model);
         }
 
         [HttpGet]
@@ -104,7 +99,6 @@ namespace YTE.WebApp.Controllers
         }
 
         [HttpPost]
-
         [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame")]
         public IActionResult ChangePassword(ChangePassModel model)
         {
@@ -112,7 +106,6 @@ namespace YTE.WebApp.Controllers
             {
                 return View("Error_NotFound");
             }
-
             if (Service.ChangePassword(model))
             {
                 return RedirectToAction("Details", "UserAccount");
@@ -120,7 +113,6 @@ namespace YTE.WebApp.Controllers
 
             ModelState.AddModelError(string.Empty, "Old password does not match the current password!");
             return View(model);
-
         }
 
         [HttpGet]
@@ -138,11 +130,13 @@ namespace YTE.WebApp.Controllers
             {
                 return View("Error_Unauthorized");
             }
+
             var model = new RegisterModel();
+
             return View("Register", model);
         }
 
-    
+
         [HttpGet]
         public IActionResult MailSent()
         {
@@ -152,7 +146,6 @@ namespace YTE.WebApp.Controllers
         [HttpPost]
         public IActionResult Register(RegisterModel model)
         {
-
             if (model == null)
             {
                 return View("Error_NotFound");
@@ -160,7 +153,6 @@ namespace YTE.WebApp.Controllers
 
             Service.RegisterNewUser(model);
 
-            
             return RedirectToAction("MailSent", "UserAccount");
         }
 
@@ -181,16 +173,16 @@ namespace YTE.WebApp.Controllers
             {
                 model.AreCredentialsInvalid = true;
                 return View(model);
-            } else if (!user.EmailConfirmed)
+            }
+            else if (!user.EmailConfirmed)
             {
                 model.EmailUnConfirmed = true;
                 return View(model);
-            } else
+            }
+            else
             {
-
                 await LogIn(user);
             }
-            
 
             return RedirectToAction("Index", "Home");
         }
@@ -238,24 +230,24 @@ namespace YTE.WebApp.Controllers
         [HttpGet]
         public IActionResult ConfirmationEmail(Guid id, string type)
         {
-
             var model = Service.ConfirmEmail(id, type);
-            return View(model);
 
+            return View(model);
         }
 
         [HttpGet]
         public IActionResult ResendConfirmation(string id)
         {
             var model = Service.ResendConfirmation(id);
-            return View(model);
 
+            return View(model);
         }
 
         [HttpGet]
         public IActionResult ResetPassConfirmation(string id)
         {
             var model = Service.ResetPassEmail(id);
+
             return View(model);
         }
 
@@ -263,14 +255,16 @@ namespace YTE.WebApp.Controllers
         public IActionResult ResetPassword(Guid id, string type)
         {
             var model = Service.ResetPasswordForm(id, type);
+
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult ResetPassword(Guid id, string type,ForgotPassModel model)
+        public IActionResult ResetPassword(Guid id, string type, ForgotPassModel model)
         {
             Service.ResetPassword(model);
-            return RedirectToAction("Login","UserAccount");
+
+            return RedirectToAction("Login", "UserAccount");
         }
     }
 }

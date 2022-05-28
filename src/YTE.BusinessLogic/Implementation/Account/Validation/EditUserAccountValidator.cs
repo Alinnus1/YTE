@@ -1,9 +1,6 @@
 ﻿using FluentValidation;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Implementation.Account.Model;
 using YTE.DataAccess;
 
@@ -48,7 +45,7 @@ namespace YTE.BusinessLogic.Implementation.Account.Validation
                 .NotEmpty().WithMessage("Required field!");
         }
 
-        private bool NotAlreadyExist(EditUserAccountModel model,string email)
+        private bool NotAlreadyExist(EditUserAccountModel model, string email)
         {
             var emailInitial = uow.Users.Get()
                     .FirstOrDefault(u => u.Id == model.Id).Email;

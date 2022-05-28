@@ -1,15 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Base;
-using YTE.BusinessLogic.Implementation.FavoriteList.Model;
 using YTE.BusinessLogic.Implementation.WatchList.Model;
 using YTE.Common.DTOS;
 using YTE.DataAccess;
-using YTE.Entities;
 
 namespace YTE.BusinessLogic.Implementation.WatchList
 {
@@ -19,7 +14,7 @@ namespace YTE.BusinessLogic.Implementation.WatchList
         {
         }
 
-        public PaginatedList<ListWatchListModel> GetOf(string username,int pageNumber )
+        public PaginatedList<ListWatchListModel> GetOf(string username, int pageNumber)
         {
 
             var watchListArtObjects = UnitOfWork.WatchLists.Get()
@@ -34,7 +29,7 @@ namespace YTE.BusinessLogic.Implementation.WatchList
             return paginatedWatchListArtObjects;
         }
 
-        public void Add( Guid artid)
+        public void Add(Guid artid)
         {
             var username = CurrentUser.UserName;
             if (!CheckExperienced(username, artid))
@@ -45,14 +40,14 @@ namespace YTE.BusinessLogic.Implementation.WatchList
                     uow.WatchLists.Insert(new Entities.WatchList()
                     {
                         ArtObjectId = artid,
-                        UserName= username
+                        UserName = username
                     });
                     uow.SaveChanges();
                 });
             }
         }
 
-        public void Remove( Guid artid)
+        public void Remove(Guid artid)
         {
             var username = CurrentUser.UserName;
             ExecuteInTransaction(uow =>
@@ -72,7 +67,6 @@ namespace YTE.BusinessLogic.Implementation.WatchList
                 var fav = uow.WatchLists.Get()
                         .FirstOrDefault(a => a.ArtObjectId == id && a.UserName == username);
                 uow.WatchLists.Delete(fav);
-
             }
         }
 

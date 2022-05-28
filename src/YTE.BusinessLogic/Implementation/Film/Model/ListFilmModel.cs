@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace YTE.BusinessLogic.Implementation.Film.Model
 {
@@ -19,7 +15,5 @@ namespace YTE.BusinessLogic.Implementation.Film.Model
         public bool AddedToFavoriteList { get; set; }
         public bool EligibleFavoriteList { get; set; }
         public bool AddedToWatchList { get; set; }
-
-
     }
 }

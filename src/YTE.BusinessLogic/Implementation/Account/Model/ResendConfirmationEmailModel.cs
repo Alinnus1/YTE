@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace YTE.BusinessLogic.Implementation.Account.Model
+﻿namespace YTE.BusinessLogic.Implementation.Account.Model
 {
     public class ResendConfirmationEmailModel
     {

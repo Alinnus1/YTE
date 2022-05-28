@@ -1,18 +1,12 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Base;
 using YTE.BusinessLogic.Implementation.ArtObject;
-using YTE.BusinessLogic.Implementation.ArtObject.Validation;
 using YTE.BusinessLogic.Implementation.ArtReview;
 using YTE.BusinessLogic.Implementation.FavoriteList;
-using YTE.BusinessLogic.Implementation.Film.Model;
 using YTE.BusinessLogic.Implementation.Genre;
 using YTE.BusinessLogic.Implementation.Images;
 using YTE.BusinessLogic.Implementation.Manga.Model;
@@ -21,11 +15,7 @@ using YTE.BusinessLogic.Implementation.WatchList;
 using YTE.Common.DTOS;
 using YTE.Common.Exceptions;
 using YTE.Common.Extensions;
-using YTE.Entities;
 using YTE.Entities.Enums;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Net.WebRequestMethods;
-using Image = YTE.Entities.Image;
 
 namespace YTE.BusinessLogic.Implementation.Manga
 {
@@ -50,7 +40,7 @@ namespace YTE.BusinessLogic.Implementation.Manga
             this.ArtObjectService = artObjectService;
         }
 
-        public List<ListMangaModel> GetMangasFilter( string searchString, int pageNumber)
+        public List<ListMangaModel> GetMangasFilter(string searchString, int pageNumber)
         {
             if (String.IsNullOrEmpty(searchString))
             {
@@ -73,7 +63,6 @@ namespace YTE.BusinessLogic.Implementation.Manga
             });
 
             return paginatedMangas;
-
         }
 
         public List<string> GetMangaAttributes()
@@ -86,7 +75,6 @@ namespace YTE.BusinessLogic.Implementation.Manga
         {
             ExecuteInTransaction(uow =>
             {
-
                 MangaValidator.Validate(model).ThenThrow(model);
 
                 var artObject = Mapper.Map<CreateMangaModel, Entities.ArtObject>(model);
@@ -110,7 +98,6 @@ namespace YTE.BusinessLogic.Implementation.Manga
             });
         }
 
-      
         public DetailsMangaModel DetailsManga(Guid id)
         {
             var manga = UnitOfWork.Mangas.Get()
@@ -145,27 +132,23 @@ namespace YTE.BusinessLogic.Implementation.Manga
             return Mapper.Map<Entities.Manga, EditMangaModel>(manga);
         }
 
-        public void UpdateManga( EditMangaModel model)
+        public void UpdateManga(EditMangaModel model)
         {
             ExecuteInTransaction(uow =>
             {
-               MangaValidator.Validate(model).ThenThrow(model);
+                MangaValidator.Validate(model).ThenThrow(model);
                 var artObject = ArtObjectService.EditArtObject(model, uow);
-
-                ImageService.SetPoster(model, uow, artObject);
-
-                ImageService.SetBackground(model, uow, artObject);
-
-
-                uow.ArtObjects.Update(artObject);
-
                 var manga = Mapper.Map<EditMangaModel, Entities.Manga>(model);
 
+                ImageService.SetPoster(model, uow, artObject);
+                ImageService.SetBackground(model, uow, artObject);
+
+                uow.ArtObjects.Update(artObject);
                 uow.Mangas.Update(manga);
 
                 GenreService.SetMangaGenres(model, uow, manga);
                 uow.SaveChanges();
-           });
+            });
         }
 
         public void DeleteManga(Guid id)

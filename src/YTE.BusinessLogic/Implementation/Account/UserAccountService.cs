@@ -1,22 +1,21 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Security.Cryptography;
+using System.Text;
 using YTE.BusinessLogic.Base;
 using YTE.BusinessLogic.Implementation.Account.Model;
 using YTE.BusinessLogic.Implementation.Account.Validation;
+using YTE.BusinessLogic.Implementation.Images;
+using YTE.BusinessLogic.Implementation.MailSender;
+using YTE.BusinessLogic.Implementation.Token;
 using YTE.Common.DTOS;
 using YTE.Common.Extensions;
+using YTE.DataAccess;
 using YTE.Entities;
 using YTE.Entities.Enums;
-using System.IO;
-using FluentValidation;
-using YTE.DataAccess;
-using YTE.BusinessLogic.Implementation.Images;
-using YTE.BusinessLogic.Implementation.Token;
-using YTE.BusinessLogic.Implementation.MailSender;
 
 namespace YTE.BusinessLogic.Implementation.Account
 {
@@ -34,7 +33,6 @@ namespace YTE.BusinessLogic.Implementation.Account
         public UserAccountService(ServiceDependencies dependencies, ImageService imageService, TokenService tokenService, MailSenderService mailSenderService)
             : base(dependencies)
         {
-
             this.RegisterUserValidator = new RegisterUserAccountValidator(UnitOfWork);
             this.ChangePasswordValidator = new ChangePasswordValidator();
             this.DeleteUserValidator = new DeleteUserAccountValidator();
@@ -54,10 +52,10 @@ namespace YTE.BusinessLogic.Implementation.Account
 
             using (SHA256 sha256Hash = SHA256.Create())
             {
-                // ComputeHash - returns byte array  
+                // ComputeHash - returns byte array
                 byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawPass));
 
-                // Convert byte array to a string   
+                // Convert byte array to a string
                 StringBuilder builder = new StringBuilder();
                 for (int i = 0; i < bytes.Length; i++)
                 {
@@ -140,7 +138,6 @@ namespace YTE.BusinessLogic.Implementation.Account
                 .FirstOrDefault(u => u.UserName == CurrentUser.UserName && u.Id == CurrentUser.Id);
 
             return Mapper.Map<User, EditUserAccountModel>(user);
-
         }
 
         public bool UpdateUserAccount(EditUserAccountModel model)
@@ -175,7 +172,6 @@ namespace YTE.BusinessLogic.Implementation.Account
                 {
                     return false;
                 }
-
             });
         }
 
@@ -213,7 +209,6 @@ namespace YTE.BusinessLogic.Implementation.Account
                         uow.SaveChanges();
                         model.IsEmailConfirmed = true;
                         return model;
-
                     }
                 }
                 else
@@ -254,31 +249,27 @@ namespace YTE.BusinessLogic.Implementation.Account
                 var token = uow.Tokens.Get()
                             .FirstOrDefault(t => t.Id == tokenId);
 
-
-                if (user != null && token != null)
-                {
-                    TimeSpan timeLeftToken = DateTime.Now - token.Date;
-                    if (timeLeftToken.Days >= 1)
-                    {
-                        uow.Tokens.Delete(token);
-                        uow.SaveChanges();
-
-                        return model;
-                    }
-                    else
-                    {
-                        model.UserId = user.Id;
-                        model.TokenId = token.Id;
-                        model.AreCredentialsValid = true;
-                        return model;
-
-                    }
-                }
-                else
+                if (user == null || token == null)
                 {
                     return model;
                 }
 
+                TimeSpan timeLeftToken = DateTime.Now - token.Date;
+                if (timeLeftToken.Days >= 1)
+                {
+                    uow.Tokens.Delete(token);
+                    uow.SaveChanges();
+
+                    return model;
+                }
+                else
+                {
+                    model.UserId = user.Id;
+                    model.TokenId = token.Id;
+                    model.AreCredentialsValid = true;
+
+                    return model;
+                }
             });
         }
 
@@ -286,30 +277,27 @@ namespace YTE.BusinessLogic.Implementation.Account
         {
             var model = new SendForgotPassEmailModel()
             {
-
                 IsEmailSent = false,
                 IsUserFound = false,
                 Email = email,
             };
+
             return ExecuteInTransaction(uow =>
             {
                 var user = uow.Users.Get()
                             .FirstOrDefault(u => u.Email == email);
 
-                if (user != null)
+                if (user == null)
                 {
-                    model.IsUserFound = true;
+                    return model;
+                }
 
-                    var token = TokenService.CreateForgotPassEmailToken(uow);
-                    uow.SaveChanges();
-                    MailSenderService.SendForgotPassEmail(user.Id, user.Email, token.Id);
-                    model.IsEmailSent = true;
-                    return model;
-                }
-                else
-                {
-                    return model;
-                }
+                model.IsUserFound = true;
+                var token = TokenService.CreateForgotPassEmailToken(uow);
+                uow.SaveChanges();
+                MailSenderService.SendForgotPassEmail(user.Id, user.Email, token.Id);
+                model.IsEmailSent = true;
+                return model;
             });
         }
 
@@ -322,32 +310,30 @@ namespace YTE.BusinessLogic.Implementation.Account
                 IsUserFound = false,
                 Email = email,
             };
+
             return ExecuteInTransaction(uow =>
             {
                 var user = uow.Users.Get()
                             .FirstOrDefault(u => u.Email == email);
 
-                if (user != null)
-                {
-                    model.IsUserFound = true;
-                    if (user.ConfirmedEmail)
-                    {
-                        model.IsEmailConfirmed = true;
-                        return model;
-                    }
-                    var token = TokenService.CreateConfirmationEmailToken(uow);
-                    uow.SaveChanges();
-                    MailSenderService.SendConfirmationEmail(user.Id, user.Email, token.Id);
-                    model.IsEmailSent = true;
-                    model.IsTokenCreated = true;
-
-                    return model;
-                }
-                else
+                if (user == null)
                 {
                     return model;
                 }
 
+                model.IsUserFound = true;
+                if (user.ConfirmedEmail)
+                {
+                    model.IsEmailConfirmed = true;
+                    return model;
+                }
+                var token = TokenService.CreateConfirmationEmailToken(uow);
+                uow.SaveChanges();
+                MailSenderService.SendConfirmationEmail(user.Id, user.Email, token.Id);
+                model.IsEmailSent = true;
+                model.IsTokenCreated = true;
+
+                return model;
             });
         }
 
@@ -361,54 +347,49 @@ namespace YTE.BusinessLogic.Implementation.Account
                     .SingleOrDefault();
                 var passwordHash = ComputeSha256Hash(model.Password);
 
-                if (user.PasswordHash == passwordHash)
+                if (user.PasswordHash != passwordHash)
                 {
-                    uow.Users.Delete(user);
-                    uow.SaveChanges();
-
-                    return true;
+                    return false;
                 }
-                return false;
 
+                uow.Users.Delete(user);
+                uow.SaveChanges();
+
+                return true;
             });
         }
 
         public bool ChangePassword(ChangePassModel model)
         {
             return ExecuteInTransaction(uow =>
-          {
-              ChangePasswordValidator.Validate(model).ThenThrow(model);
-              var userPass = uow.Users.Get()
-                  .Where(u => u.Id == CurrentUser.Id)
-                  .Select(u => u.PasswordHash)
-                  .SingleOrDefault();
+            {
+                ChangePasswordValidator.Validate(model).ThenThrow(model);
 
-              var passwordHash = ComputeSha256Hash(model.OldPassword);
+                var userPass = uow.Users.Get()
+                    .Where(u => u.Id == CurrentUser.Id)
+                    .Select(u => u.PasswordHash)
+                    .SingleOrDefault();
+                var passwordHash = ComputeSha256Hash(model.OldPassword);
 
-              if (userPass == passwordHash)
-              {
-                  var user = uow.Users.Get()
-                  .Where(u => u.Id == CurrentUser.Id)
-                  .SingleOrDefault();
+                if (userPass != passwordHash)
+                {
+                    return false;
+                }
 
-                  var newPasswordHash = ComputeSha256Hash(model.NewPassword);
-                  user.PasswordHash = newPasswordHash;
+                var user = uow.Users.Get()
+                .Where(u => u.Id == CurrentUser.Id)
+                .SingleOrDefault();
+                user.PasswordHash = ComputeSha256Hash(model.NewPassword);
+                uow.Users.Update(user);
+                uow.SaveChanges();
 
-                  uow.Users.Update(user);
-                  uow.SaveChanges();
-
-                  return true;
-              }
-              return false;
-
-          });
+                return true;
+            });
         }
 
         #endregion
         public void RegisterNewUser(RegisterModel model)
         {
-
-
             ExecuteInTransaction(uow =>
             {
                 RegisterUserValidator.Validate(model).ThenThrow(model);
@@ -416,25 +397,19 @@ namespace YTE.BusinessLogic.Implementation.Account
                 var user = Mapper.Map<RegisterModel, User>(model);
 
                 user.PasswordHash = ComputeSha256Hash(model.Password);
-                user.JoinDate = System.DateTime.Today;
-
+                user.JoinDate = DateTime.Today;
                 user.UserRoles = new List<UserRole>
                 {
                     new UserRole { RoleId = (int)RoleTypes.User }
                 };
-                ImageService.SetStockImage(user, uow);
                 user.WantsNotifications = true;
                 user.ConfirmedEmail = false;
-                // creare de token 
+                uow.Users.Insert(user);
+                uow.SaveChanges();
 
                 var token = TokenService.CreateConfirmationEmailToken(uow);
-
-
-                uow.Users.Insert(user);
-                // trimitere de email
+                ImageService.SetStockImage(user, uow);
                 MailSenderService.SendConfirmationEmail(user.Id, user.Email, token.Id);
-
-                uow.SaveChanges();
             });
         }
 
@@ -442,14 +417,13 @@ namespace YTE.BusinessLogic.Implementation.Account
         {
             ExecuteInTransaction(uow =>
             {
-                var dt = DateTime.Now.AddDays(-3);
+                var pastDateTime = DateTime.Now.AddDays(-3);
                 var users = uow.Users.Get()
-                    .Where(u => u.ConfirmedEmail == false && u.JoinDate >= dt);
+                    .Where(u => u.ConfirmedEmail == false && u.JoinDate >= pastDateTime);
 
                 foreach (var user in users)
                 {
                     uow.Users.Delete(user);
-
                 }
                 uow.SaveChanges();
             });
@@ -465,6 +439,5 @@ namespace YTE.BusinessLogic.Implementation.Account
                 })
                 .ToList();
         }
-
     }
 }

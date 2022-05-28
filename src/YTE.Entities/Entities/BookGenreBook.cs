@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
+using YTE.Common;
 
 #nullable disable
 
 namespace YTE.Entities
 {
-    public partial class BookGenreBook
+    public partial class BookGenreBook : IEntity
     {
         public int GenreId { get; set; }
         public Guid BookId { get; set; }

@@ -1,7 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using YTE.Entities;
+﻿using Microsoft.EntityFrameworkCore;
 
 
 
@@ -25,9 +22,6 @@ namespace YTE.Entities.Context
         public virtual DbSet<Album> Albums { get; set; }
         public virtual DbSet<AlbumGenre> AlbumGenres { get; set; }
         public virtual DbSet<AlbumGenreAlbum> AlbumGenreAlbums { get; set; }
-        public virtual DbSet<Anime> Animes { get; set; }
-        public virtual DbSet<AnimeGenre> AnimeGenres { get; set; }
-        public virtual DbSet<AnimeGenreAnime> AnimeGenreAnimes { get; set; }
         public virtual DbSet<ArtObject> ArtObjects { get; set; }
         public virtual DbSet<ArtObjectType> ArtObjectTypes { get; set; }
         public virtual DbSet<ArtReview> ArtReviews { get; set; }
@@ -45,9 +39,6 @@ namespace YTE.Entities.Context
         public virtual DbSet<MangaGenre> MangaGenres { get; set; }
         public virtual DbSet<MangaGenreManga> MangaGenreMangas { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
-        public virtual DbSet<Tvseries> Tvseries { get; set; }
-        public virtual DbSet<TvseriesGenre> TvseriesGenres { get; set; }
-        public virtual DbSet<TvseriesGenreTvseries> TvseriesGenreTvseries { get; set; }
         public virtual DbSet<Token> Tokens { get; set; }
         public virtual DbSet<TokenType> TokenTypes { get; set; }
         public virtual DbSet<User> Users { get; set; }
@@ -78,6 +69,8 @@ namespace YTE.Entities.Context
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
+                entity.Property(e => e.Length).HasColumnType("time(7)");
+
                 entity.HasOne(d => d.ArtObject)
                     .WithOne(p => p.Album)
                     .HasForeignKey<Album>(d => d.Id)
@@ -95,7 +88,7 @@ namespace YTE.Entities.Context
 
             modelBuilder.Entity<AlbumGenreAlbum>(entity =>
             {
-                entity.HasKey(e => new { e.GenreId, e.MusicArtId })
+                entity.HasKey(e => new { e.GenreId, e.AlbumId })
                     .HasName("PK_Genre_MusicArt");
 
                 entity.ToTable("AlbumGenre_Album");
@@ -103,74 +96,12 @@ namespace YTE.Entities.Context
                 entity.HasOne(d => d.Genre)
                     .WithMany(p => p.AlbumGenreAlbums)
                     .HasForeignKey(d => d.GenreId)
-                    .HasConstraintName("FK_Genre_MusicArt_MusicGenre");
+                    .HasConstraintName("FK_Genre_Album_AlbumGenre");
 
-                entity.HasOne(d => d.MusicArt)
+                entity.HasOne(d => d.Album)
                     .WithMany(p => p.AlbumGenreAlbums)
-                    .HasForeignKey(d => d.MusicArtId)
-                    .HasConstraintName("FK_Genre_MusicArt_Album");
-            });
-
-            modelBuilder.Entity<Anime>(entity =>
-            {
-                entity.ToTable("Anime");
-
-                entity.HasIndex(e => e.MangaId, "IX_Manga_ASC");
-
-                entity.HasIndex(e => e.MangaId, "IX_Manga_DESC");
-
-                entity.HasIndex(e => e.Studio, "IX_Studio_ASC");
-
-                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
-
-                entity.Property(e => e.IsFinished).HasColumnName("isFinished");
-
-                entity.Property(e => e.Studio).HasMaxLength(50);
-
-                entity.HasOne(d => d.ArtObject)
-                    .WithOne(p => p.Anime)
-                    .HasForeignKey<Anime>(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Anime_ArtObject");
-
-                entity.HasOne(d => d.Manga)
-                    .WithMany(p => p.Animes)
-                    .HasForeignKey(d => d.MangaId)
-                    .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK_Anime_Manga");
-            });
-
-            modelBuilder.Entity<AnimeGenre>(entity =>
-            {
-                entity.ToTable("AnimeGenre");
-
-                entity.HasIndex(e => e.Name, "IX_AnimeGenre")
-                    .IsUnique();
-
-                entity.HasIndex(e => e.Name, "IX_AnimeGenre_1")
-                    .IsUnique();
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
-            });
-
-            modelBuilder.Entity<AnimeGenreAnime>(entity =>
-            {
-                entity.HasKey(e => new { e.GenreId, e.AnimeId })
-                    .HasName("PK_Genre_Anime");
-
-                entity.ToTable("AnimeGenre_Anime");
-
-                entity.HasOne(d => d.Anime)
-                    .WithMany(p => p.AnimeGenreAnimes)
-                    .HasForeignKey(d => d.AnimeId)
-                    .HasConstraintName("FK_Genre_Anime_Anime");
-
-                entity.HasOne(d => d.Genre)
-                    .WithMany(p => p.AnimeGenreAnimes)
-                    .HasForeignKey(d => d.GenreId)
-                    .HasConstraintName("FK_Genre_Anime_AnimeGenre");
+                    .HasForeignKey(d => d.AlbumId)
+                    .HasConstraintName("FK_Genre_Album_Album");
             });
 
             modelBuilder.Entity<ArtObject>(entity =>
@@ -459,54 +390,6 @@ namespace YTE.Entities.Context
                     .HasMaxLength(20);
             });
 
-            modelBuilder.Entity<Tvseries>(entity =>
-            {
-                entity.ToTable("TVSeries");
-
-                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
-
-                entity.Property(e => e.IsFinished).HasColumnName("isFinished");
-
-                entity.HasOne(d => d.ArtObject)
-                    .WithOne(p => p.Tvseries)
-                    .HasForeignKey<Tvseries>(d => d.Id)
-                    .HasConstraintName("FK_TVSeries_ArtObject");
-            });
-
-            modelBuilder.Entity<TvseriesGenre>(entity =>
-            {
-                entity.ToTable("TVSeriesGenre");
-
-                entity.HasIndex(e => e.Name, "IX_TVSeriesGenre")
-                    .IsUnique();
-
-                entity.HasIndex(e => e.Name, "IX_TVSeriesGenre_1")
-                    .IsUnique();
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
-            });
-
-            modelBuilder.Entity<TvseriesGenreTvseries>(entity =>
-            {
-                entity.HasKey(e => new { e.GenreId, e.TvseriesId })
-                    .HasName("PK_Genre_TVSeries");
-
-                entity.ToTable("TVSeriesGenre_TVSeries");
-
-                entity.Property(e => e.TvseriesId).HasColumnName("TVSeriesId");
-
-                entity.HasOne(d => d.Genre)
-                    .WithMany(p => p.TvseriesGenreTvseries)
-                    .HasForeignKey(d => d.GenreId)
-                    .HasConstraintName("FK_Genre_TVSeries_TVSeriesGenre");
-
-                entity.HasOne(d => d.Tvseries)
-                    .WithMany(p => p.TvseriesGenreTvseries)
-                    .HasForeignKey(d => d.TvseriesId)
-                    .HasConstraintName("FK_Genre_TVSeries_TVSeries");
-            });
             modelBuilder.Entity<Token>(entity =>
             {
                 entity.ToTable("Token");

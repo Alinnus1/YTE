@@ -2,25 +2,20 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Base;
 using YTE.BusinessLogic.Implementation.ArtObject;
-using YTE.BusinessLogic.Implementation.ArtObject.Model;
 using YTE.BusinessLogic.Implementation.ArtReview;
 using YTE.BusinessLogic.Implementation.FavoriteList;
 using YTE.BusinessLogic.Implementation.Film.Model;
 using YTE.BusinessLogic.Implementation.Genre;
 using YTE.BusinessLogic.Implementation.Images;
-using YTE.BusinessLogic.Implementation.Manga.Validation;
+using YTE.BusinessLogic.Implementation.Film.Validation;
 using YTE.BusinessLogic.Implementation.WatchList;
 using YTE.Common.DTOS;
 using YTE.Common.Exceptions;
 using YTE.Common.Extensions;
 using YTE.DataAccess;
-using YTE.Entities;
 using YTE.Entities.Enums;
 
 namespace YTE.BusinessLogic.Implementation.Film
@@ -35,8 +30,7 @@ namespace YTE.BusinessLogic.Implementation.Film
         private readonly ArtReviewService ArtReviewService;
         private readonly ArtObjectService ArtObjectService;
 
-
-        public FilmService(ServiceDependencies serviceDependencies, ImageService imageService, GenreService genreService, FavoriteListService favoriteListService,WatchListService watchListService, ArtReviewService artReviewService,ArtObjectService artObjectService) : base(serviceDependencies)
+        public FilmService(ServiceDependencies serviceDependencies, ImageService imageService, GenreService genreService, FavoriteListService favoriteListService, WatchListService watchListService, ArtReviewService artReviewService, ArtObjectService artObjectService) : base(serviceDependencies)
         {
             this.FilmValidator = new FilmValidator();
             this.ImageService = imageService;
@@ -78,12 +72,14 @@ namespace YTE.BusinessLogic.Implementation.Film
                 uow.SaveChanges();
             });
         }
-        public PaginatedList<ListFilmModel> GetFilmsFilter( string searchString, int pageNumber)
+
+        public PaginatedList<ListFilmModel> GetFilmsFilter(string searchString, int pageNumber)
         {
             if (String.IsNullOrEmpty(searchString))
             {
                 searchString = "";
             }
+
             var films = UnitOfWork.Films.Get()
                 .Include(a => a.ArtObject)
                 .Include(a => a.ArtObject.Poster)
@@ -99,6 +95,7 @@ namespace YTE.BusinessLogic.Implementation.Film
                 f.Average = ArtReviewService.GetAverageOfArt(f.Id);
                 f.NoReviews = ArtReviewService.GetNumberOfReviewsOfArt(f.Id);
             });
+
             return paginatedFilms;
         }
 
@@ -109,7 +106,6 @@ namespace YTE.BusinessLogic.Implementation.Film
                 .Include(a => a.ArtObject.Background)
                 .Include(a => a.ArtObject.Poster)
                 .FirstOrDefault(a => a.Id == id);
-
 
             if (film == null)
             {
@@ -129,7 +125,7 @@ namespace YTE.BusinessLogic.Implementation.Film
             return filmDetails;
         }
 
-        public string GetName(Guid id)
+        public string GetFilmName(Guid id)
         {
             return UnitOfWork.Films.Get()
                 .Include(f => f.ArtObject)
@@ -147,7 +143,7 @@ namespace YTE.BusinessLogic.Implementation.Film
             return Mapper.Map<Entities.Film, EditFilmModel>(film);
         }
 
-        public void UpdateFilm( EditFilmModel model)
+        public void UpdateFilm(EditFilmModel model)
         {
             ExecuteInTransaction(uow =>
             {
@@ -155,13 +151,11 @@ namespace YTE.BusinessLogic.Implementation.Film
                 var artObject = ArtObjectService.EditArtObject(model, uow);
 
                 ImageService.SetPoster(model, uow, artObject);
-
                 ImageService.SetBackground(model, uow, artObject);
-
-                uow.ArtObjects.Update(artObject);
 
                 var film = Mapper.Map<EditFilmModel, Entities.Film>(model);
 
+                uow.ArtObjects.Update(artObject);
                 uow.Films.Update(film);
                 GenreService.SetFilmGenres(model, uow, film);
                 uow.SaveChanges();
@@ -174,11 +168,9 @@ namespace YTE.BusinessLogic.Implementation.Film
             {
                 var artObject = UnitOfWork.ArtObjects.Get()
                 .FirstOrDefault(a => a.Id == id);
-
                 artObject.IsDeleted = true;
 
                 uow.ArtObjects.Update(artObject);
-
                 uow.SaveChanges();
             });
         }

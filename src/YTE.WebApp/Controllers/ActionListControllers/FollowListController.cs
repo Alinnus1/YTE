@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Implementation.FollowList;
 using YTE.Code.Base;
 
@@ -19,15 +16,17 @@ namespace YTE.WebApp.Controllers.ActionListControllers
         }
 
         [HttpGet]
-        public IActionResult Of(string id, string currentFilter,string searchString,int pageNumber = 1)
+        public IActionResult Of(string id, string currentFilter, string searchString, int pageNumber = 1)
         {
             if (searchString == null)
             {
                 searchString = currentFilter;
             }
             ViewData["CurrentFilter"] = searchString;
-            var model = Service.GetUserFollowings(id, searchString, pageNumber );
             ViewData["UserName"] = Service.GetFollowerUserName(id);
+
+            var model = Service.GetUserFollowings(id, searchString, pageNumber);
+
             return View(model);
         }
 
@@ -39,21 +38,23 @@ namespace YTE.WebApp.Controllers.ActionListControllers
                 searchString = currentFilter;
             }
             ViewData["CurrentFilter"] = searchString;
-            var model = Service.GetFollowersOf(id, searchString, pageNumber);
             ViewData["UserName"] = Service.GetFollowerUserName(id);
+
+            var model = Service.GetFollowersOf(id, searchString, pageNumber);
+
             return View(model);
         }
 
         [HttpPost]
         public void Add(Guid id)
         {
-            Service.Add( id);
+            Service.Add(id);
         }
 
         [HttpPost]
         public void Remove(Guid id)
         {
-            Service.Remove( id);
+            Service.Remove(id);
         }
     }
 }

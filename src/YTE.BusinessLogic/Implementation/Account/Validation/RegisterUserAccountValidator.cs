@@ -1,13 +1,8 @@
 ﻿using FluentValidation;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Implementation.Account.Model;
-using YTE.BusinessLogic.Implementation.Account;
 using YTE.DataAccess;
-using YTE.BusinessLogic.Implementation.ArtReview.Model;
 
 namespace YTE.BusinessLogic.Implementation.Account.Validation
 {
@@ -35,7 +30,7 @@ namespace YTE.BusinessLogic.Implementation.Account.Validation
             RuleFor(x => x.ConfirmPassword)
                 .Equal(x => x.Password).WithMessage("Passwords do not match");
 
-            RuleFor(x=> x.UserName)
+            RuleFor(x => x.UserName)
                 .NotEmpty().WithMessage("Required field!")
                 .Must(FilterForbiddenWords).WithMessage("You are not allowed to use bad mannered words!")
                 .MinimumLength(3).WithMessage("UserName must have at least 3 letters!")
@@ -56,7 +51,7 @@ namespace YTE.BusinessLogic.Implementation.Account.Validation
             RuleFor(r => r.Age)
                 .NotEmpty().WithMessage("Required field!")
                 .Must(BetweenRange).WithMessage("Date must be between 1900 and 2020!");
-                
+
             RuleFor(r => r.GenderId)
                 .NotEmpty().WithMessage("Required field!");
 
@@ -64,7 +59,7 @@ namespace YTE.BusinessLogic.Implementation.Account.Validation
 
         private bool BetweenRange(DateTime date)
         {
-            DateTime dateMin= new DateTime(1900, 1, 1, 0, 0, 0);
+            DateTime dateMin = new DateTime(1900, 1, 1, 0, 0, 0);
             DateTime dateMax = new DateTime(2020, 1, 1, 0, 0, 0);
             int result1 = DateTime.Compare(dateMin, date);
             int result2 = DateTime.Compare(date, dateMax);
@@ -87,7 +82,7 @@ namespace YTE.BusinessLogic.Implementation.Account.Validation
 
             return !emails.Contains(email);
         }
-        private bool FilterForbiddenWords( string userName)
+        private bool FilterForbiddenWords(string userName)
         {
             var forbiddenWords = uow.ForbiddenWords.Get()
                                     .Select(f => f.Word)
@@ -98,4 +93,4 @@ namespace YTE.BusinessLogic.Implementation.Account.Validation
         }
     }
 }
-    
+

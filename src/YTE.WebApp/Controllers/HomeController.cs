@@ -1,5 +1,5 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using YTE.Code.Base;
 using YTE.Models;
 
@@ -10,7 +10,6 @@ namespace YTE.Controllers
         public HomeController(ControllerDependencies dependencies)
            : base(dependencies)
         {
-
         }
 
         public IActionResult Index()

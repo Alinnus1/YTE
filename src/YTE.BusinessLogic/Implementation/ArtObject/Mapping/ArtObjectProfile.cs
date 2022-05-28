@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using System;
-using YTE.BusinessLogic.Implementation.Account.Model;
 using YTE.BusinessLogic.Implementation.ArtObject.Model;
-using YTE.Entities;
 
 namespace YTE.BusinessLogic.Implementation.Account.Mapping
 {

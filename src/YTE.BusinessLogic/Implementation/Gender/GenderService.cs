@@ -1,9 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using YTE.BusinessLogic.Base;
 using YTE.Common.DTOS;
 
@@ -13,7 +10,6 @@ namespace YTE.BusinessLogic.Implementation.Gender
     {
         public GenderService(ServiceDependencies serviceDependencies) : base(serviceDependencies)
         {
-
         }
 
         public List<ListItem<string, int>> GetGenders()
@@ -37,8 +33,6 @@ namespace YTE.BusinessLogic.Implementation.Gender
                     Value = u.Gender.Id
                 })
                 .ToList();
-
         }
-
     }
 }
