@@ -8,12 +8,12 @@
     <div class="col-md-4">
         <form action="/UserAccount/Register" method="post" novalidate="novalidate">
             <div class="form-group">
-                <label class="control-label"> UserName</label>
+                <label class="control-label"> Username</label>
                 <input asp-for="UserName" class="form-control" />
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="control-label">Email </label>
+                <label class="control-label">Email Address</label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
@@ -28,17 +28,17 @@
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="control-label"> Name</label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label class="control-label">Last name</label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="control-label">Pronoun</label>
-                <input asp-for="Pronoun" class="form-control" />
-                <span asp-validation-for="Pronoun" class="text-danger"></span>
+                <label class="control-label">First name</label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="control-label">Date of Birth</label>
+                <label class="control-label">Date of birth</label>
                 <input asp-for="Age" class="form-control" type="date" />
                 <span asp-validation-for="Age" class="text-danger"></span>
             </div>

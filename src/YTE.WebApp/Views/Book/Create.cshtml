@@ -19,7 +19,7 @@
                 <span asp-validation-for="Author" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="control-label">Release Date</label>
+                <label class="control-label">Release date</label>
                 <input asp-for="ReleaseDate" type="date" class="form-control" />
                 <span asp-validation-for="ReleaseDate" class="text-danger"></span>
             </div>
@@ -34,17 +34,17 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="control-label">Number of Pages</label>
+                <label class="control-label">Number of pages</label>
                 <input asp-for="NoPages" class="form-control" />
                 <span asp-validation-for="NoPages" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="control-label">Number of Chapters</label>
+                <label class="control-label">Number of chapters</label>
                 <input asp-for="NoChapters" class="form-control" />
                 <span asp-validation-for="NoChapters" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="control-label">Select Genres</label>
+                <label class="control-label">Select genres</label>
                 <select id="Genre" asp-for="selectedGenres" class="form-control select"  asp-items="@(new SelectList(string.Empty,"Value","Text"))" multiple></select>
             </div>
             <div class="form-group">

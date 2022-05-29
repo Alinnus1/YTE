@@ -49,6 +49,9 @@
                             case 4:
                                 <p>Book Genre</p>
                                 break;
+                            case 5:
+                                <p>Album Genre</p>
+                                break;
                             default:
                                 break;
                         }
@@ -56,21 +59,34 @@
 
                 </td>
                 <td>
+                    <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#ModalDeleteGenre_@item.Id">
+                        Delete
+                    </button>
 
-                    <span id="confirmDeleteSpan_@item.Id@item.GenreType" style="display:none">
-                        <span>Are you sure you want to delete?</span>
-                        <a href="/Genre/Delete/@item.Id/@item.GenreType" type="submit" class="btn btn-danger">Yes</a>
-                        <a class="btn btn-primary" onclick="confirmDelete('@item.Id@item.GenreType', false)">No</a>
-                    </span>
-                    <span id="deleteSpan_@item.Id@item.GenreType">
-                        <a class="btn btn-outline-danger" onclick="confirmDelete('@item.Id@item.GenreType',true)">Delete</a>
-                    </span>
+                    <div class="modal fade" id="ModalDeleteGenre_@item.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Delete <i>@item.Name</i> genre</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to delete <i>@item.Name</i> genre?
+                                    <br />
+                                    <a href="/Genre/Delete/@item.Id/@item.GenreType" type="submit" class="btn btn-danger">Yes</a>
+                                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">No</button>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </td>
             </tr>
         }
     </tbody>
 </table>
-@section Scripts{
-    <script src="~/js/delete.js"></script>
-
-}

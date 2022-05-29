@@ -1,7 +1,7 @@
 ﻿@model YTE.Common.DTOS.PaginatedList<YTE.BusinessLogic.Implementation.ArtReview.Model.ListUserArtReviewModel>
 
 
-<h1 class="py-3">All manga reviews of <a href="/UserProfile/Details/@ViewBag.UserName"><i>@ViewBag.UserName</i></a></h1>
+<h1 class="py-3">All album reviews of <a href="/UserProfile/Details/@ViewBag.UserName"><i>@ViewBag.UserName</i></a></h1>
 <br />
 <table class="table">
     <thead>
@@ -10,13 +10,13 @@
                 Name
             </th>
             <th>
-                <a asp-action="ListMangaReviewsOf" asp-route-sortOrder="@ViewData["ScoreSortParm"]"asp-route-currentFilter="@ViewData["CurrentFilter"]">Score</a>
+                <a asp-action="ListAlbumReviewsOf" asp-route-sortOrder="@ViewData["ScoreSortParm"]"asp-route-currentFilter="@ViewData["CurrentFilter"]">Score</a>
             </th>
             <th>
                 Experienced At
             </th>
             <th>
-                <a asp-action="ListMangaReviewsOf" asp-route-sortOrder="@ViewData["DateSortParm"]"asp-route-currentFilter="@ViewData["CurrentFilter"]">Date of review</a>
+                <a asp-action="ListAlbumReviewsOf" asp-route-sortOrder="@ViewData["DateSortParm"]"asp-route-currentFilter="@ViewData["CurrentFilter"]">Date of review</a>
             </th>
             <th>
                 Review
@@ -37,14 +37,14 @@
     var nextDisabled = !Model.NextPage ? "disabled" : "";
 }
 
-<a asp-action="ListMangaReviewsOf"
+<a asp-action="ListAlbumReviewsOf"
    asp-route-sortOrder="@ViewData["CurrentSort"]"
    asp-route-pageNumber="@(Model.PageIndex - 1)"
    asp-route-currentFilter="@ViewData["CurrentFilter"]"
    class="btn btn-default @prevDisabled">
     Previous
 </a>
-<a asp-action="ListMangaReviewsOf"
+<a asp-action="ListAlbumReviewsOf"
    asp-route-sortOrder="@ViewData["CurrentSort"]"
    asp-route-pageNumber="@(Model.PageIndex + 1)"
    asp-route-currentFilter="@ViewData["CurrentFilter"]"

@@ -2,7 +2,9 @@
 @inject YTE.Common.DTOS.CurrentUserDto CurrentUser
 
 <h1 class="py-3">Reviews for @if (Model.Count() > 0)
-{ <i>@Model.First().ArtName</i>}
+{
+    <a href="/@Model.First().Route/Details/@Model.First().ArtObjectId">@Model.First().ArtName</a>
+}
 else { <i> an object with no reviews</i>}</h1>
 
 
@@ -30,7 +32,7 @@ else { <i> an object with no reviews</i>}</h1>
             <th></th>
         </tr>
     </thead>
-    
+
         @if (Model.Count == 0)
         {
             <i>No Reviews yet</i>
@@ -42,7 +44,7 @@ else { <i> an object with no reviews</i>}</h1>
             {
                 <tr>
                     <td>
-                        @item.UserName
+                        <a href="/UserProfile/Details/@item.UserName">@item.UserName</a>
                     </td>
                     <td>
                         <img src="@item.Image" width="100" height="100" />
@@ -66,15 +68,32 @@ else { <i> an object with no reviews</i>}</h1>
                             {
                                 <a class="btn btn-outline-dark" href="/ArtReview/Edit/@item.ArtObjectId/@item.UserName">Edit</a>
                                 <br />
-                                <span id="confirmDeleteSpan_@item.UserName" style="display:none">
-                                    <span>Are you sure you want to delete?</span>
-                                    <a href="/ArtReview/Delete/@item.ArtObjectId/@item.UserName" type="submit" class="btn btn-danger">Yes</a>
-                                    <a style="cursor:pointer"class="btn btn-primary" onclick="confirmDelete('@item.UserName', false)">No</a>
-                                </span>
-                                <span id="deleteSpan_@item.UserName">
-                                    <a style="cursor:pointer" class="btn btn-outline-danger" onclick="confirmDelete('@item.UserName',true)">Delete</a>
-                                </span>
 
+                                <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#ModalDeleteReview_@item.UserName">
+                                    Delete
+                                </button>
+
+                                <div class="modal fade" id="ModalDeleteReview_@item.UserName" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">Delete <i>@item.UserName</i>'s review</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to delete <i>@item.UserName</i>'s review?
+                                                <br />
+                                                <a href="/ArtReview/Delete/@item.ArtObjectId/@item.UserName" type="submit" class="btn btn-danger">Yes</a>
+                                                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">No</button>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             }
 
                         }

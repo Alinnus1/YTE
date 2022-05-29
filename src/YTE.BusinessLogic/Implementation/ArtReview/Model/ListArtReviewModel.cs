@@ -2,12 +2,10 @@
 
 namespace YTE.BusinessLogic.Implementation.ArtReview.Model
 {
-    public class ListArtReviewModel
+    public class ListArtReviewModel : IListUserArtReview
     {
-
         public Guid ArtObjectId { get; set; }
         public string ArtName { get; set; }
-        // puteam sa fac peste acest model inca un model care sa mi mentina proprietatile comune ca sa elimin redundanta
         public Guid UserId { get; set; }
         public string UserName { get; set; }
         public string Image { get; set; }
@@ -15,6 +13,7 @@ namespace YTE.BusinessLogic.Implementation.ArtReview.Model
         public DateTime ExperiencedAt { get; set; }
         public DateTime Date { get; set; }
         public decimal Score { get; set; }
+        public string Route { get; set; }
 
     }
 }

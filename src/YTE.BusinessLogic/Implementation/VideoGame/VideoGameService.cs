@@ -114,7 +114,6 @@ namespace YTE.BusinessLogic.Implementation.VideoGame
             }
 
             var detailsVideoGame = Mapper.Map<Entities.VideoGame, DetailsVideoGameModel>(videogame);
-            //notfounderrorexception
 
             detailsVideoGame.MostNegativeReviews = ArtReviewService.GetReviewsOfArtForDetails(id, "Score", false);
             detailsVideoGame.MostPositiveReviews = ArtReviewService.GetReviewsOfArtForDetails(id, "Score", true);
@@ -123,6 +122,7 @@ namespace YTE.BusinessLogic.Implementation.VideoGame
             detailsVideoGame.NoReviews = ArtReviewService.GetNumberOfReviewsOfArt(id);
             detailsVideoGame.EligibleFavoriteList = FavoriteService.CheckExperienced(CurrentUser.Id, detailsVideoGame.Id);
             detailsVideoGame.AddedToFavoriteList = FavoriteService.CheckAdded(CurrentUser.Id, detailsVideoGame.Id);
+            detailsVideoGame.IsReviewedByCurrentUser = ArtReviewService.IsArtReviewedByUser(id, CurrentUser.UserName);
 
             return detailsVideoGame;
         }

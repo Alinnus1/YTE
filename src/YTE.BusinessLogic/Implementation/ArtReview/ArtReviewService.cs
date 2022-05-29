@@ -117,6 +117,15 @@ namespace YTE.BusinessLogic.Implementation.ArtReview
                 .Count();
         }
 
+        public bool IsArtReviewedByUser(Guid id, string username)
+        {
+            return UnitOfWork.ArtReview.Get()
+                .Include(u => u.User)
+                .Include(a => a.ArtObject)
+                .Where(a => a.ArtObjectId == id && a.User.UserName == username && a.ArtObject.IsDeleted == false)
+                .Any();
+        }
+
         public EditArtReviewModel EditArtReview(Guid id, string username)
         {
             return UnitOfWork.ArtReview.Get()

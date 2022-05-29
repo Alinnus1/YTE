@@ -24,6 +24,7 @@ namespace YTE.WebApp.Controllers
         public IActionResult Create()
         {
             var model = new CreateVideoGameModel();
+            model.ReleaseDate = DateTime.Now.AddYears(-10);
 
             return View("Create", model);
         }

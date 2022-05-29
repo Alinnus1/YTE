@@ -24,6 +24,7 @@ namespace YTE.WebApp.Controllers.ArtControllers
         public IActionResult Create()
         {
             var model = new CreateBookModel();
+            model.ReleaseDate = DateTime.Now.AddYears(-10);
 
             return View("Create", model);
         }

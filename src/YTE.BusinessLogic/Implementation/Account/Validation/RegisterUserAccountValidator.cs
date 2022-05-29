@@ -36,13 +36,13 @@ namespace YTE.BusinessLogic.Implementation.Account.Validation
                 .MinimumLength(3).WithMessage("UserName must have at least 3 letters!")
                 .MaximumLength(50).WithMessage("UserName can not be longer than 50 letters!");
 
-            RuleFor(r => r.Name)
+            RuleFor(r => r.LastName)
                 .NotEmpty().WithMessage("Required field!")
                 .MinimumLength(3).WithMessage("Name must have at least 3 letters!")
                 .MaximumLength(50).WithMessage("Name can not be longer than 50 letters!")
                 .Matches(@"^[a-zA-Z ]*$").WithMessage("Name can have only letters!");
 
-            RuleFor(r => r.Pronoun)
+            RuleFor(r => r.FirstName)
                 .NotEmpty().WithMessage("Required field!")
                 .MinimumLength(3).WithMessage("Pronoun must have at least 3 letters!")
                 .MaximumLength(50).WithMessage("Pronoun can not be longer than 50 letters!")

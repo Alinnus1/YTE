@@ -158,11 +158,10 @@ namespace YTE.BusinessLogic.Implementation.Account
                 if (user.PasswordHash == passwordHash)
                 {
                     user.UserName = model.UserName;
-                    user.Name = model.Name;
-                    user.Pronoun = model.Pronoun;
+                    user.Name = model.LastName;
+                    user.Pronoun = model.FirstName;
                     user.GenderId = model.GenderId;
                     user.Age = model.Age;
-                    user.Image.IsActive = false;
                     ImageService.SetImage(model, uow, user);
                     uow.Users.Update(user);
                     uow.SaveChanges();

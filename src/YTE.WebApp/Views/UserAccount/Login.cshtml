@@ -14,7 +14,7 @@
                 <div class="form-actions no-color">
                     <p>
                         Insert your email to resend the email confirmation: <input type="email" name="id" />
-                        <input type="submit" value="Send" class="btn btn-primary" /> 
+                        <input type="submit" value="Send" class="btn btn-primary" />
 
                     </p>
                 </div>
@@ -23,21 +23,17 @@
         else if (Model.AreCredentialsInvalid)
         {
             <div><span style="color:red">Invalid credentials</span></div>
-            
+
         }
 
         <form action="/UserAccount/Login" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label class="control-label" for="Email">Email</label>
+                <label class="control-label" for="Email">Email address</label>
                 <input class="form-control" type="text" id="Email" name="Email">
                 <span asp-validation-for="Email" class="text-danger"></span>
-                @*<span class="text-danger field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>*@
             </div>
             <div class="form-group">
-                @*<label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" type="password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>*@
                 <label class="control-label" for="Password">Password</label>
                 <input type="password" class="form-control" id="Password" name="Password">
                 <span asp-validation-for="Password" class="text-danger"></span>
@@ -55,7 +51,7 @@
         <div class="form-actions no-color">
             <p>
                 Forgot your password? <br />
-                Insert your mail here: <input type="email" name="id" />
+                Insert your email address here: <input type="email" name="id" />
                 <input type="submit" value="Send" class="btn btn-primary" />
 
             </p>
