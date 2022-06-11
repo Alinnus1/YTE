@@ -3,7 +3,6 @@
 <h1 class="py-3">Films</h1>
 
 @if (CurrentUser.Roles.Contains("Admin") || CurrentUser.Roles.Contains("ModFilm"))
-
 {
     <a class="btn btn-outline-success" href="/Film/Create" style="float: right;">Add a new film</a>
 }

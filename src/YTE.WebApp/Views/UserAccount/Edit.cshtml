@@ -50,8 +50,8 @@
                 </label>
             </div>
             <div class="form-group">
-                <label class="control-label">Password</label>
-
+                <label class="control-label">Current password</label>
+                <button type="button" class="btn btn-outline-info" data-toggle="popover" title="Confirm Password" style="margin: 3px; padding: 0; font-size: 14px;  border-radius: 50%;  width: 37px; height: 37px; transition: transform 2s; position: relative; " data-content="For security reasons you have to confirm your password every time you change your preferences.">i</button>
                 <input asp-for="Password" type="password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
@@ -63,9 +63,7 @@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
-
         </form>
-        <button class="btn btn-outline-info" data-toggle="popover" title="Confirm Password" style="margin: 0; padding: 0; font-size: 14px;  border-radius: 50%;  width: 37px; height: 37px; transition: transform 2s; position: relative; " data-content="For security reasons you have to confirm your password for every preference change.">i</button>
     </div>
 </div>
 

@@ -17,12 +17,12 @@
                     @if (Model.Followed)
                     {
                         <button class="btn btn-outline-dark" onclick="removeFromFollow('@Model.Id')">Unfollow</button>
-                        <button  class="btn btn-outline-info" data-toggle="popover" title="Unfollowing"  style="margin: 0; padding: 0; font-size: 14px;  border-radius: 50%;  width: 37px; height: 37px; transition: transform 2s; position: relative; " data-content="You'll no longer receive @Model.UserName's reviews via email!">i</button>
+                        <button  class="btn btn-outline-info" data-toggle="popover" title="Unfollowing"  style="margin: 3px; padding: 0; font-size: 14px;  border-radius: 50%;  width: 37px; height: 37px; transition: transform 2s; position: relative; " data-content="You'll no longer receive @Model.UserName's reviews via email!">i</button>
                     }
                     else
                     {
                         <button class="btn btn-outline-dark " onclick="addToFollow('@Model.Id')">Follow</button>
-                        <button class="btn btn-outline-info" data-toggle="popover" title="Following"  style="margin: 0; padding: 0; font-size: 14px;  border-radius: 50%;  width: 37px; height: 37px; transition: transform 2s; position: relative; " data-content="You'll start receiving weekly emails regarding this person's reviews published in that span of time!">i</button>
+                        <button class="btn btn-outline-info" data-toggle="popover" title="Following"  style="margin: 3px; padding: 0; font-size: 14px;  border-radius: 50%;  width: 37px; height: 37px; transition: transform 2s; position: relative; " data-content="You'll start receiving weekly emails regarding this person's reviews published in that span of time!">i</button>
                     }
                 </div>
             }

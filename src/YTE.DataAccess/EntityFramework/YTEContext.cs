@@ -12,11 +12,13 @@ namespace YTE.Entities.Context
     {
         public YTEContext()
         {
+            this.ChangeTracker.LazyLoadingEnabled = false;
         }
 
         public YTEContext(DbContextOptions<YTEContext> options)
             : base(options)
         {
+            this.ChangeTracker.LazyLoadingEnabled = false;
         }
 
         public virtual DbSet<Album> Albums { get; set; }
@@ -61,6 +63,7 @@ namespace YTE.Entities.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            #region use
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
             modelBuilder.Entity<Album>(entity =>
@@ -103,7 +106,7 @@ namespace YTE.Entities.Context
                     .HasForeignKey(d => d.AlbumId)
                     .HasConstraintName("FK_Genre_Album_Album");
             });
-
+            #endregion
             modelBuilder.Entity<ArtObject>(entity =>
             {
                 entity.ToTable("ArtObject");

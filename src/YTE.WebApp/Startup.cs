@@ -109,7 +109,6 @@ namespace YTE
 
             BackgroundJobs.CreateJobs(serviceProvider);
 
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHangfireDashboard();

@@ -33,7 +33,6 @@ namespace YTE.DataAccess
         public TEntity Update(TEntity entity)
         {
             Context.Set<TEntity>().Update(entity);
-
             return entity;
         }
     }
