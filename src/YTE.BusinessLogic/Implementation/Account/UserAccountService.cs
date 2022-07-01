@@ -404,11 +404,11 @@ namespace YTE.BusinessLogic.Implementation.Account
                 user.WantsNotifications = true;
                 user.ConfirmedEmail = false;
                 uow.Users.Insert(user);
-                uow.SaveChanges();
 
                 var token = TokenService.CreateConfirmationEmailToken(uow);
                 ImageService.SetStockImage(user, uow);
                 MailSenderService.SendConfirmationEmail(user.Id, user.Email, token.Id);
+                uow.SaveChanges();
             });
         }
 
