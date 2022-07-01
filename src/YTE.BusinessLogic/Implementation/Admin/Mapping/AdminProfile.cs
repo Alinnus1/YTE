@@ -19,7 +19,13 @@ namespace YTE.BusinessLogic.Implementation.Admin.Mapping
                 .ForMember(a => a.Age, a => a.MapFrom(s => GetAge(s.Age)))
                 .ForMember(a => a.Image, a => a.MapFrom(s => $"data:image/gif;base64,{Convert.ToBase64String(s.Image.Content)}"));
             CreateMap<User, EditUserModel>()
-                .ForMember(a => a.Image, opt => opt.Ignore());
+                .ForMember(a => a.Image, opt => opt.Ignore())
+                .ForMember(a => a.FirstName, a => a.MapFrom(s=>s.Pronoun))
+                .ForMember(a => a.LastName, a => a.MapFrom(s=>s.Name));
+
+            CreateMap<EditUserModel, User>()
+                .ForMember(a => a.Pronoun, a => a.MapFrom(s => s.FirstName))
+                .ForMember(a => a.Name, a => a.MapFrom(s => s.LastName));
         }
         public int GetAge(DateTime birth)
         {
