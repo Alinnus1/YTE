@@ -89,8 +89,8 @@ namespace YTE.BusinessLogic.Implementation.Admin
 
                 EditUserValidator.Validate(model).ThenThrow(model);
                 user.UserName = model.UserName;
-                user.Name = model.Name;
-                user.Pronoun = model.Pronoun;
+                user.Name = model.LastName;
+                user.Pronoun = model.FirstName;
                 user.GenderId = model.GenderId;
                 user.Age = model.Age;
                 user.Image.IsActive = false;

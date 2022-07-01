@@ -126,6 +126,7 @@ namespace YTE.BusinessLogic.Implementation.Book
             bookDetails.RecentReviews = ArtReviewService.GetReviewsOfArtForDetails(id, "Date", true);
             bookDetails.Average = ArtReviewService.GetAverageOfArt(id);
             bookDetails.NoReviews = ArtReviewService.GetNumberOfReviewsOfArt(id);
+            bookDetails.IsReviewedByCurrentUser = ArtReviewService.IsArtReviewedByUser(id, CurrentUser.UserName);
 
             return bookDetails;
         }

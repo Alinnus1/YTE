@@ -19,7 +19,7 @@ namespace YTE.BusinessLogic.Implementation.Images
 
         public void SetImage(IEditUser model, UnitOfWork uow, User user)
         {
-            if (model.Image != null)
+            if (model.Image == null)
             {
                 return;
             }

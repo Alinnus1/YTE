@@ -1,7 +1,7 @@
 ﻿@model YTE.BusinessLogic.Implementation.Admin.Model.EditUserModel
 
 
-<h1 class="py-3">Edit user <i>@Model.Name</i></h1>
+<h1 class="py-3">Edit user <i>@Model.LastName</i></h1>
 
 
 <hr />
@@ -11,24 +11,24 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
+                <label asp-for="Email" class="control-label">Email address</label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UserName" class="control-label"></label>
+                <label asp-for="UserName" class="control-label">Username</label>
                 <input asp-for="UserName" class="form-control" />
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label asp-for="LastName" class="control-label">Last name</label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Pronoun" class="control-label"></label>
-                <input asp-for="Pronoun" class="form-control" />
-                <span asp-validation-for="Pronoun" class="text-danger"></span>
+                <label asp-for="FirstName" class="control-label">First name</label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Age" class="control-label"></label>
@@ -41,16 +41,17 @@
                 <span asp-validation-for="GenderId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="control-label">Select Roles</label>
+                <label class="control-label">Select roles</label>
                 <select id="Role" asp-for="selectedRoles" class="form-control select" asp-items="@(new SelectList(string.Empty,"Value","Text"))" multiple style="overflow-y:auto"></select>
             </div>
             <div class="form-group">
                 <label class="control-label"> Profile picture</label>
-                <input type="file" asp-for="Image" accept=".png, .jpg, .jpeg, .gif" class="form-control" />
+                <input type="file" asp-for="Image" accept=".png, .jpg, .jpeg, .gif"/>
                 <span asp-validation-for="Image" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="NewPassword" class="control-label"></label>
+                <button type="button" class="btn btn-outline-info" id="pop" data-toggle="popover" title="Password requirements"  style="margin: 3px; padding: 0; font-size: 14px;  border-radius: 50%;  width: 37px; height: 37px; transition: transform 2s; position: relative; " data-content="The password must have between 8 and 25 characters. It also must have at least one uppercase, one lowercase letter, one digit and a special character ('@@#$%^&+=!*')">i</button>
                 <input asp-for="NewPassword" type="password" class="form-control" />
                 <span asp-validation-for="NewPassword" class="text-danger"></span>
             </div>

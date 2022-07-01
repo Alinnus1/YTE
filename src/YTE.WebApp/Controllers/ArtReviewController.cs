@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using YTE.BusinessLogic.Implementation.ArtReview;
 using YTE.BusinessLogic.Implementation.ArtReview.Model;
+using YTE.BusinessLogic.Implementation.UserProfile;
 using YTE.Code.Base;
 
 namespace YTE.WebApp.Controllers
@@ -11,11 +12,13 @@ namespace YTE.WebApp.Controllers
 
     public class ArtReviewController : BaseController
     {
-        private readonly ArtReviewService Service;
+        private readonly ArtReviewService ArtReviewService;
+        private readonly UserProfileService UserProfileService;
 
-        public ArtReviewController(ControllerDependencies dependencies, ArtReviewService service) : base(dependencies)
+        public ArtReviewController(ControllerDependencies dependencies, ArtReviewService artReviewService, UserProfileService userProfileService) : base(dependencies)
         {
-            this.Service = service;
+            this.ArtReviewService = artReviewService;
+            this.UserProfileService = userProfileService;
         }
 
         [HttpGet]
@@ -23,18 +26,18 @@ namespace YTE.WebApp.Controllers
         {
             ViewData["ScoreSortParm"] = String.IsNullOrEmpty(sortOrder) ? "score_asc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
-            var model = Service.GetReviewsOfArt(id, "Score", true, pageNumber);
+            var model = ArtReviewService.GetReviewsOfArt(id, "Score", true, pageNumber);
 
             switch (sortOrder)
             {
                 case "score_asc":
-                    model = Service.GetReviewsOfArt(id, "Score", false, pageNumber);
+                    model = ArtReviewService.GetReviewsOfArt(id, "Score", false, pageNumber);
                     break;
                 case "Date":
-                    model = Service.GetReviewsOfArt(id, "Date", false, pageNumber);
+                    model = ArtReviewService.GetReviewsOfArt(id, "Date", false, pageNumber);
                     break;
                 case "date_desc":
-                    model = Service.GetReviewsOfArt(id, "Date", true, pageNumber);
+                    model = ArtReviewService.GetReviewsOfArt(id, "Date", true, pageNumber);
                     break;
                 default:
 
@@ -48,23 +51,28 @@ namespace YTE.WebApp.Controllers
         [HttpGet]
         public IActionResult ListReviewsOf(string id, string sortOrder, int pageNumber = 1)
         {
+            if (!UserProfileService.IsUserNameValid(id))
+            {
+                return View("Error_NotFound");
+            }
+
             ViewData["CurrentSort"] = sortOrder;
             ViewData["ScoreSortParm"] = String.IsNullOrEmpty(sortOrder) ? "score_asc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
 
-            var model = Service.GetSpecificUserReviewsOfArt(id, "Score", true, pageNumber);
-            ViewBag.UserName = model.FirstOrDefault()?.UserName;
+            ViewBag.UserName = id;
+            var model = ArtReviewService.GetSpecificUserReviewsOfArt(id, "Score", true, pageNumber);
 
             switch (sortOrder)
             {
                 case "score_asc":
-                    model = Service.GetSpecificUserReviewsOfArt(id, "Score", false, pageNumber);
+                    model = ArtReviewService.GetSpecificUserReviewsOfArt(id, "Score", false, pageNumber);
                     break;
                 case "Date":
-                    model = Service.GetSpecificUserReviewsOfArt(id, "Date", false, pageNumber);
+                    model = ArtReviewService.GetSpecificUserReviewsOfArt(id, "Date", false, pageNumber);
                     break;
                 case "date_desc":
-                    model = Service.GetSpecificUserReviewsOfArt(id, "Date", true, pageNumber);
+                    model = ArtReviewService.GetSpecificUserReviewsOfArt(id, "Date", true, pageNumber);
                     break;
                 default:
 
@@ -77,23 +85,28 @@ namespace YTE.WebApp.Controllers
         [HttpGet]
         public IActionResult ListFilmReviewsOf(string id, string sortOrder, int pageNumber = 1)
         {
+            if (!UserProfileService.IsUserNameValid(id))
+            {
+                return View("Error_NotFound");
+            }
+
             ViewData["CurrentSort"] = sortOrder;
             ViewData["ScoreSortParm"] = String.IsNullOrEmpty(sortOrder) ? "score_asc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
 
-            var model = Service.GetSpecificUserReviewsOfFilms(id, "Score", true, pageNumber);
-            ViewBag.UserName = model.FirstOrDefault()?.UserName;
+            ViewBag.UserName = id;
+            var model = ArtReviewService.GetSpecificUserReviewsOfFilms(id, "Score", true, pageNumber);
 
             switch (sortOrder)
             {
                 case "score_asc":
-                    model = Service.GetSpecificUserReviewsOfFilms(id, "Score", false, pageNumber);
+                    model = ArtReviewService.GetSpecificUserReviewsOfFilms(id, "Score", false, pageNumber);
                     break;
                 case "Date":
-                    model = Service.GetSpecificUserReviewsOfFilms(id, "Date", false, pageNumber);
+                    model = ArtReviewService.GetSpecificUserReviewsOfFilms(id, "Date", false, pageNumber);
                     break;
                 case "date_desc":
-                    model = Service.GetSpecificUserReviewsOfFilms(id, "Date", true, pageNumber);
+                    model = ArtReviewService.GetSpecificUserReviewsOfFilms(id, "Date", true, pageNumber);
                     break;
                 default:
 
@@ -106,23 +119,28 @@ namespace YTE.WebApp.Controllers
         [HttpGet]
         public IActionResult ListMangaReviewsOf(string id, string sortOrder, int pageNumber = 1)
         {
+            if (!UserProfileService.IsUserNameValid(id))
+            {
+                return View("Error_NotFound");
+            }
+
             ViewData["CurrentSort"] = sortOrder;
             ViewData["ScoreSortParm"] = String.IsNullOrEmpty(sortOrder) ? "score_asc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
 
-            var model = Service.GetSpecificUserReviewsOfMangas(id, "Score", true, pageNumber);
-            ViewBag.UserName = model.FirstOrDefault()?.UserName;
+            ViewBag.UserName = id;
+            var model = ArtReviewService.GetSpecificUserReviewsOfMangas(id, "Score", true, pageNumber);
 
             switch (sortOrder)
             {
                 case "score_asc":
-                    model = Service.GetSpecificUserReviewsOfMangas(id, "Score", false, pageNumber);
+                    model = ArtReviewService.GetSpecificUserReviewsOfMangas(id, "Score", false, pageNumber);
                     break;
                 case "Date":
-                    model = Service.GetSpecificUserReviewsOfMangas(id, "Date", false, pageNumber);
+                    model = ArtReviewService.GetSpecificUserReviewsOfMangas(id, "Date", false, pageNumber);
                     break;
                 case "date_desc":
-                    model = Service.GetSpecificUserReviewsOfMangas(id, "Date", true, pageNumber);
+                    model = ArtReviewService.GetSpecificUserReviewsOfMangas(id, "Date", true, pageNumber);
                     break;
                 default:
 
@@ -135,23 +153,28 @@ namespace YTE.WebApp.Controllers
         [HttpGet]
         public IActionResult ListGameReviewsOf(string id, string sortOrder, int pageNumber = 1)
         {
+            if (!UserProfileService.IsUserNameValid(id))
+            {
+                return View("Error_NotFound");
+            }
+
             ViewData["CurrentSort"] = sortOrder;
             ViewData["ScoreSortParm"] = String.IsNullOrEmpty(sortOrder) ? "score_asc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
 
-            var model = Service.GetSpecificUserReviewsOfGames(id, "Score", true, pageNumber);
-            ViewBag.UserName = model.FirstOrDefault()?.UserName;
+            ViewBag.UserName = id;
+            var model = ArtReviewService.GetSpecificUserReviewsOfGames(id, "Score", true, pageNumber);
 
             switch (sortOrder)
             {
                 case "score_asc":
-                    model = Service.GetSpecificUserReviewsOfGames(id, "Score", false, pageNumber);
+                    model = ArtReviewService.GetSpecificUserReviewsOfGames(id, "Score", false, pageNumber);
                     break;
                 case "Date":
-                    model = Service.GetSpecificUserReviewsOfGames(id, "Date", false, pageNumber);
+                    model = ArtReviewService.GetSpecificUserReviewsOfGames(id, "Date", false, pageNumber);
                     break;
                 case "date_desc":
-                    model = Service.GetSpecificUserReviewsOfGames(id, "Date", true, pageNumber);
+                    model = ArtReviewService.GetSpecificUserReviewsOfGames(id, "Date", true, pageNumber);
                     break;
                 default:
 
@@ -164,23 +187,28 @@ namespace YTE.WebApp.Controllers
         [HttpGet]
         public IActionResult ListBookReviewsOf(string id, string sortOrder, int pageNumber = 1)
         {
+            if (!UserProfileService.IsUserNameValid(id))
+            {
+                return View("Error_NotFound");
+            }
+
             ViewData["CurrentSort"] = sortOrder;
             ViewData["ScoreSortParm"] = String.IsNullOrEmpty(sortOrder) ? "score_asc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
 
-            var model = Service.GetSpecificUserReviewsOfBooks(id, "Score", true, pageNumber);
-            ViewBag.UserName = model.FirstOrDefault()?.UserName;
+            ViewBag.UserName = id;
+            var model = ArtReviewService.GetSpecificUserReviewsOfBooks(id, "Score", true, pageNumber);
 
             switch (sortOrder)
             {
                 case "score_asc":
-                    model = Service.GetSpecificUserReviewsOfBooks(id, "Score", false, pageNumber);
+                    model = ArtReviewService.GetSpecificUserReviewsOfBooks(id, "Score", false, pageNumber);
                     break;
                 case "Date":
-                    model = Service.GetSpecificUserReviewsOfBooks(id, "Date", false, pageNumber);
+                    model = ArtReviewService.GetSpecificUserReviewsOfBooks(id, "Date", false, pageNumber);
                     break;
                 case "date_desc":
-                    model = Service.GetSpecificUserReviewsOfBooks(id, "Date", true, pageNumber);
+                    model = ArtReviewService.GetSpecificUserReviewsOfBooks(id, "Date", true, pageNumber);
                     break;
                 default:
 
@@ -193,23 +221,28 @@ namespace YTE.WebApp.Controllers
         [HttpGet]
         public IActionResult ListAlbumReviewsOf(string id, string sortOrder, int pageNumber = 1)
         {
+            if (!UserProfileService.IsUserNameValid(id))
+            {
+                return View("Error_NotFound");
+            }
+
             ViewData["CurrentSort"] = sortOrder;
             ViewData["ScoreSortParm"] = String.IsNullOrEmpty(sortOrder) ? "score_asc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
 
-            var model = Service.GetSpecificUserReviewsOfAlbums(id, "Score", true, pageNumber);
-            ViewBag.UserName = model.FirstOrDefault()?.UserName;
+            ViewBag.UserName = id;
+            var model = ArtReviewService.GetSpecificUserReviewsOfAlbums(id, "Score", true, pageNumber);
 
             switch (sortOrder)
             {
                 case "score_asc":
-                    model = Service.GetSpecificUserReviewsOfAlbums(id, "Score", false, pageNumber);
+                    model = ArtReviewService.GetSpecificUserReviewsOfAlbums(id, "Score", false, pageNumber);
                     break;
                 case "Date":
-                    model = Service.GetSpecificUserReviewsOfAlbums(id, "Date", false, pageNumber);
+                    model = ArtReviewService.GetSpecificUserReviewsOfAlbums(id, "Date", false, pageNumber);
                     break;
                 case "date_desc":
-                    model = Service.GetSpecificUserReviewsOfAlbums(id, "Date", true, pageNumber);
+                    model = ArtReviewService.GetSpecificUserReviewsOfAlbums(id, "Date", true, pageNumber);
                     break;
                 default:
 
@@ -228,7 +261,8 @@ namespace YTE.WebApp.Controllers
         {
             var model = new CreateArtReviewModel();
             model.ArtObjectId = id;
-            if (!Service.Check(id, CurrentUser.UserName))
+            model.ExperiencedAt = DateTime.Now;
+            if (!ArtReviewService.Check(id, CurrentUser.UserName))
             {
                 return View(model);
             }
@@ -248,7 +282,7 @@ namespace YTE.WebApp.Controllers
             {
                 return View("Error_NotFound");
             }
-            Service.CreateArtReview(model);
+            ArtReviewService.CreateArtReview(model);
 
             return RedirectToAction("ListReviewsOfArt", "ArtReview", new { id = model.ArtObjectId });
         }
@@ -258,7 +292,7 @@ namespace YTE.WebApp.Controllers
         [Authorize(Roles = "Admin,User,ModManga,ModFilm,ModVideoGame,ModBook,ModAlbum")]
         public IActionResult Edit(Guid id, string type)
         {
-            var model = Service.EditArtReview(id, type);
+            var model = ArtReviewService.EditArtReview(id, type);
 
             ViewBag.Name = model.ArtName;
 
@@ -273,7 +307,7 @@ namespace YTE.WebApp.Controllers
             {
                 return View("Error_");
             }
-            if (Service.UpdateArtReviewOfCurrent(model, id, type))
+            if (ArtReviewService.UpdateArtReviewOfCurrent(model, id, type))
             {
                 return RedirectToAction("ListReviewsOfArt", "ArtReview", new { id = id });
             }
@@ -292,7 +326,7 @@ namespace YTE.WebApp.Controllers
         {
             var previousUrl = string.Empty;
 
-            if (Service.DeleteArtReviewOfCurrent(id, type))
+            if (ArtReviewService.DeleteArtReviewOfCurrent(id, type))
             {
                 previousUrl = Request.Headers["Referer"].ToString();
 
@@ -310,7 +344,7 @@ namespace YTE.WebApp.Controllers
         [HttpGet]
         public bool Check(Guid id, string type)
         {
-            return Service.Check(id, type);
+            return ArtReviewService.Check(id, type);
         }
     }
 }

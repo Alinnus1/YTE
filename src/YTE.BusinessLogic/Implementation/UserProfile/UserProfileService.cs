@@ -70,5 +70,14 @@ namespace YTE.BusinessLogic.Implementation.UserProfile
             user.NoFollowers = FollowService.GetNumbersOfFollowersOf(user.Id);
             return user;
         }
+
+        public bool IsUserNameValid(string id)
+        {
+            var user = UnitOfWork.Users.Get()
+                .Where(u => u.UserName == id)
+                .FirstOrDefault();
+
+            return user != null;
+        }
     }
 }

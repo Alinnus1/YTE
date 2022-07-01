@@ -20,6 +20,7 @@ namespace YTE.BusinessLogic.Implementation.Album.Model
         public string Description { get; set; }
         public string Background { get; set; }
         public string Poster { get; set; }
+        public bool IsReviewedByCurrentUser { get; set; }
         public bool AddedToFavoriteList { get; set; }
         public bool EligibleFavoriteList { get; set; }
         public bool AddedToWatchList { get; set; }

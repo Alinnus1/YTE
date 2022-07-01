@@ -121,6 +121,7 @@ namespace YTE.BusinessLogic.Implementation.Film
             filmDetails.RecentReviews = ArtReviewService.GetReviewsOfArtForDetails(id, "Date", true);
             filmDetails.Average = ArtReviewService.GetAverageOfArt(id);
             filmDetails.NoReviews = ArtReviewService.GetNumberOfReviewsOfArt(id);
+            filmDetails.IsReviewedByCurrentUser = ArtReviewService.IsArtReviewedByUser(id, CurrentUser.UserName);
 
             return filmDetails;
         }

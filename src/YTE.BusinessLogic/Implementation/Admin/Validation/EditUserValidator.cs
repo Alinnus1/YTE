@@ -22,9 +22,9 @@ namespace YTE.BusinessLogic.Implementation.Admin.Validation
                 .NotEmpty().WithMessage("Required field!")
                 .Must(NotAlreadyExistUserName).WithMessage("UserName is already being used by somebody else!");
 
-            RuleFor(r => r.Name)
+            RuleFor(r => r.LastName)
                 .MaximumLength(50).WithMessage("Name can not be longer than 50 letters!");
-            RuleFor(r => r.Pronoun)
+            RuleFor(r => r.FirstName)
                 .MaximumLength(50).WithMessage("Pronoun can not be longer than 50 letters!");
         }
 

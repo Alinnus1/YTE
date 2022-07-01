@@ -25,6 +25,7 @@ namespace YTE.WebApp.Controllers
         public IActionResult Create()
         {
             var model = new CreateMangaModel();
+            model.ReleaseDate = DateTime.Now.AddYears(-10);
 
             return View("Create", model);
         }

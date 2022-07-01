@@ -12,6 +12,7 @@ namespace YTE.BusinessLogic.Implementation.Genre.Mapping
             CreateMap<CreateGenreModel, Entities.FilmGenre>();
             CreateMap<CreateGenreModel, Entities.VideoGameGenre>();
             CreateMap<CreateGenreModel, Entities.BookGenre>();
+            CreateMap<CreateGenreModel, Entities.AlbumGenre>();
 
             CreateMap<Entities.MangaGenre, ListGenreModel>()
                 .ForMember(a => a.GenreType, a => a.MapFrom(s => GenreType.MangaGenre));
@@ -21,6 +22,8 @@ namespace YTE.BusinessLogic.Implementation.Genre.Mapping
                .ForMember(a => a.GenreType, a => a.MapFrom(s => GenreType.VideoGameGenre));
             CreateMap<Entities.BookGenre, ListGenreModel>()
                 .ForMember(a => a.GenreType, a => a.MapFrom(s => GenreType.BookGenre));
+            CreateMap<Entities.AlbumGenre, ListGenreModel>()
+                .ForMember(a => a.GenreType, a => a.MapFrom(s => GenreType.AlbumGenre));
         }
     }
 }

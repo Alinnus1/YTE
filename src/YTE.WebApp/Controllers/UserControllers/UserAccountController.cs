@@ -132,6 +132,7 @@ namespace YTE.WebApp.Controllers
             }
 
             var model = new RegisterModel();
+            model.Age = DateTime.Now.AddYears(-15);
 
             return View("Register", model);
         }

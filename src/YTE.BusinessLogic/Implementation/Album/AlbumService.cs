@@ -121,6 +121,7 @@ namespace YTE.BusinessLogic.Implementation.Album
             albumDetails.RecentReviews = ArtReviewService.GetReviewsOfArtForDetails(id, "Date", true);
             albumDetails.Average = ArtReviewService.GetAverageOfArt(id);
             albumDetails.NoReviews = ArtReviewService.GetNumberOfReviewsOfArt(id);
+            albumDetails.IsReviewedByCurrentUser = ArtReviewService.IsArtReviewedByUser(id, CurrentUser.UserName);
 
             return albumDetails;
         }

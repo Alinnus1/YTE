@@ -18,7 +18,38 @@
             }
             else
             {
-                <a style=" cursor:pointer;" class="btn btn-outline-success" id="check" href="/ArtReview/Create/@Model.Id">Create Review</a>
+                @if (Model.IsReviewedByCurrentUser)
+                {
+                    <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#ModalDeleteReview_@CurrentUser.UserName">
+                        Delete Review
+                    </button>
+
+                    <div class="modal fade" id="ModalDeleteReview_@CurrentUser.UserName" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Delete your review</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to delete your review?
+                                    <br />
+                                    <a href="/ArtReview/Delete/@Model.Id/@CurrentUser.UserName" type="submit" class="btn btn-outline-danger">Yes</a>
+                                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">No</button>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <a style=" cursor:pointer;" class="btn btn-outline-success" id="check" href="/ArtReview/Create/@Model.Id">Create Review</a>
+                }
             }
 
             <a class="btn btn-outline-secondary" href="/ArtReview/ListReviewsOfArt/@Model.Id">See all reviews</a>
@@ -61,14 +92,31 @@
             {
                 <a class="btn btn-outline-dark" href="/Book/Edit/@Model.Id">Edit</a>
                 <br />
-                <span id="confirmDeleteSpan_@Model.Id" style="display:none">
-                    <span>Are you sure you want to delete?</span>
-                    <a href="/Book/Delete/@Model.Id" style=" cursor:pointer;" type="submit" class="btn btn-danger">Yes</a>
-                    <a class="btn btn-primary" style=" cursor:pointer;" onclick="confirmDelete('@Model.Id', false)">No</a>
-                </span>
-                <span id="deleteSpan_@Model.Id">
-                    <a style=" cursor:pointer;" class="btn btn-outline-danger" onclick="confirmDelete('@Model.Id',true)">Delete</a>
-                </span>
+                <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#ModalDeleteBook_@Model.Id">
+                    Delete Book
+                </button>
+
+                <div class="modal fade" id="ModalDeleteBook_@Model.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Delete <i>@Model.Name</i> Book</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to delete <i>@Model.Name</i> Book?
+                                <br />
+                                <a href="/Book/Delete/@Model.Id" style=" cursor:pointer;" type="submit" class="btn btn-danger">Yes</a>
+                                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">No</button>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
             <div class="card-footer">
                 @if (Model.GenreList.Count() != 0)

@@ -120,6 +120,7 @@ namespace YTE.BusinessLogic.Implementation.Manga
             detailsManga.RecentReviews = ArtReviewService.GetReviewsOfArtForDetails(id, "Date", true);
             detailsManga.Average = ArtReviewService.GetAverageOfArt(id);
             detailsManga.NoReviews = ArtReviewService.GetNumberOfReviewsOfArt(id);
+            detailsManga.IsReviewedByCurrentUser = ArtReviewService.IsArtReviewedByUser(id, CurrentUser.UserName);
 
             return detailsManga;
         }

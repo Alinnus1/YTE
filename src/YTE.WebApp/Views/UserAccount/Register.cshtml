@@ -8,17 +8,18 @@
     <div class="col-md-4">
         <form action="/UserAccount/Register" method="post" novalidate="novalidate">
             <div class="form-group">
-                <label class="control-label"> UserName</label>
+                <label class="control-label"> Username</label>
                 <input asp-for="UserName" class="form-control" />
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="control-label">Email </label>
+                <label class="control-label">Email Address</label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label class="control-label">Password</label>
+                <button type="button" class="btn btn-outline-info" id="pop" data-toggle="popover" title="Password requirements"  style="margin: 3px; padding: 0; font-size: 14px;  border-radius: 50%;  width: 37px; height: 37px; transition: transform 2s; position: relative; " data-content="The password must have between 8 and 25 characters. It also must have at least one uppercase, one lowercase letter, one digit and a special character ('@@#$%^&+=!*')">i</button>
                 <input asp-for="Password" type="password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
@@ -28,17 +29,17 @@
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="control-label"> Name</label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label class="control-label">Last name</label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="control-label">Pronoun</label>
-                <input asp-for="Pronoun" class="form-control" />
-                <span asp-validation-for="Pronoun" class="text-danger"></span>
+                <label class="control-label">First name</label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="control-label">Date of Birth</label>
+                <label class="control-label">Date of birth</label>
                 <input asp-for="Age" class="form-control" type="date" />
                 <span asp-validation-for="Age" class="text-danger"></span>
             </div>
@@ -64,4 +65,5 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/js/gender-dropdown.js" ></script>
+    <script src="~/js/add-popover.js"></script>
 }
